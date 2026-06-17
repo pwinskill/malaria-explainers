@@ -137,6 +137,10 @@
   footer{text-align:center;padding:30px 22px 60px;color:var(--muted);font-size:13.5px}
   a{color:var(--accent)}
   .note{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:18px 0}
+  .next-link{border-color:var(--accent-soft);background:linear-gradient(180deg,#ffffff,#f6fbf9)}
+  .next-eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;color:var(--accent);margin:0 0 6px}
+  .next-a{font-size:20px;font-weight:750;text-decoration:none;letter-spacing:-.01em}
+  .next-a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -222,6 +226,12 @@
 
     <canvas id="r0Chart" height="300" aria-label="R0 versus coverage"></canvas>
     <p class="caption">R₀ as ITN coverage increases. The curve isn't a straight line, it falls non-linearly, because nets hit the squared biting term and the exponential survival term at the same time.</p>
+  </section>
+
+  <section class="card next-link">
+    <p class="next-eyebrow">Next</p>
+    <a class="next-a" href="worked-example.html">Non-linearities in malaria epidemiology and control →</a>
+    <p class="muted" style="margin:8px 0 0">Trace a bed-net effect through the cascade from coverage to EIR, prevalence and clinical incidence, and see how the non-linearities compound.</p>
   </section>
 
   <footer>

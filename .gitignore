@@ -1,0 +1,9 @@
+# Papers / PDFs
+*.pdf
+
+# Raw data
+*.RData
+*.csv
+
+# Local tooling / editor config
+.claude/
