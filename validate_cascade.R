@@ -139,7 +139,8 @@ inc_adult <- make_cam(cam_adult, tail_exp = NA)
 ## 3. EIR -> PfPR : read the Hay data and REFIT the saturating curve  [DATA/FITTED]
 ## ===========================================================================
 ## Source: P. falciparum parasite rate in children (<15 y) vs annual EIR across
-## African sites (Hay et al. 2005). 130 site-level points.
+## African sites (Smith et al. 2005, Nature; data file named for senior author
+## Hay). 130 site-level points.
 load("EIR_prev_hay2005.RData") # provides data frame EIR_prev_hay2005
 hay <- as.data.frame(EIR_prev_hay2005)
 names(hay) <- c("eir", "pfpr")
@@ -231,7 +232,7 @@ cat(sprintf(
 ))
 
 ## ===========================================================================
-## 6. THE FOUR PLOTS
+## 6. THE FIVE PLOTS
 ## ===========================================================================
 base_theme <- theme_minimal(base_size = 11) +
   theme(
@@ -295,80 +296,111 @@ p2 <- ggplot() +
   scale_y_continuous(labels = percent, limits = c(0, 1), oob = scales::squish) +
   labs(
     title = "2. PfPR vs EIR",
-    subtitle = "dots: Hay et al. 2005 (children <15); curve: fitted saturating model",
+    subtitle = "dots: Smith et al. 2005 (children <15); curve: fitted saturating model",
     x = "EIR (log scale)",
     y = "prevalence (PfPR)"
   ) +
   base_theme
 
-## --- Plot 3: incidence vs PfPR (3 age curves + field data) ------------------
-curve3 <- bind_rows(
+## --- Plot 3: incidence vs EIR (composed; log EIR, linear incidence) ---------
+## incidence(EIR) = cameron_age( pfpr_from_eir(EIR) ): the fork's second arm.
+curve_ie <- bind_rows(
+  data.frame(eir = eir_curve, inc = inc_young(pfpr_from_eir(eir_curve)), age = "0-5y"),
+  data.frame(eir = eir_curve, inc = inc_old(pfpr_from_eir(eir_curve)), age = "5-15y"),
+  data.frame(eir = eir_curve, inc = inc_adult(pfpr_from_eir(eir_curve)), age = ">15y")
+) %>%
+  mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
+
+marker_ie <- data.frame(
+  eir = eir_at(cov_mark),
+  inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
+  age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
+)
+
+p3 <- ggplot() +
+  geom_line(data = curve_ie, aes(eir, inc, colour = age), linewidth = 1) +
+  geom_point(data = marker_ie, aes(eir, inc), colour = col_warm, size = 2.6) +
+  scale_colour_manual(values = age_cols, name = NULL) +
+  scale_x_log10(
+    limits = c(0.02, 1000),
+    oob = scales::squish,
+    breaks = c(0.1, 1, 10, 100, 1000),
+    labels = c("0.1", "1", "10", "100", "1000")
+  ) +
+  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
+  labs(
+    title = "3. Incidence vs EIR",
+    subtitle = "log EIR, linear incidence: older ages plateau, young keep rising",
+    x = "EIR (log scale)",
+    y = "incidence (/person/yr)"
+  ) +
+  base_theme +
+  theme(legend.position = "none")
+
+## --- Plot 4: incidence vs PfPR (3 age curves + field data; linear) ----------
+curve_pfpr <- bind_rows(
   data.frame(pfpr = pfpr_grid, inc = inc_young(pfpr_grid), age = "0-5y"),
   data.frame(pfpr = pfpr_grid, inc = inc_old(pfpr_grid), age = "5-15y"),
   data.frame(pfpr = pfpr_grid, inc = inc_adult(pfpr_grid), age = ">15y")
 ) %>%
   mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
 
-marker3 <- data.frame(
+marker_pfpr <- data.frame(
   pfpr = pf_cov,
   inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
   age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
 )
 
-p3 <- ggplot() +
+## Linear incidence axis (0-3) to match plot 3; the highest field records
+## (incidence > 3) are squished to the top edge, as on the web page.
+p4 <- ggplot() +
   geom_point(
     data = battle_pts,
     aes(pfpr, inc, colour = age),
     alpha = 0.30,
     size = 1.1
   ) +
-  geom_line(data = curve3, aes(pfpr, inc, colour = age), linewidth = 1) +
-  geom_point(data = marker3, aes(pfpr, inc), colour = col_warm, size = 2.6) +
+  geom_line(data = curve_pfpr, aes(pfpr, inc, colour = age), linewidth = 1) +
+  geom_point(data = marker_pfpr, aes(pfpr, inc), colour = col_warm, size = 2.6) +
   scale_colour_manual(values = age_cols, name = NULL) +
-  scale_x_continuous(
-    labels = percent,
-    limits = c(0, 0.80),
-    oob = scales::squish
-  ) +
-  scale_y_log10(
-    limits = c(0.01, 10),
-    oob = scales::squish,
-    breaks = c(0.01, 0.1, 1, 10),
-    labels = c("0.01", "0.1", "1", "10")
-  ) +
+  scale_x_continuous(labels = percent, limits = c(0, 0.80), oob = scales::squish) +
+  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
   labs(
-    title = "3. Incidence vs PfPR",
-    subtitle = "curves: Cameron 2015 by age; dots: Battle 2015 matched records",
+    title = "4. Incidence vs PfPR",
+    subtitle = "curves: Cameron 2015 by age; dots: Battle 2015 (highest run off top)",
     x = "PfPR (2-10)",
     y = "incidence (/person/yr)"
   ) +
   base_theme +
   theme(
-    legend.position = c(0.85, 0.18),
+    legend.position = c(0.18, 0.80),
     legend.background = element_rect(fill = "white", colour = NA)
   )
 
-## --- Plot 4: incidence vs coverage (3 age curves) ---------------------------
-curve4 <- bind_rows(
+## --- Plot 5: incidence vs coverage (3 age curves) ---------------------------
+curve_cov <- bind_rows(
   data.frame(cov = cov_grid, inc = inc_young(pf_at(cov_grid)), age = "0-5y"),
   data.frame(cov = cov_grid, inc = inc_old(pf_at(cov_grid)), age = "5-15y"),
   data.frame(cov = cov_grid, inc = inc_adult(pf_at(cov_grid)), age = ">15y")
 ) %>%
   mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
 
-marker4 <- data.frame(
+marker_cov <- data.frame(
   cov = cov_mark,
   inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
   age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
 )
 
-p4 <- ggplot() +
-  geom_line(data = curve4, aes(cov, inc, colour = age), linewidth = 1) +
-  geom_point(data = marker4, aes(cov, inc), colour = col_warm, size = 2.6) +
+## y-axis scaled to the (no-net) young-child baseline, as on the web page.
+y_cov_max <- as.numeric(inc_young(pf0)) * 1.08
+p5 <- ggplot() +
+  geom_line(data = curve_cov, aes(cov, inc, colour = age), linewidth = 1) +
+  geom_point(data = marker_cov, aes(cov, inc), colour = col_warm, size = 2.6) +
   scale_colour_manual(values = age_cols, name = NULL) +
   scale_x_continuous(labels = percent) +
+  scale_y_continuous(limits = c(0, y_cov_max), oob = scales::squish) +
   labs(
-    title = "4. Incidence vs coverage",
+    title = "5. Incidence vs coverage",
     subtitle = "absolute incidence by age group",
     x = "bed-net coverage",
     y = "incidence (/person/yr)"
@@ -379,8 +411,8 @@ p4 <- ggplot() +
 ## ===========================================================================
 ## 7. COMBINE & SAVE
 ## ===========================================================================
-combined <- (p1 | p2) /
-  (p3 | p4) +
+combined <- (p1 | p2 | p3) /
+  (p4 | p5 | plot_spacer()) +
   plot_annotation(
     title = sprintf(
       "Bed-net cascade (baseline EIR = %.0f, marker at %.0f%% coverage)",
@@ -390,5 +422,5 @@ combined <- (p1 | p2) /
     theme = theme(plot.title = element_text(face = "bold"))
   )
 
-ggsave("cascade_validation.png", combined, width = 11, height = 8.5, dpi = 130)
+ggsave("cascade_validation.png", combined, width = 15, height = 8.5, dpi = 130)
 cat("\nSaved cascade_validation.png\n")
