@@ -105,7 +105,7 @@
   .readout .v{font-size:23px;font-weight:800;line-height:1.1}
   .readout .l{font-size:12px;color:var(--muted);margin-top:3px}
 
-  .plots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;align-items:start}
+  .plots{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:22px;align-items:start}
   @media(max-width:860px){.plots{grid-template-columns:repeat(2,1fr);gap:22px}}
   @media(max-width:520px){.plots{grid-template-columns:1fr}}
   .panel{min-width:0}
@@ -116,10 +116,14 @@
   .note{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding:6px 0 6px 14px;margin:18px 0;line-height:1.6}
   .note p{margin:8px 0}
   .note ul{margin:8px 0;padding-left:18px}
+  .note ol.refs{margin:8px 0 0;padding-left:22px}
+  .note ol.refs li{margin:0 0 7px}
   .note li{margin:6px 0}
   .note strong{color:var(--ink)}
   footer{text-align:center;padding:24px 22px 60px;color:var(--muted);font-size:13.5px}
   a{color:var(--accent)}
+  sup.cite{line-height:0}
+  sup.cite a{text-decoration:none;font-weight:700;padding:0 1px}
 </style>
 </head>
 <body>
@@ -166,7 +170,7 @@
       </span>
     </div>
     <p>where <span class="var">m</span> is mosquitoes per person, <span class="var">a</span> the biting rate, <span class="var">p</span> daily mosquito survival and <span class="var">n</span> the extrinsic incubation period. A treated net both reduces bites and kills mosquitoes, shortening survival so that fewer live long enough to complete the incubation period <span class="var">n</span>.</p>
-    <p>Biting enters <strong>squared</strong> (<span class="var">a</span><sup>2</sup>) and survival as <strong><span class="var">p</span><sup><span class="var">n</span></sup></strong>, so a modest change in either produces a much larger change in transmission. Baseline transmission also spans a wide range: estimated <span class="pill warm">R₀</span> runs from about 1 to over 3,000 across African settings (Smith et al.).</p>
+    <p>Biting enters <strong>squared</strong> (<span class="var">a</span><sup>2</sup>) and survival as <strong><span class="var">p</span><sup><span class="var">n</span></sup></strong>, so a modest change in either produces a much larger change in transmission. Baseline transmission also spans a wide range: estimated <span class="pill warm">R₀</span> runs from about 1 to over 3,000 across African settings<sup class="cite"><a href="#ref1">1</a></sup>.</p>
   </section>
 
   <!-- SECTION 2 -->
@@ -175,8 +179,8 @@
     <p class="sub">A steeply saturating curve</p>
 
     <h3>Evidence</h3>
-    <p>The relationship between the entomological inoculation rate (EIR) and parasite prevalence is strongly non-linear. At low EIR, small changes produce large changes in prevalence; at high EIR, PfPR saturates, so large differences in EIR map to small differences in prevalence. Cross-site analyses find PfPR tracks roughly the <em>logarithm</em> of annual EIR: some sites with annual EIR below 5 still exceed 40% PfPR, while high-EIR sites cluster near a ceiling.</p>
-    <p>Two features sustain this. Biting is heterogeneous (a minority of people receive most infectious bites), and infections last around six months, so prevalence integrates exposure over time rather than tracking it instantly.</p>
+    <p>The relationship between the entomological inoculation rate (EIR) and parasite prevalence is strongly non-linear. At low EIR, small changes produce large changes in prevalence; at high EIR, PfPR saturates, so large differences in EIR map to small differences in prevalence. Cross-site analyses find PfPR tracks roughly the <em>logarithm</em> of annual EIR<sup class="cite"><a href="#ref5">5</a></sup>: some sites with annual EIR below 5 still exceed 40% PfPR, while high-EIR sites cluster near a ceiling.</p>
+    <p>Two features sustain this. Biting is heterogeneous (a minority of people receive most infectious bites), and infections last around six months, so prevalence integrates exposure over time rather than tracking it instantly<sup class="cite"><a href="#ref6">6</a></sup>.</p>
 
     <h3>Mechanism</h3>
     <p>A minimal prevalence model captures the shape:</p>
@@ -196,7 +200,7 @@
     <p class="sub">Shaped by immunity and exposure history</p>
 
     <h3>Evidence</h3>
-    <p>We use the fitted Cameron et al. (2015) relationship between PfPR and clinical incidence, and plot the matched field data it draws on (Battle et al. 2015) alongside it. Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
+    <p>We use the fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship between PfPR and clinical incidence, and plot the matched field data it draws on<sup class="cite"><a href="#ref8">8</a></sup> alongside it. Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
     <p>At low transmission, incidence scales roughly linearly with prevalence. As transmission rises, prevalence saturates while clinical episodes continue through repeated infection and superinfection, producing convexity, most strongly in young children. The age pattern shifts with it: below about 10% PfPR much of the burden falls on adults; at higher transmission it concentrates in children. After a recent decline in transmission, young children carry a larger share, because older groups retain immunity acquired under previously higher transmission.</p>
 
     <h3>Mechanism</h3>
@@ -242,22 +246,27 @@
       <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--blue)">2</span> PfPR vs EIR</p>
         <canvas id="pPfpr" height="190" aria-label="Prevalence versus EIR"></canvas>
-        <p class="pcap">Dots: field data (Hay et al. 2005); the curve is a saturating fit. Prevalence rises steeply at low EIR then plateaus, so large EIR reductions move it little near the top. Log EIR axis.</p>
+        <p class="pcap">Dots: field data<sup class="cite"><a href="#ref6">6</a></sup>; the curve is a saturating fit. Prevalence rises steeply at low EIR then plateaus, so large EIR reductions move it little near the top. Log EIR axis.</p>
       </div>
       <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
+        <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs EIR</p>
+        <canvas id="pIncEir" height="190" aria-label="Clinical incidence versus EIR"></canvas>
+        <p class="pcap">The fork's second arm: clinical incidence by age against transmission (composing steps 2 and 4). EIR is on a log scale but incidence is linear, which makes the plateau plain: older children and adults level off once EIR passes roughly 10, while young-child incidence keeps climbing. Age colours as in the other incidence plots.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--clin)">4</span> Incidence vs PfPR</p>
         <canvas id="pInc" height="190" aria-label="Clinical incidence versus prevalence"></canvas>
         <p class="pcap">
-          Cameron model curves and field data by age: <span style="color:var(--clin);font-weight:750">● 0–5y</span>
+          Cameron model curves<sup class="cite"><a href="#ref7">7</a></sup> and field data by age: <span style="color:var(--clin);font-weight:750">● 0–5y</span>
           <span style="color:var(--accent);font-weight:750">● 5–15y</span>
           <span style="color:var(--blue);font-weight:750">● &gt;15y</span><br>
-          Both incidence and its sensitivity to prevalence fall with age: convex in young children, saturating in older children, low and flat in adults. Dots: 279 matched records (Battle et al. 2015 / Cameron), coloured by age group. On the log axis the cloud spans ~100-fold at a given prevalence, largely reflecting how studies <em>detect</em> cases. Plot 4 uses these curves.</p>
+          Both incidence and its sensitivity to prevalence fall with age: convex in young children, saturating in older children, low and flat in adults. Dots: 279 matched records<sup class="cite"><a href="#ref8">8</a></sup>, coloured by age group. The data scatter widely at any prevalence (the highest-incidence records run off the top of this axis), largely reflecting how studies <em>detect</em> cases. These age curves drive plots 3 and 5.</p>
       </div>
       <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--warm)">4</span> Incidence vs coverage</p>
+        <p class="panel-h"><span class="step" style="background:var(--warm)">5</span> Incidence vs coverage</p>
         <canvas id="pComb" height="190" aria-label="Clinical incidence versus coverage"></canvas>
-        <p class="pcap">Absolute incidence (cases·person⁻¹·yr⁻¹), one line per age group (<span style="color:var(--clin);font-weight:750">0–5</span> / <span style="color:var(--accent);font-weight:750">5–15</span> / <span style="color:var(--blue);font-weight:750">&gt;15</span>), from the plot-3 curves. Young children carry the most incidence and the largest absolute reduction; adults change little.</p>
-        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> ~50% fewer uncomplicated episodes vs no nets (Cochrane ITN review, Lengeler 2004), a child measure. The 0–5y line (the readout) reaches ~50% at high EIR and ~80% coverage.</p>
+        <p class="pcap">Absolute incidence (cases·person⁻¹·yr⁻¹), one line per age group (<span style="color:var(--clin);font-weight:750">0–5</span> / <span style="color:var(--accent);font-weight:750">5–15</span> / <span style="color:var(--blue);font-weight:750">&gt;15</span>), read off the same age curves. Young children carry the most incidence and the largest absolute reduction; adults change little.</p>
+        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> ~50% fewer uncomplicated episodes vs no nets<sup class="cite"><a href="#ref9">9</a></sup>, a child measure (Cochrane ITN review). The 0–5y line (the readout) reaches ~50% at high EIR and ~80% coverage.</p>
       </div>
     </div>
   </section>
@@ -266,22 +275,33 @@
 <div class="wrapwide">
   <section class="card">
     <h2>What to notice</h2>
-    <p><strong>Each step is non-linear in a different way, and they compound.</strong> Plot 1 falls steeply then flattens (biting squared, survival exponential). Plot 2 saturates, so the same EIR reduction buys less prevalence change when baseline transmission is high. Plot 3's slope depends on age (convex in young children, near-flat in adults), so a prevalence fall reduces young-child cases substantially but adult cases little.</p>
+    <p><strong>Each step is non-linear in a different way, and they compound.</strong> Plot 1 falls steeply then flattens (biting squared, survival exponential). Plot 2 saturates, so the same EIR reduction buys less prevalence change when baseline transmission is high, and plot 3 carries that saturation straight through to clinical incidence. Plot 4's slope depends on age (convex in young children, near-flat in adults), so a prevalence fall reduces young-child cases substantially but adult cases little.</p>
     <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction moves prevalence, and clinical incidence, only slightly. At low baseline EIR the same coverage produces a much larger prevalence and case response. Returns therefore increase as transmission falls.</p>
     <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be hidden within a saturated prevalence figure while still lowering clinical disease. The conclusion depends on which outcome is measured.</p>
-    <p><strong>The size of the effect.</strong> The net's effects on biting and survival are taken from experimental-hut data, so the impact on clinical incidence is not tuned: it falls out at the end of the cascade. At high transmission and ~80% coverage the modelled reduction in under-5 clinical incidence is about 50%, close to the ~50% fewer uncomplicated episodes reported by the Cochrane review of ITN trials (Lengeler 2004). This is a best case: a new net with no insecticide resistance.</p>
+    <p><strong>The size of the effect.</strong> The net's effects on biting and survival are taken from experimental-hut data, so the impact on clinical incidence is not tuned: it falls out at the end of the cascade. At high transmission and ~80% coverage the modelled reduction in under-5 clinical incidence is about 50%, close to the ~50% fewer uncomplicated episodes reported by the Cochrane review of ITN trials<sup class="cite"><a href="#ref9">9</a></sup>. This is a best case: a new net with no insecticide resistance.</p>
   </section>
 
   <div class="note">
     <p><strong>Methods.</strong> An illustrative model showing the <em>shape</em> of these relationships, not a specific setting. Not to be used for decision making. The no-net baseline EIR is set by the slider and coverage is capped at 80%.</p>
     <ul>
-      <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days; Le Menach 2007, Griffin et al. 2010). These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, comparable to the ~87% in Unwin et al. (2023), which reflects operational rather than new-net conditions. This step is more mechanistic than the two data-fitted steps below.</li>
-      <li><strong>EIR → PfPR.</strong> A saturating fit to <em>P. falciparum</em> PfPR in children &lt;15 against annual EIR across African sites (Hay et al. 2005).</li>
-      <li><strong>PfPR → incidence.</strong> The fitted Cameron et al. (2015) relationship (Griffin individual-based model, low seasonality), digitised in absolute units (cases·person⁻¹·yr⁻¹) for three age groups. The dots are 279 matched incidence and prevalence records for <em>P. falciparum</em> in sub-Saharan Africa (Battle et al. 2015; Cameron calibration subset), one point per record, coloured by reported age group (young ≤6, older 4–16, adult ≥15).</li>
+      <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days)<sup class="cite"><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>. These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, comparable to the ~87% in Unwin et al.<sup class="cite"><a href="#ref4">4</a></sup>, which reflects operational rather than new-net conditions. This step is more mechanistic than the two data-fitted steps below.</li>
+      <li><strong>EIR → PfPR.</strong> A saturating fit to <em>P. falciparum</em> PfPR in children &lt;15 against annual EIR across African sites<sup class="cite"><a href="#ref6">6</a></sup>.</li>
+      <li><strong>PfPR → incidence.</strong> The fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship (Griffin individual-based model, low seasonality), digitised in absolute units (cases·person⁻¹·yr⁻¹) for three age groups. The dots are 279 matched incidence and prevalence records for <em>P. falciparum</em> in sub-Saharan Africa<sup class="cite"><a href="#ref8">8</a></sup> (Cameron calibration subset), one point per record, coloured by reported age group (young ≤6, older 4–16, adult ≥15).</li>
       <li><strong>Summary readout.</strong> The reduction in under-5 (0–5y) clinical incidence, matching the age range of the Cochrane trial measure.</li>
-      <li><strong>Age band.</strong> The EIR–PfPR data is PfPR in children &lt;15 (Hay et al. 2005); Cameron's relationship uses PfPR<sub>2–10</sub>. Both are childhood references, so the cascade runs on roughly one scale; PfPR&lt;15 sits slightly below PfPR<sub>2–10</sub>, but the offset is small and largely cancels in the relative reduction. The cross-site incidence scatter is dominated by study design (detection method, case definition).</li>
+      <li><strong>Age band.</strong> The EIR–PfPR data is PfPR in children &lt;15<sup class="cite"><a href="#ref6">6</a></sup>; Cameron's relationship uses PfPR<sub>2–10</sub>. Both are childhood references, so the cascade runs on roughly one scale; PfPR&lt;15 sits slightly below PfPR<sub>2–10</sub>, but the offset is small and largely cancels in the relative reduction. The cross-site incidence scatter is dominated by study design (detection method, case definition).</li>
     </ul>
-    <p><strong>References.</strong> Smith, D.L. et al. (vectorial capacity / R₀ range); Le Menach, A. et al. <em>Malar. J.</em> 6:10 (2007); Griffin, J.T. et al. <em>PLoS Med.</em> 7:e1000324 (2010); Beier, J.C., Killeen, G.F. &amp; Githure, J.I. (1999, PfPR ≈ log EIR); Hay, S.I. et al. (2005); Battle, K.E. et al. <em>Sci. Data</em> 2:150012 (2015); Cameron, E. et al. <em>Nat. Commun.</em> 6:8170 (2015); Unwin, H.J.T. et al. <em>Nat. Commun.</em> 14:676 (2023); Lengeler, C. <em>Cochrane Database Syst. Rev.</em> (2004).</p>
+    <p><strong>References.</strong></p>
+    <ol class="refs">
+      <li id="ref1">Smith <em>et al</em>, 2007. Revisiting the basic reproductive number for malaria and its implications for malaria control. <em>PLoS Biology</em> 5:e42. <a href="https://doi.org/10.1371/journal.pbio.0050042" target="_blank" rel="noopener">doi.org/10.1371/journal.pbio.0050042</a></li>
+      <li id="ref2">Le Menach <em>et al</em>, 2007. An elaborated feeding cycle model for reductions in vectorial capacity of night-biting mosquitoes by insecticide-treated nets. <em>Malaria Journal</em> 6:10. <a href="https://doi.org/10.1186/1475-2875-6-10" target="_blank" rel="noopener">doi.org/10.1186/1475-2875-6-10</a></li>
+      <li id="ref3">Griffin <em>et al</em>, 2010. Reducing <em>Plasmodium falciparum</em> malaria transmission in Africa: a model-based evaluation of intervention strategies. <em>PLoS Medicine</em> 7:e1000324. <a href="https://doi.org/10.1371/journal.pmed.1000324" target="_blank" rel="noopener">doi.org/10.1371/journal.pmed.1000324</a></li>
+      <li id="ref4">Unwin <em>et al</em>, 2023. Quantifying the direct and indirect protection provided by insecticide treated bed nets against malaria. <em>Nature Communications</em> 14:676. <a href="https://doi.org/10.1038/s41467-023-36356-9" target="_blank" rel="noopener">doi.org/10.1038/s41467-023-36356-9</a></li>
+      <li id="ref5">Beier <em>et al</em>, 1999. Entomologic inoculation rates and <em>Plasmodium falciparum</em> malaria prevalence in Africa. <em>American Journal of Tropical Medicine and Hygiene</em> 61:109–113. <a href="https://doi.org/10.4269/ajtmh.1999.61.109" target="_blank" rel="noopener">doi.org/10.4269/ajtmh.1999.61.109</a></li>
+      <li id="ref6">Smith <em>et al</em>, 2005. The entomological inoculation rate and <em>Plasmodium falciparum</em> infection in African children. <em>Nature</em> 438:492–495. <a href="https://doi.org/10.1038/nature04024" target="_blank" rel="noopener">doi.org/10.1038/nature04024</a></li>
+      <li id="ref7">Cameron <em>et al</em>, 2015. Defining the relationship between infection prevalence and clinical incidence of <em>Plasmodium falciparum</em> malaria. <em>Nature Communications</em> 6:8170. <a href="https://doi.org/10.1038/ncomms9170" target="_blank" rel="noopener">doi.org/10.1038/ncomms9170</a></li>
+      <li id="ref8">Battle <em>et al</em>, 2015. Global database of matched <em>Plasmodium falciparum</em> and <em>P. vivax</em> incidence and prevalence records from 1985–2013. <em>Scientific Data</em> 2:150012. <a href="https://doi.org/10.1038/sdata.2015.12" target="_blank" rel="noopener">doi.org/10.1038/sdata.2015.12</a></li>
+      <li id="ref9">Lengeler, 2004. Insecticide-treated bed nets and curtains for preventing malaria. <em>Cochrane Database of Systematic Reviews</em> CD000363. <a href="https://doi.org/10.1002/14651858.CD000363.pub2" target="_blank" rel="noopener">doi.org/10.1002/14651858.CD000363.pub2</a></li>
+    </ol>
   </div>
 
   <footer>
@@ -473,7 +493,7 @@ function update(){
   document.getElementById('vUse').textContent = use.value+'%';
 
   const eirU = eirAt(u), pfU = pfAt(u);
-  const baseYoung = camYoungInc(PFPR0);                          // tallest curve's baseline → plot-4 y-axis
+  const baseYoung = camYoungInc(PFPR0);                          // tallest curve's baseline → plot-5 y-axis
   document.getElementById('rEir').textContent   = eirU<1 ? eirU.toFixed(2) : eirU<10 ? eirU.toFixed(1) : Math.round(eirU);
   document.getElementById('rPf').textContent    = pct(pfU);
   document.getElementById('rPfRed').textContent = pct(1 - pfU/PFPR0);
@@ -496,15 +516,22 @@ function update(){
     curve:{fn:e=>pfprFromEIR(e), col:BLU},
     marker:{x:eirU,y:pfU,col:WRM}
   });
-  // 3) clinical incidence vs PfPR — Cameron model curves by age + under-5 field data
+  // 3) clinical incidence vs EIR — composed (EIR -> PfPR -> incidence), by age; log EIR, linear incidence
+  panel('pIncEir', {
+    xLog:true, xMin:0.02, xMax:1000, yMax:3, xlab:'EIR (log scale)', ylab:'incidence (/person/yr)',
+    fmtY:t=>(t*3).toFixed(1),
+    curves:[{fn:e=>camYoungInc(pfprFromEIR(e)),col:CLN},{fn:e=>camOldInc(pfprFromEIR(e)),col:ACC},{fn:e=>camAdultInc(pfprFromEIR(e)),col:BLU}],
+    markers:[{x:eirU,y:camYoungInc(pfU),col:CLN},{x:eirU,y:camOldInc(pfU),col:ACC},{x:eirU,y:camAdultInc(pfU),col:BLU}]
+  });
+  // 4) clinical incidence vs PfPR — Cameron model curves by age + field data
   panel('pInc', {
-    xMax:0.8, yLog:true, yMin:0.01, yMax:10, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
-    fmtX:t=>Math.round(t*80)+'%',
+    xMax:0.8, yMax:3, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
+    fmtX:t=>Math.round(t*80)+'%', fmtY:t=>(t*3).toFixed(1),
     pointSets:[{pts:DATA_YOUNG,col:'rgba(123,91,214,0.28)'},{pts:DATA_OLD,col:'rgba(47,143,126,0.30)'},{pts:DATA_ADULT,col:'rgba(61,111,180,0.32)'}],
     curves:[{fn:camYoungInc,col:CLN},{fn:camOldInc,col:ACC},{fn:camAdultInc,col:BLU}],
     markers:[{x:pfU,y:camYoungInc(pfU),col:CLN},{x:pfU,y:camOldInc(pfU),col:ACC},{x:pfU,y:camAdultInc(pfU),col:BLU}]
   });
-  // 4) clinical incidence vs coverage — the payoff (absolute), by age group
+  // 5) clinical incidence vs coverage — the payoff (absolute), by age group
   const yM = Math.max(0.2, baseYoung*1.08);
   panel('pComb', {
     xMax:USE_MAX, yMax:yM, xlab:'bed-net coverage', ylab:'incidence (/person/yr)',
