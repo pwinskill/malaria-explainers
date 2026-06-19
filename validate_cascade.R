@@ -1,7 +1,7 @@
 # =============================================================================
 # validate_cascade.R
 #
-# Static R/ggplot reproduction of the four plots in worked-example.html, as an
+# Static R/ggplot reproduction of the four plots in index.html, as an
 # independent cross-check of the interactive model. It re-implements the same
 # cascade
 #
@@ -302,7 +302,7 @@ p2 <- ggplot() +
   ) +
   base_theme
 
-## --- Plot 3: incidence vs EIR (composed; log EIR, linear incidence) ---------
+## --- Plot 4: incidence vs EIR (composed; log EIR, linear incidence) ---------
 ## incidence(EIR) = cameron_age( pfpr_from_eir(EIR) ): the fork's second arm.
 curve_ie <- bind_rows(
   data.frame(eir = eir_curve, inc = inc_young(pfpr_from_eir(eir_curve)), age = "0-5y"),
@@ -317,7 +317,7 @@ marker_ie <- data.frame(
   age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
 )
 
-p3 <- ggplot() +
+p4 <- ggplot() +
   geom_line(data = curve_ie, aes(eir, inc, colour = age), linewidth = 1) +
   geom_point(data = marker_ie, aes(eir, inc), colour = col_warm, size = 2.6) +
   scale_colour_manual(values = age_cols, name = NULL) +
@@ -329,7 +329,7 @@ p3 <- ggplot() +
   ) +
   scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
   labs(
-    title = "3. Incidence vs EIR",
+    title = "4. Incidence vs EIR",
     subtitle = "log EIR, linear incidence: older ages plateau, young keep rising",
     x = "EIR (log scale)",
     y = "incidence (/person/yr)"
@@ -337,7 +337,7 @@ p3 <- ggplot() +
   base_theme +
   theme(legend.position = "none")
 
-## --- Plot 4: incidence vs PfPR (3 age curves + field data; linear) ----------
+## --- Plot 3: incidence vs PfPR (3 age curves + field data; linear) ----------
 curve_pfpr <- bind_rows(
   data.frame(pfpr = pfpr_grid, inc = inc_young(pfpr_grid), age = "0-5y"),
   data.frame(pfpr = pfpr_grid, inc = inc_old(pfpr_grid), age = "5-15y"),
@@ -351,9 +351,9 @@ marker_pfpr <- data.frame(
   age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
 )
 
-## Linear incidence axis (0-3) to match plot 3; the highest field records
+## Linear incidence axis (0-3) to match plot 4; the highest field records
 ## (incidence > 3) are squished to the top edge, as on the web page.
-p4 <- ggplot() +
+p3 <- ggplot() +
   geom_point(
     data = battle_pts,
     aes(pfpr, inc, colour = age),
@@ -366,7 +366,7 @@ p4 <- ggplot() +
   scale_x_continuous(labels = percent, limits = c(0, 0.80), oob = scales::squish) +
   scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
   labs(
-    title = "4. Incidence vs PfPR",
+    title = "3. Incidence vs PfPR",
     subtitle = "curves: Cameron 2015 by age; dots: Battle 2015 (highest run off top)",
     x = "PfPR (2-10)",
     y = "incidence (/person/yr)"
@@ -391,14 +391,13 @@ marker_cov <- data.frame(
   age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
 )
 
-## y-axis scaled to the (no-net) young-child baseline, as on the web page.
-y_cov_max <- as.numeric(inc_young(pf0)) * 1.08
+## fixed 0-3 incidence axis, matching plots 3 and 4 (as on the web page).
 p5 <- ggplot() +
   geom_line(data = curve_cov, aes(cov, inc, colour = age), linewidth = 1) +
   geom_point(data = marker_cov, aes(cov, inc), colour = col_warm, size = 2.6) +
   scale_colour_manual(values = age_cols, name = NULL) +
   scale_x_continuous(labels = percent) +
-  scale_y_continuous(limits = c(0, y_cov_max), oob = scales::squish) +
+  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
   labs(
     title = "5. Incidence vs coverage",
     subtitle = "absolute incidence by age group",

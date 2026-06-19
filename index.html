@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malaria, Mosquitoes & Bed Nets — a short tour</title>
+<title>Non-linearities in malaria epidemiology and control</title>
 <style>
   :root{
     --bg:#f7f6f2;
@@ -11,153 +11,139 @@
     --ink:#26303b;
     --muted:#6b7785;
     --line:#e7e4dc;
-    --accent:#2f8f7e;       /* teal-green */
+    --accent:#2f8f7e;
     --accent-soft:#dcefe9;
-    --warm:#e8804b;         /* mosquito / danger */
+    --warm:#e8804b;         /* current-state marker */
     --warm-soft:#fbe3d6;
-    --blue:#3d6fb4;
+    --blue:#3d6fb4;         /* transmission / EIR */
+    --blue-soft:#dde7f3;
+    --clin:#7b5bd6;         /* clinical incidence */
+    --clin-soft:#e7e0f7;
     --shadow:0 1px 2px rgba(20,30,40,.05),0 8px 24px rgba(20,30,40,.06);
     --radius:18px;
     --maxw:760px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--ink);
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-  header.hero{
-    text-align:center;
-    padding:64px 22px 40px;
-  }
-  .kicker{
-    text-transform:uppercase;letter-spacing:.14em;font-size:13px;font-weight:700;
-    color:var(--accent);margin-bottom:14px;
-  }
-  h1{
-    font-size:clamp(30px,5vw,44px);
-    line-height:1.12;margin:0 0 16px;font-weight:800;letter-spacing:-.02em;
-  }
-  .lede{font-size:19px;color:var(--muted);max-width:560px;margin:0 auto}
+  .wrapwide{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.hero{text-align:center;padding:56px 22px 24px}
+  .kicker{text-transform:uppercase;letter-spacing:.14em;font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px}
+  h1{font-size:clamp(27px,4.6vw,40px);line-height:1.12;margin:0 0 16px;font-weight:800;letter-spacing:-.02em}
+  .lede{font-size:18px;color:var(--muted);max-width:620px;margin:0 auto}
   section{margin:30px 0}
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:30px 32px;
-    box-shadow:var(--shadow);
-    margin-bottom:26px;
-  }
-  h2{font-size:25px;margin:0 0 6px;font-weight:750;letter-spacing:-.01em;display:flex;align-items:center;gap:12px}
-  .num{
-    flex:none;width:34px;height:34px;border-radius:50%;
-    background:var(--accent-soft);color:var(--accent);
-    display:grid;place-items:center;font-size:16px;font-weight:800;
-  }
-  h2 + .sub{color:var(--muted);margin:2px 0 20px 46px;font-size:16px}
-  p{margin:14px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:28px 30px;box-shadow:var(--shadow);margin-bottom:24px}
+  h2{font-size:23px;margin:0 0 6px;font-weight:750;letter-spacing:-.01em;display:flex;align-items:center;gap:12px}
+  .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);
+    display:grid;place-items:center;font-size:16px;font-weight:800}
+  h2 + .sub{color:var(--muted);margin:2px 0 18px 46px;font-size:16px}
+  h3{font-size:15px;font-weight:750;margin:22px 0 4px;letter-spacing:.01em;text-transform:uppercase;
+    font-size:12.5px;letter-spacing:.08em;color:var(--accent)}
+  p{margin:13px 0}
   .muted{color:var(--muted)}
+  .var{font-style:italic;font-family:Georgia,"Times New Roman",serif}
   strong{font-weight:700}
+  canvas{width:100%;display:block}
   .pill{display:inline-block;background:var(--accent-soft);color:var(--accent);
     padding:1px 9px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
   .pill.warm{background:var(--warm-soft);color:#c45a25}
+  .pill.blue{background:var(--blue-soft);color:#345f9c}
 
-  /* ---- formula ---- */
-  .formula{
-    background:linear-gradient(180deg,#fbfaf7,#f4f2ec);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:26px 20px;
-    text-align:center;
-    margin:22px 0 8px;
-    font-size:22px;
-  }
+  .eqline{font-family:Georgia,"Times New Roman",serif;font-size:16px;background:#f4f2ec;border:1px solid var(--line);
+    border-radius:10px;padding:14px 16px;margin:16px 0;text-align:center}
+  .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 5px}
+  .frac > span{display:block;padding:1px 10px}
+  .frac .den{border-top:2px solid var(--ink)}
+  sup{font-size:.7em}
+
+  /* ---- Ross–Macdonald formula (section 1) ---- */
+  .formula{background:linear-gradient(180deg,#fbfaf7,#f4f2ec);border:1px solid var(--line);border-radius:14px;
+    padding:26px 20px;text-align:center;margin:18px 0 8px;font-size:22px}
   .eq{display:inline-flex;align-items:center;gap:8px;font-family:Georgia,"Times New Roman",serif}
   .r0{display:inline-block;position:relative}
   .r0 sub{font-size:.6em;font-style:normal;line-height:0;position:relative;bottom:-.28em;margin-left:1px;
-    font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-feature-settings:"lnum" 1;}
-  .var{font-style:italic}
-  .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}
-  .frac > span{display:block;padding:2px 10px}
-  .frac .den{border-top:2px solid var(--ink)}
-  sup{font-size:.65em}
-  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 24px;margin-top:22px;
+    font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px 24px;margin-top:20px;
     list-style:none;padding:0;font-size:15px}
   .legend li{display:flex;gap:10px}
-  .legend .sym{font-family:Georgia,serif;font-style:italic;font-weight:700;color:var(--accent);min-width:20px}
+  .legend .sym{font-family:Georgia,serif;font-style:italic;font-weight:700;color:var(--accent);min-width:24px}
   .highlight-term{color:var(--warm);font-weight:700}
   .hl-bite{color:var(--warm);font-weight:700}
-
-  /* ---- charts ---- */
-  .chart-card{padding:24px 26px 28px}
-  canvas{width:100%;display:block}
-  .readouts{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-    gap:12px;margin:20px 0 4px;
-  }
-  .readout{
-    background:var(--bg);border:1px solid var(--line);border-radius:12px;
-    padding:12px 14px;text-align:center;
-  }
-  .readout .val{font-size:24px;font-weight:800;line-height:1.1}
-  .readout .lab{font-size:12px;color:var(--muted);margin-top:3px;letter-spacing:.02em}
-
-  /* ---- slider ---- */
-  .slider-block{
-    background:var(--accent-soft);
-    border-radius:14px;padding:20px 22px;margin:6px 0 24px;
-  }
-  .slider-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-  .slider-top .label{font-weight:700}
-  .slider-top .cov{font-size:30px;font-weight:800;color:var(--accent)}
-  input[type=range]{
-    -webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
-    background:linear-gradient(90deg,var(--accent) 0%,var(--accent) var(--fill,0%),#c7e0d8 var(--fill,0%),#c7e0d8 100%);
-    outline:none;margin:6px 0;
-  }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;
-    background:#fff;border:3px solid var(--accent);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.18);
-  }
-  input[type=range]::-moz-range-thumb{
-    width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--accent);cursor:pointer;
-  }
-  .verdict{
-    margin-top:14px;font-size:16px;font-weight:600;padding:12px 16px;border-radius:10px;
-    transition:background .25s,color .25s;
-  }
-  .verdict.spread{background:var(--warm-soft);color:#b34d1f}
-  .verdict.fade{background:#d9f0e7;color:#1f6f5e}
   .caption{font-size:13.5px;color:var(--muted);margin-top:14px}
-  footer{text-align:center;padding:30px 22px 60px;color:var(--muted);font-size:13.5px}
+  .chartbox{float:right;width:330px;max-width:46%;margin:2px 0 10px 22px}
+  .chartbox .caption{margin-top:6px;font-size:12px}
+  @media(max-width:560px){.chartbox{float:none;width:100%;max-width:none;margin:10px 0}}
+
+  /* ---- controls ---- */
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+  @media(max-width:620px){.controls{grid-template-columns:1fr}}
+  .slider-block{border-radius:14px;padding:16px 20px}
+  .slider-block.eir{background:var(--blue-soft)}
+  .slider-block.cov{background:var(--accent-soft)}
+  .slider-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .slider-top .label{font-weight:700;font-size:15px}
+  .slider-top .val{font-size:26px;font-weight:800}
+  .slider-block.eir .val{color:var(--blue)}
+  .slider-block.cov .val{color:var(--accent)}
+  .slider-sub{font-size:12.5px;margin-top:6px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;outline:none;margin:4px 0}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;
+    background:#fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer}
+  #eir0{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
+  #eir0::-webkit-slider-thumb{border:3px solid var(--blue)} #eir0::-moz-range-thumb{border:3px solid var(--blue)}
+  #use{background:linear-gradient(90deg,var(--accent) 0%,var(--accent) var(--fill,0%),#c7e0d8 var(--fill,0%),#c7e0d8 100%)}
+  #use::-webkit-slider-thumb{border:3px solid var(--accent)} #use::-moz-range-thumb{border:3px solid var(--accent)}
+
+  .readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0 4px}
+  .readout{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center}
+  .readout .v{font-size:23px;font-weight:800;line-height:1.1}
+  .readout .l{font-size:12px;color:var(--muted);margin-top:3px}
+
+  .plots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 18px;margin-top:22px;align-items:start}
+  @media(max-width:860px){.plots{grid-template-columns:repeat(2,1fr);gap:22px}}
+  @media(max-width:520px){.plots{grid-template-columns:1fr}}
+  .panel{min-width:0}
+  .panel-h{font-size:14px;font-weight:750;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+  .panel-h .step{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+    font-size:12px;font-weight:800;color:#fff}
+  .pcap{font-size:12px;color:var(--muted);margin:8px 0 0;line-height:1.5}
+  .note{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding:6px 0 6px 14px;margin:18px 0;line-height:1.6}
+  .note p{margin:8px 0}
+  .note ul{margin:8px 0;padding-left:18px}
+  .note ol.refs{margin:8px 0 0;padding-left:22px}
+  .note ol.refs li{margin:0 0 7px}
+  .note li{margin:6px 0}
+  .note strong{color:var(--ink)}
+  footer{text-align:center;padding:24px 22px 60px;color:var(--muted);font-size:13.5px}
   a{color:var(--accent)}
-  .note{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding:2px 0 2px 14px;margin:18px 0}
-  .next-link{border-color:var(--accent-soft);background:linear-gradient(180deg,#ffffff,#f6fbf9)}
-  .next-eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;color:var(--accent);margin:0 0 6px}
-  .next-a{font-size:20px;font-weight:750;text-decoration:none;letter-spacing:-.01em}
-  .next-a:hover{text-decoration:underline}
+  sup.cite{line-height:0}
+  sup.cite a{text-decoration:none;font-weight:700;padding:0 1px}
 </style>
 </head>
 <body>
 
 <header class="hero">
-  <h1>Non-linear impacts of bed nets</h1>
+  <p class="kicker">An interactive explainer</p>
+  <h1>Non-linearities in malaria epidemiology and control</h1>
+  <p class="lede">This page helps us consider and explore a number of non-linearities in malaria transmission and control.</p>
 </header>
 
-<div class="wrap">
+<div class="wrapwide">
 
   <!-- SECTION 1 -->
   <section class="card">
-    <h2><span class="num">1</span> The Ross–Macdonald equation</h2>
+    <h2><span class="num">1</span> Bed-net coverage and vector control</h2>
 
-    <p>Ronald Ross and George Macdonald's simple model of <span class="pill">R₀</span>, the <em>basic reproduction number</em>: the average number of new human infections caused by one infected person dropped into a fully susceptible population.</p>
+    <h3>Evidence</h3>
+    <p>Insecticide-treated nets protect users directly by blocking infectious bites, and protect users and non-users indirectly by lowering mosquito survival and density and shrinking the infectious reservoir.</p>
+    <p>Direct protection scales with personal use; the indirect effect scales with community coverage and depends on vector behaviour, insecticide efficacy, resistance, net durability and spatial clustering. Pyrethroid resistance erodes the insecticidal benefits but leaves the physical barrier intact.</p>
 
-    <p>If R₀ &gt; 1, malaria spreads. If R₀ &lt; 1, it will be eliminated. The model:</p>
+    <h3>Mechanism</h3>
+    <p>Ross and Macdonald's model expresses the basic reproduction number <span class="pill">R₀</span>, the average number of new human infections caused by one infected person dropped into a fully susceptible population. If R₀ &gt; 1 malaria spreads; if R₀ &lt; 1 it is eliminated.</p>
 
     <div class="formula">
       <span class="eq">
@@ -183,90 +169,232 @@
       <li><span class="sym">n</span><span class="highlight-term">days the parasite needs to mature</span></li>
     </ul>
 
-    <p class="note">The two highlighted parts are exactly what bed nets act on. The biting rate <span class="hl-bite">a</span> enters <em>squared</em>, while the <span class="highlight-term">survival terms</span> are <em>exponential</em> and it's that exponential piece that makes the ITN impact non-linear. The rest of this page zooms in on them.</p>
+    <p>A treated net acts on the two highlighted terms at once: it reduces bites (lowering the biting rate <span class="hl-bite var">a</span>) and kills mosquitoes (lowering daily survival <span class="highlight-term var">p</span>). Biting enters <strong>squared</strong> (<span class="var">a</span><sup>2</sup>) and survival as <strong><span class="var">p</span><sup><span class="var">n</span></sup></strong>, so a modest change in either produces a much larger change in transmission. Baseline transmission also spans a wide range: estimated R₀ runs from about 1 to over 3,000 across African settings<sup class="cite"><a href="#ref1">1</a></sup>.</p>
+
+    <div class="chartbox">
+      <canvas id="expChart" width="300" height="190" aria-label="Exponential mosquito survival curve"></canvas>
+      <p class="caption">Mosquitoes still alive each day. Only the shaded tail past day 10 can transmit, and lowering daily survival shrinks it fast.</p>
+    </div>
+
+    <p>When a mosquito bites an infected person it does not become infectious straight away. The parasite must develop inside it for about <span class="var">n</span> ≈ 10 days: the <span class="pill warm">extrinsic incubation period</span>. Only a mosquito that survives those 10 days can transmit. Lifespans are roughly exponential: each day a mosquito survives with probability <span class="var">p</span>, so its chance of still being alive after <span class="var">n</span> days is <span class="var">p</span><sup>n</sup>. Because that is a <em>power</em>, a small nudge to daily survival is amplified enormously over 10 days.</p>
+
+    <p>Drop daily survival from 0.90 to 0.80 and survival to day 10 falls from about 35% to 11%, roughly a three-fold reduction. That exponential leverage is what makes the bed-net effect on transmission non-linear, and it propagates through every step that follows.</p>
+    <div style="clear:both"></div>
   </section>
 
   <!-- SECTION 2 -->
-  <section class="card chart-card">
-    <h2><span class="num">2</span> The non-linearity</h2>
+  <section class="card">
+    <h2><span class="num">2</span> From EIR to prevalence (PfPR)</h2>
 
-    <p>When a mosquito bites an infected person, it doesn't become infectious straight away. The parasite needs to develop inside it for about n ≈ 10 days: the <span class="pill warm">extrinsic incubation period</span>. Only a mosquito that survives those 10 days can transmit.</p>
+    <h3>Evidence</h3>
+    <p>The relationship between the entomological inoculation rate (EIR) and parasite prevalence is strongly non-linear. At low EIR, small changes produce large changes in prevalence; at high EIR, PfPR saturates, so large differences in EIR map to small differences in prevalence. Cross-site analyses find PfPR tracks roughly the <em>logarithm</em> of annual EIR<sup class="cite"><a href="#ref5">5</a></sup>: some sites with annual EIR below 5 still exceed 40% PfPR, while high-EIR sites cluster near a ceiling.</p>
+    <p>Two features sustain this. Biting is heterogeneous (a minority of people receive most infectious bites), and infections last around six months, so prevalence integrates exposure over time rather than tracking it instantly<sup class="cite"><a href="#ref6">6</a></sup>.</p>
 
-    <p>Mosquito lifespans follow an exponential distribution: each day it survives with probability <span class="var">p</span>, so the chance of still being alive after <span class="var">n</span> days is <span class="var">p</span><sup>n</sup>. Because that's a <em>power</em>, a small nudge to daily survival gets amplified enormously over 10 days.</p>
-
-    <canvas id="expChart" height="300" aria-label="Exponential survival curve"></canvas>
-    <p class="caption">The curve shows the fraction of mosquitoes still alive each day. The shaded slice past day 10 is the only part that can ever transmit malaria and reducing daily survival even a little reduces that tail fast.</p>
-
-    <p>Drop daily survival from 0.90 to 0.80 and survival to day 10 falls from about 35% to 11%. That's roughly a three-fold reduction, demonstrating the non-linearity.</p>
+    <h3>Mechanism</h3>
+    <p>A minimal prevalence model captures the shape:</p>
+    <div class="eqline">
+      PfPR ≈
+      <span class="frac">
+        <span><span class="var">λ</span></span>
+        <span class="den"><span class="var">λ</span> + <span class="var">r</span></span>
+      </span>
+    </div>
+    <p>where <span class="var">λ</span> is the force of infection (related to EIR) and <span class="var">r</span> the clearance rate. At low <span class="var">λ</span> prevalence rises sharply; at high <span class="var">λ</span> most people are already infected, so it approaches a ceiling. In practice the ceiling is reinforced by superinfection (a further bite does not change a positive survey), long infection duration, heterogeneous biting, and immunity effects on parasite density and detectability.</p>
   </section>
 
   <!-- SECTION 3 -->
-  <section class="card chart-card">
-    <h2><span class="num">3</span> The impact of bed nets</h2>
+  <section class="card">
+    <h2><span class="num">3</span> From prevalence to clinical incidence</h2>
 
-    <p>Insecticide-treated nets (ITNs) impact the equation in two places at once: they physically stop bites (lowering <span class="hl-bite var">a</span>, which enters <em>squared</em>) and their insecticide kills mosquitoes that land on them (lowering daily survival <span class="highlight-term var">p</span>, which feeds the <span class="highlight-term"><span class="var">p</span><sup>n</sup></span> term).</p>
+    <h3>Evidence</h3>
+    <p>We use the fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship between PfPR and clinical incidence, and plot the matched field data it draws on<sup class="cite"><a href="#ref8">8</a></sup> alongside it. Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
+    <p>At low transmission, incidence scales roughly linearly with prevalence. As transmission rises, prevalence saturates while clinical episodes continue through repeated infection and superinfection, producing convexity, most strongly in young children. Older children and adults, with years of cumulative exposure, acquire immunity to clinical disease, so their incidence plateaus at a low level as transmission rises, while young children (not yet protected) keep accumulating episodes. The age pattern shifts with it: below about 10% PfPR much of the burden falls on adults; at higher transmission it concentrates in children. After a recent decline in transmission, young children carry a larger share, because older groups retain immunity acquired under previously higher transmission.</p>
 
-    <p>Usage is the proportion of people sleeping under a net, so it determines how often a host-seeking mosquito encounters a net. At low coverage most mosquitoes find an unprotected person and feed freely; as coverage climbs, a growing fraction of feeding attempts are turned away at the net (pulling down the average biting rate <span class="hl-bite var">a</span>) and a growing fraction end with the mosquito picking up a lethal dose of insecticide (pulling down daily survival <span class="highlight-term var">p</span>).</p>
+    <h3>Mechanism</h3>
+    <p>The driver is exposure-acquired immunity. Clinical incidence decomposes as:</p>
+    <div class="eqline">clinical incidence&nbsp;=&nbsp;infection incidence&nbsp;×&nbsp;P(infection&nbsp;→&nbsp;disease)</div>
+    <p>PfPR reflects the proportion infected; clinical incidence depends on how often people are infected <em>and</em> how often infection becomes febrile. The second term falls with accumulated exposure and is age- and history-dependent: a setting that has long sat at 30% PfPR differs from one that has just fallen from 70%. PfPR is an equilibrium marker of infection; clinical incidence is a dynamic outcome shaped by recent exposure.</p>
+  </section>
+</div>
 
-    <div class="slider-block">
-      <div class="slider-top">
-        <span class="label">ITN coverage</span>
-        <span class="cov" id="covLabel">0%</span>
+<!-- INTERACTIVE -->
+<div class="wrapwide">
+  <section class="card">
+    <h2><span class="num">▶</span> Trace a bed-net effect through the cascade</h2>
+    <p class="sub">A <strong style="color:var(--warm)">toy</strong> model to trace the impact of non-linearities</p>
+    <p>Set the no-net baseline transmission, then adjust coverage. Each plot shows the combined bed-net effect (barrier plus insecticidal killing) as it propagates down the cascade.</p>
+
+    <div class="controls">
+      <div class="slider-block eir">
+        <div class="slider-top"><span class="label">Baseline EIR (no nets)</span><span class="val" id="vEir">20</span></div>
+        <input type="range" id="eir0" min="0.1" max="200" value="20" step="0.1">
+        <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence <strong id="basePf" style="color:var(--blue)">—</strong></div>
       </div>
-      <input type="range" id="cov" min="0" max="100" value="0" step="1" aria-label="ITN coverage percentage">
-      <div class="verdict" id="verdict"></div>
+      <div class="slider-block cov">
+        <div class="slider-top"><span class="label">Bed-net coverage</span><span class="val" id="vUse">50%</span></div>
+        <input type="range" id="use" min="0" max="80" value="50" step="1">
+        <div class="slider-sub muted">share of people sleeping under a net (capped at 80%)</div>
+      </div>
     </div>
 
     <div class="readouts">
-      <div class="readout"><div class="val" id="rSurv">0.90</div><div class="lab">daily survival p</div></div>
-      <div class="readout"><div class="val" id="rLife">9.5</div><div class="lab">mean lifespan (days)</div></div>
-      <div class="readout"><div class="val" id="rTail">35%</div><div class="lab">reach infectious age</div></div>
-      <div class="readout"><div class="val" id="rR0" style="color:var(--warm)">50</div><div class="lab">R₀</div></div>
+      <div class="readout"><div class="v" id="rEir" style="color:var(--blue)">—</div><div class="l">EIR with nets</div></div>
+      <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">—</div><div class="l">prevalence with nets</div></div>
+      <div class="readout"><div class="v" id="rPfRed" style="color:var(--accent)">—</div><div class="l">prevalence reduction</div></div>
+      <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">—</div><div class="l">clinical reduction (0–5y)</div></div>
     </div>
 
-    <canvas id="r0Chart" height="300" aria-label="R0 versus coverage"></canvas>
-    <p class="caption">R₀ as ITN coverage increases. The curve isn't a straight line, it falls non-linearly, because nets hit the squared biting term and the exponential survival term at the same time.</p>
+    <div class="plots">
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--accent)">1</span> EIR vs coverage</p>
+        <canvas id="pEIR" height="190" aria-label="EIR versus coverage"></canvas>
+        <p class="pcap">Direct protection lowers the biting rate (<span class="var">a</span><sup>2</sup>) and insecticidal killing reduces mosquito survival (<span class="var">p</span><sup><span class="var">n</span></sup>), so EIR falls more than proportionally.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--blue)">2</span> PfPR vs EIR</p>
+        <canvas id="pPfpr" height="190" aria-label="Prevalence versus EIR"></canvas>
+        <p class="pcap">Prevalence rises steeply at low EIR then plateaus. Points: field data<sup class="cite"><a href="#ref6">6</a></sup>. Line: a saturating fit. Log EIR axis.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
+        <canvas id="pInc" height="190" aria-label="Clinical incidence versus prevalence"></canvas>
+        <p class="pcap">Clinical incidence by age against PfPR. Cameron model curves<sup class="cite"><a href="#ref7">7</a></sup> and field data by age. Points: 279 matched records<sup class="cite"><a href="#ref8">8</a></sup>, coloured by age group. Wide variation in data.<br>
+          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--clin)">4</span> Incidence vs EIR</p>
+        <canvas id="pIncEir" height="190" aria-label="Clinical incidence versus EIR"></canvas>
+        <p class="pcap">Clinical incidence by age against EIR (composing steps 2 and 3). Clinical incidence plateaus at higher EIR: older children and adults level off once EIR passes roughly 10, while young-child incidence keeps climbing. Log EIR axis.<br>
+          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--warm)">5</span> Incidence vs coverage</p>
+        <canvas id="pComb" height="190" aria-label="Clinical incidence versus coverage"></canvas>
+        <p class="pcap">Clinical incidence by age against bed-net coverage (composing steps 1, 2 and 3). Illustrates the impact of net coverage on incidence, and the changing age distribution of cases with baseline transmission.<br>
+          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
+        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> ~50% fewer uncomplicated episodes vs no nets<sup class="cite"><a href="#ref9">9</a></sup>, a child measure (Cochrane ITN review). The 0–5y line (the readout) reaches ~50% at high EIR and ~80% coverage.</p>
+      </div>
+    </div>
+    <p class="muted" style="font-size:14px;margin-top:18px">The cascade composes <strong style="color:var(--warm)">equilibrium</strong> relationships: it shows roughly where a setting would settle at each coverage level, not the dynamic trajectory after nets are deployed. The PfPR → incidence step in particular reflects long-run immunity and exposure history, so "moving along the curve" with coverage is a simplification, not a post-intervention prediction.</p>
+  </section>
+</div>
+
+<div class="wrapwide">
+  <section class="card">
+    <h2>What to notice</h2>
+    <p><strong>Each step is non-linear in a different way, and they compound.</strong> Plot 1 falls steeply then flattens (biting squared, survival exponential). Plot 2 saturates, so the same EIR reduction buys less prevalence change when baseline transmission is high. Plot 3's slope depends on age (convex in young children, near-flat in adults), so a prevalence fall reduces young-child cases substantially but adult cases little. Plot 4 carries that EIR saturation straight through to clinical incidence.</p>
+    <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction moves prevalence only slightly. Clinical incidence is buffered too, but less completely: young-child incidence can still fall appreciably even when prevalence barely shifts, because episodes accumulate through repeated infection. At low baseline EIR the same coverage produces a much larger prevalence and case response. Returns therefore increase as transmission falls.</p>
+    <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be hidden within a saturated prevalence figure while still lowering clinical disease. The conclusion depends on which outcome is measured.</p>
   </section>
 
-  <section class="card next-link">
-    <p class="next-eyebrow">Next</p>
-    <a class="next-a" href="worked-example.html">Non-linearities in malaria epidemiology and control →</a>
-    <p class="muted" style="margin:8px 0 0">Trace a bed-net effect through the cascade from coverage to EIR, prevalence and clinical incidence, and see how the non-linearities compound.</p>
-  </section>
+  <div class="note">
+    <p><strong>Methods.</strong> An illustrative model showing the <em>shape</em> of these relationships, not a specific setting. Not to be used for decision making. The no-net baseline EIR is set by the slider and coverage is capped at 80%.</p>
+    <ul>
+      <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days)<sup class="cite"><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>. These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, not an input, and should be read as an <em>idealised ceiling</em>: it assumes a brand-new net, full insecticidal potency, every relevant bite interceptable, and no behavioural avoidance or net decay. Because biting enters squared and survival exponentially, these assumptions compound, so the figure sits at the optimistic end. Real-world reductions are smaller, eroded by pyrethroid resistance, outdoor and early biting (residual transmission), imperfect and partial use, and ageing nets, closer to the ~87% operational estimate of Unwin et al.<sup class="cite"><a href="#ref4">4</a></sup> and lower again where residual transmission is high. This step is more mechanistic than the two data-fitted steps below.</li>
+      <li><strong>EIR → PfPR.</strong> A saturating fit to <em>P. falciparum</em> PfPR in children &lt;15 against annual EIR across African sites<sup class="cite"><a href="#ref6">6</a></sup>.</li>
+      <li><strong>PfPR → incidence.</strong> The fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship (Griffin individual-based model, low seasonality), digitised in absolute units (cases·person⁻¹·yr⁻¹) for three age groups. The dots are 279 matched incidence and prevalence records for <em>P. falciparum</em> in sub-Saharan Africa<sup class="cite"><a href="#ref8">8</a></sup> (Cameron calibration subset), one point per record, coloured by reported age group (young ≤6, older 4–16, adult ≥15).</li>
+      <li><strong>Summary readout.</strong> The reduction in under-5 (0–5y) clinical incidence, matching the age range of the Cochrane trial measure.</li>
+      <li><strong>Age band.</strong> The EIR–PfPR data is PfPR in children &lt;15<sup class="cite"><a href="#ref6">6</a></sup>; Cameron's relationship uses PfPR<sub>2–10</sub>. Both are childhood references, so the cascade runs on roughly one scale; PfPR&lt;15 sits slightly below PfPR<sub>2–10</sub>, but the offset is small and largely cancels in the relative reduction. The cross-site incidence scatter is dominated by study design (detection method, case definition).</li>
+    </ul>
+    <p><strong>References.</strong></p>
+    <ol class="refs">
+      <li id="ref1">Smith <em>et al</em>, 2007. Revisiting the basic reproductive number for malaria and its implications for malaria control. <em>PLoS Biology</em> 5:e42. <a href="https://doi.org/10.1371/journal.pbio.0050042" target="_blank" rel="noopener">doi.org/10.1371/journal.pbio.0050042</a></li>
+      <li id="ref2">Le Menach <em>et al</em>, 2007. An elaborated feeding cycle model for reductions in vectorial capacity of night-biting mosquitoes by insecticide-treated nets. <em>Malaria Journal</em> 6:10. <a href="https://doi.org/10.1186/1475-2875-6-10" target="_blank" rel="noopener">doi.org/10.1186/1475-2875-6-10</a></li>
+      <li id="ref3">Griffin <em>et al</em>, 2010. Reducing <em>Plasmodium falciparum</em> malaria transmission in Africa: a model-based evaluation of intervention strategies. <em>PLoS Medicine</em> 7:e1000324. <a href="https://doi.org/10.1371/journal.pmed.1000324" target="_blank" rel="noopener">doi.org/10.1371/journal.pmed.1000324</a></li>
+      <li id="ref4">Unwin <em>et al</em>, 2023. Quantifying the direct and indirect protection provided by insecticide treated bed nets against malaria. <em>Nature Communications</em> 14:676. <a href="https://doi.org/10.1038/s41467-023-36356-9" target="_blank" rel="noopener">doi.org/10.1038/s41467-023-36356-9</a></li>
+      <li id="ref5">Beier <em>et al</em>, 1999. Entomologic inoculation rates and <em>Plasmodium falciparum</em> malaria prevalence in Africa. <em>American Journal of Tropical Medicine and Hygiene</em> 61:109–113. <a href="https://doi.org/10.4269/ajtmh.1999.61.109" target="_blank" rel="noopener">doi.org/10.4269/ajtmh.1999.61.109</a></li>
+      <li id="ref6">Smith <em>et al</em>, 2005. The entomological inoculation rate and <em>Plasmodium falciparum</em> infection in African children. <em>Nature</em> 438:492–495. <a href="https://doi.org/10.1038/nature04024" target="_blank" rel="noopener">doi.org/10.1038/nature04024</a></li>
+      <li id="ref7">Cameron <em>et al</em>, 2015. Defining the relationship between infection prevalence and clinical incidence of <em>Plasmodium falciparum</em> malaria. <em>Nature Communications</em> 6:8170. <a href="https://doi.org/10.1038/ncomms9170" target="_blank" rel="noopener">doi.org/10.1038/ncomms9170</a></li>
+      <li id="ref8">Battle <em>et al</em>, 2015. Global database of matched <em>Plasmodium falciparum</em> and <em>P. vivax</em> incidence and prevalence records from 1985–2013. <em>Scientific Data</em> 2:150012. <a href="https://doi.org/10.1038/sdata.2015.12" target="_blank" rel="noopener">doi.org/10.1038/sdata.2015.12</a></li>
+      <li id="ref9">Lengeler, 2004. Insecticide-treated bed nets and curtains for preventing malaria. <em>Cochrane Database of Systematic Reviews</em> CD000363. <a href="https://doi.org/10.1002/14651858.CD000363.pub2" target="_blank" rel="noopener">doi.org/10.1002/14651858.CD000363.pub2</a></li>
+    </ol>
+  </div>
 
   <footer>
-    <p>Numbers here are illustrative: they show the shape of the relationship, not real-world impact, which depends on local mosquito behaviour, insecticide resistance, net use and more. Not to be used for decision making.</p>
+    <p>Numbers here are illustrative: they show the shape of the relationships, not real-world impact, which depends on local mosquito behaviour, insecticide resistance, net use and more. Not to be used for decision making.</p>
   </footer>
-
 </div>
 
 <script>
-// ---------- shared model parameters (illustrative) ----------
-const P0 = 0.90;     // baseline daily survival
-const N  = 10;       // extrinsic incubation period (days)
-const R0_BASE = 50;  // baseline R0 with no nets
-const MU = 0.30;     // per-coverage extra daily mortality from nets
-const THETA = 0.40;  // per-coverage reduction in biting
+// ---------- fixed model constants (illustrative) ----------
+const P0 = 0.90;      // baseline daily mosquito survival
+const N  = 10;        // extrinsic incubation period (days)
+let   EIR0 = 20;      // baseline EIR (no nets) — set by the slider
+const USE_MAX = 0.80; // coverage capped at 80%
+// Net effect on the vector, from experimental-hut quantities (generic new pyrethroid net, no resistance):
+const BETA = 0.70;    // blood-feeding inhibition: fraction of bites prevented on a net user (EHT)
+const MU   = 0.45;    // per-encounter mortality: fraction of mosquitoes feeding on a net user that are killed (EHT)
+const GONO = 3;       // gonotrophic cycle length (days), bridges per-encounter mortality to daily survival
 
-const f = p => Math.pow(p, N) / (-Math.log(p));   // the survival leverage term
+const f = p => Math.pow(p, N) / (-Math.log(p));      // survival leverage term p^n / -ln p
 const F0 = f(P0);
 
-function model(C){                 // C in [0,1]
-  const p = P0 * (1 - MU * C);     // effective daily survival
-  const a = 1 - THETA * C;         // relative biting rate
-  const R0 = R0_BASE * a * a * (f(p) / F0);
-  return {
-    p,
-    life: -1 / Math.log(p),
-    tail: Math.pow(p, N),
-    R0
+// EIR -> prevalence: saturating fit to Smith et al. (2005), prev = 1 - exp(-A*EIR^B)
+const SMITH_A = 0.455, SMITH_B = 0.216;
+const pfprFromEIR = E => E <= 0 ? 0 : 1 - Math.exp(-SMITH_A * Math.pow(E, SMITH_B));
+let   PFPR0 = pfprFromEIR(EIR0);                     // baseline prevalence (recomputed when EIR0 changes)
+
+// combined bed-net effect on transmission, from EHT-derived changes to a and p:
+//   biting:   a -> a0(1 - BETA*C)            — feeding inhibition on the covered fraction; enters squared
+//   survival: p -> p0(1 - MU*C)^(1/GONO)     — per-cycle killing MU*C spread over the gonotrophic cycle
+const gNet = C => {
+  const a = 1 - BETA * C;
+  const p = P0 * Math.pow(1 - MU * C, 1 / GONO);
+  return a * a * (f(p) / F0);
+};
+
+// --- prevalence -> clinical incidence: Cameron et al. (2015) age-group curves ---
+// Three separate age-group curves (0-5, 5-15, >15) are digitised from Fig. 1 (Griffin
+// individual-based model, low seasonality): clinical incidence (cases·person⁻¹·yr⁻¹) vs
+// PfPR2-10. They are interpolated below (camYoungInc/camOldInc/camAdultInc) and plotted
+// separately; the young (0-5) curve drives the headline readout. y-units cancel on normalising.
+
+// --- field data: clinical incidence (cases·person⁻¹·yr⁻¹) vs PfPR2-10, by age group ---
+// P. falciparum, sub-Saharan Africa, Battle et al. (2015) matched database, Cameron calibration
+// subset; one point per matched record, binned by reported age range (young ≤6, older 4–16,
+// adult ≥15). Wide scatter is largely study design (detection frequency, case definition).
+const DATA_YOUNG = [[0.0087,0.862],[0.0087,1.408],[0.0087,1.462],[0.0087,1.513],[0.0087,1.541],[0.0087,1.574],[0.0113,0.0179],[0.0113,0.0294],[0.0122,0.0296],[0.0392,1.902],[0.0392,2.181],[0.0392,2.579],[0.0392,2.879],[0.0392,2.962],[0.0392,2.983],[0.044,0.0229],[0.0987,0.4286],[0.1045,0.1768],[0.1045,0.185],[0.1045,0.198],[0.1045,0.2088],[0.1045,0.2253],[0.1045,0.2293],[0.1045,0.2611],[0.1073,0.1925],[0.1073,0.22],[0.1073,0.5682],[0.1073,0.7149],[0.1138,0.0205],[0.1138,0.6362],[0.1138,1.0723],[0.1138,1.8],[0.1138,1.871],[0.1138,2.25],[0.1138,2.681],[0.1138,3.187],[0.1138,3.269],[0.1138,4.833],[0.1138,5.065],[0.1138,6.132],[0.118,1.1852],[0.118,1.75],[0.118,2.6],[0.1279,0.1021],[0.1279,0.1293],[0.1279,0.1387],[0.1279,0.1744],[0.1279,0.2126],[0.1447,1.087],[0.1447,1.17],[0.1447,1.233],[0.1447,1.4444],[0.1447,1.6062],[0.1526,0.46],[0.1526,0.982],[0.1526,1.337],[0.1526,1.34],[0.1526,1.411],[0.1526,1.503],[0.195,0.34],[0.195,0.63],[0.2199,5.7],[0.2199,5.8929],[0.2199,6.0],[0.2354,0.6324],[0.2354,1.2281],[0.2354,3.1436],[0.2354,3.8126],[0.2354,3.8585],[0.2832,0.0457],[0.2832,0.0516],[0.2832,0.146],[0.2832,0.1579],[0.2832,0.1889],[0.2832,0.257],[0.2832,0.3198],[0.2832,0.3221],[0.2832,0.3592],[0.2832,0.3835],[0.2832,0.4586],[0.2832,0.5015],[0.2832,0.5055],[0.2832,0.5804],[0.2832,0.6032],[0.2832,0.7178],[0.2832,0.8216],[0.2832,0.8674],[0.2832,0.9682],[0.3864,0.7451],[0.3864,1.6379],[0.4016,4.3025],[0.4016,6.3391],[0.4016,7.0042],[0.4016,8.4564],[0.4016,8.5467],[0.4063,0.5776],[0.4063,0.6146],[0.4063,1.4769],[0.4063,1.6372],[0.4063,2.5907],[0.4124,0.1747],[0.4124,0.1814],[0.4124,0.189],[0.4124,0.1931],[0.4347,1.1927],[0.4719,0.9873],[0.4719,1.8158],[0.4728,0.4],[0.4728,1.0],[0.5093,2.0],[0.5207,1.1649],[0.5207,2.9688],[0.5207,3.0621],[0.5207,3.0748],[0.5323,1.47],[0.5323,2.0],[0.5431,1.4766],[0.5431,2.2051],[0.5431,2.5445],[0.5431,2.7027],[0.5431,2.8047],[0.5542,2.295],[0.5542,4.8272],[0.5911,3.367],[0.5911,7.3345],[0.5955,0.9385],[0.5955,1.5508],[0.5955,2.1711],[0.5955,2.1791],[0.5955,2.6051]];
+const DATA_OLD = [[0.0087,0.425],[0.0087,0.501],[0.0087,0.765],[0.0087,0.924],[0.0087,1.073],[0.0087,1.658],[0.0113,0.0292],[0.0122,0.0089],[0.0122,0.0288],[0.0392,1.487],[0.0392,1.859],[0.0392,2.111],[0.0392,2.202],[0.0392,2.49],[0.0392,2.714],[0.0392,2.722],[0.0392,2.75],[0.0392,2.877],[0.044,0.0313],[0.0987,0.375],[0.0987,0.7273],[0.1045,0.1883],[0.1073,0.1192],[0.1138,0.0714],[0.1138,0.0875],[0.1138,0.1077],[0.1138,0.114],[0.1138,0.259],[0.1138,0.265],[0.1138,0.2917],[0.1138,0.438],[0.1138,0.57],[0.1138,0.6621],[0.1138,0.7216],[0.1138,0.8032],[0.1138,0.838],[0.1138,1.171],[0.1138,1.39],[0.1138,1.944],[0.1138,2.615],[0.118,1.6],[0.118,2.4921],[0.1526,0.276],[0.1526,0.279],[0.1526,0.304],[0.1526,0.372],[0.1526,0.477],[0.1526,0.51],[0.1791,0.1008],[0.195,0.08],[0.195,0.26],[0.2199,0.2609],[0.2199,2.9062],[0.2354,0.3849],[0.2354,0.4124],[0.2832,0.139],[0.2832,0.1981],[0.2832,0.2038],[0.2832,0.2439],[0.2832,0.3428],[0.3864,0.9184],[0.3864,1.2642],[0.3864,1.9796],[0.3864,2.1042],[0.4063,0.2179],[0.4063,0.2402],[0.4347,0.13],[0.4347,0.4674],[0.4347,0.8652],[0.4719,0.4528],[0.4719,0.7971],[0.4728,0.25],[0.4728,0.6207],[0.5093,1.0],[0.5093,1.1538],[0.5093,1.3958],[0.5093,1.6346],[0.5207,0.8281],[0.5207,1.1768],[0.5323,1.18],[0.5323,1.91],[0.5323,1.97],[0.5542,0.512],[0.5911,0.37],[0.5911,0.5873],[0.5911,2.709]];
+const DATA_ADULT = [[0.0087,0.047],[0.0087,0.048],[0.0087,0.106],[0.0087,0.377],[0.0113,0.0085],[0.0113,0.0183],[0.0122,0.0039],[0.0122,0.0266],[0.0392,0.386],[0.0392,0.406],[0.0392,0.428],[0.0392,0.52],[0.0392,0.646],[0.0392,0.843],[0.0392,1.053],[0.044,0.0071],[0.044,0.0167],[0.0987,0.1579],[0.1073,0.11],[0.1138,0.0073],[0.1138,0.0324],[0.1138,0.0419],[0.1138,0.0891],[0.1138,0.153],[0.1138,0.167],[0.1138,0.1781],[0.1138,0.188],[0.1138,0.226],[0.1138,0.256],[0.1138,0.263],[0.1138,0.2917],[0.1138,0.3243],[0.1138,0.423],[0.1138,0.5297],[0.1138,0.5378],[0.118,0.5],[0.118,0.6021],[0.118,0.75],[0.118,0.8],[0.1526,0.029],[0.1526,0.048],[0.1526,0.099],[0.1526,0.234],[0.195,0.04],[0.195,0.04],[0.195,0.07],[0.2199,0.2609],[0.2199,0.3],[0.2199,0.3261],[0.2354,0.3116],[0.3864,1.0217],[0.3864,1.8696],[0.4719,0.1285],[0.4728,0.1636],[0.5093,0.6744],[0.5093,0.7209],[0.5207,0.0479],[0.5207,0.0841],[0.5207,0.1359],[0.5207,0.2564],[0.5323,0.67],[0.5542,0.2174],[0.5542,0.3569]];
+// Cameron/Griffin MODEL curves by age group (cases·person⁻¹·yr⁻¹), digitised from Fig. 1 (c,f,i).
+const CAM_YOUNG = [[0,0],[0.05,0.055],[0.1,0.133],[0.15,0.232],[0.2,0.354],[0.25,0.498],[0.3,0.653],[0.35,0.808],[0.4,0.973],[0.45,1.139],[0.5,1.305],[0.55,1.471],[0.6,1.637]];
+const CAM_OLD   = [[0,0],[0.05,0.077],[0.1,0.177],[0.15,0.277],[0.2,0.387],[0.25,0.476],[0.3,0.553],[0.35,0.608],[0.45,0.675],[0.5,0.697],[0.55,0.719]];
+const CAM_ADULT = [[0,0],[0.05,0.055],[0.1,0.122],[0.15,0.166],[0.2,0.21],[0.35,0.232],[0.4,0.221],[0.45,0.221],[0.5,0.21]];
+// monotone cubic (PCHIP) interpolation through the digitised points — smooth and shape-preserving
+const camCurve = (PTS,tail) => {
+  const n=PTS.length, xs=PTS.map(p=>p[0]), ys=PTS.map(p=>p[1]), h=[], d=[];
+  for(let i=0;i<n-1;i++){ h[i]=xs[i+1]-xs[i]; d[i]=(ys[i+1]-ys[i])/h[i]; }
+  const m=new Array(n); m[0]=d[0]; m[n-1]=d[n-2];
+  for(let i=1;i<n-1;i++){
+    if(d[i-1]*d[i]<=0) m[i]=0;
+    else { const w1=2*h[i]+h[i-1], w2=h[i]+2*h[i-1]; m[i]=(w1+w2)/(w1/d[i-1]+w2/d[i]); }
+  }
+  const last=PTS[n-1];
+  return P => {
+    if(P<=0) return 0;
+    if(P>=last[0]) return tail!=null ? last[1]*Math.pow(P/last[0],tail) : last[1];
+    let i=0; while(i<n-2 && P>xs[i+1]) i++;
+    const t=(P-xs[i])/h[i], t2=t*t, t3=t2*t;
+    const v=(2*t3-3*t2+1)*ys[i] + (t3-2*t2+t)*h[i]*m[i] + (-2*t3+3*t2)*ys[i+1] + (t3-t2)*h[i]*m[i+1];
+    return Math.max(0,v);
   };
-}
+};
+const camYoungInc = camCurve(CAM_YOUNG,1.2);   // 0-5y, convex, gentle power-law tail
+const camOldInc   = camCurve(CAM_OLD,null);    // 5-15y, saturating (flat tail)
+const camAdultInc = camCurve(CAM_ADULT,null);  // >15y, low & flat
+
+// outputs at coverage C
+const eirAt  = C => EIR0 * gNet(C);
+const pfAt   = C => pfprFromEIR(eirAt(C));
+
+// Smith et al. (2005) annual-EIR vs prevalence data [EIR, prev]
+const SMITH_PTS = [[4.6,0.53],[0.14,0.22],[0.55,0.17],[0,0.113],[262.8,0.626],[223.8,0.54],[133,0.466],[441.6,0.949],[1.47,0.221],[7.71,0.315],[5.58,0.197],[0,0.029],[113,0.771],[82,0.471],[82,0.569],[17.7,0.615],[511,0.568],[176.1,0.69],[191.05,0.72],[161,0.71],[565.75,0.616],[3,0.473],[22.5,0.66],[397.9,0.888],[246,0.875],[80,0.73],[250.18,0.684],[397.85,0.714],[0.27,0.02],[0.92,0.395],[1.21,0.573],[4.17,0.342],[0.44,0.287],[7.75,0.712],[1.94,0.287],[11.15,0.712],[5,0.342],[3.24,0.395],[0.99,0.573],[418,0.584],[119.72,0.73],[13.51,0.65],[0,0.39],[0.73,0.38],[52.93,0.61],[29.2,0.82],[2.71,0.503],[21.54,0.79],[39.06,0.66],[35.41,0.54],[24.82,0.72],[4.62,0.495],[1.5,0.462],[17.69,0.45],[259.9,0.639],[14.23,0.526],[1.5,0.171],[299.3,0.757],[0,0.7],[21.9,0.69],[63.15,0.64],[35.04,0.75],[40.88,0.58],[39.06,0.66],[14.6,0.48],[1.83,0.59],[10.59,0.63],[0,0.503],[16.79,0.49],[14.97,0.78],[33.22,0.83],[30.95,0.672],[3.68,0.514],[46.7,0.497],[5,0.5],[7.67,0.72],[237.25,0.947],[1.1,0.54],[8,0.446],[0,0.52],[41.61,0.67],[0.66,0.455],[27.35,0.66],[9.13,0.44],[3.65,0.59],[0.66,0.558],[0,0.13],[3.65,0.22],[62.05,0.92],[21.9,0.68],[92,0.658],[0.91,0.334],[52.85,0.436],[0.05,0.051],[0.1,0.024],[0.12,0.042],[186.5,0.825],[12,0.65],[0,0.01],[26.5,0.56],[0,0.01],[8.8,0.56],[1.28,0.1],[21.9,0.569],[21.54,0.624],[26.65,0.568],[36.5,0.663],[0.59,0.016],[1.8,0.53],[0.08,0.26],[217.7,0.859],[34,0.535],[584,0.831],[620.5,0.752],[271.6,0.875],[667.43,0.818],[576.7,0.882],[419.75,0.771],[91,0.815],[1.7,0.66],[405,0.818],[9.7,0.64],[235.6,0.746],[702.6,0.745],[547.5,0.83],[0.03,0.118],[379.6,0.942],[329,0.85],[220.6,0.927],[93.7,0.872]];
 
 // ---------- canvas helpers ----------
 function setup(canvas){
+  const cssW = canvas.clientWidth, cssH = canvas.clientHeight || canvas.height;
+  if (!cssW) return null;
   const dpr = window.devicePixelRatio || 1;
-  const cssW = canvas.clientWidth, cssH = canvas.height;
   canvas.width = cssW * dpr; canvas.height = cssH * dpr;
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -274,10 +402,10 @@ function setup(canvas){
 }
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
-// ---------- Chart 2: exponential survival ----------
+// ---------- section 1: exponential mosquito-survival chart ----------
 function drawExp(){
-  const c = document.getElementById('expChart');
-  const {ctx,W,H} = setup(c);
+  const c = document.getElementById('expChart'); const s = setup(c); if(!s) return;
+  const {ctx,W,H} = s;
   ctx.clearRect(0,0,W,H);
   const padL=44, padR=16, padT=16, padB=34;
   const days = 22;
@@ -287,13 +415,14 @@ function drawExp(){
   // axes
   ctx.strokeStyle = css('--line'); ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,H-padB); ctx.lineTo(W-padR,H-padB); ctx.stroke();
-  ctx.fillStyle = css('--muted'); ctx.font='12px -apple-system,Segoe UI,sans-serif';
+  ctx.fillStyle = css('--muted'); ctx.font='11px -apple-system,Segoe UI,sans-serif';
   ctx.textAlign='center';
-  for(let d=0; d<=days; d+=5){ ctx.fillText(d, x(d), H-padB+18); }
-  ctx.save(); ctx.translate(13,(H-padB+padT)/2); ctx.rotate(-Math.PI/2);
+  for(let d=0; d<=days; d+=5){ ctx.fillText(d, x(d), H-padB+15); }
+  ctx.fillText('days since the mosquito fed', (padL+W-padR)/2, H-3);
+  ctx.save(); ctx.translate(12,(H-padB+padT)/2); ctx.rotate(-Math.PI/2);
   ctx.fillText('% still alive', 0,0); ctx.restore();
   ctx.textAlign='right';
-  [0,0.5,1].forEach(v=>ctx.fillText(Math.round(v*100), padL-8, y(v)+4));
+  [0,0.5,1].forEach(v=>ctx.fillText(Math.round(v*100), padL-6, y(v)+4));
 
   // shaded infectious tail (p=0.90 baseline) past EIP
   const p = P0;
@@ -303,94 +432,159 @@ function drawExp(){
   ctx.lineTo(x(days), y(0)); ctx.closePath();
   ctx.fillStyle = css('--warm-soft'); ctx.fill();
 
-  // EIP line
+  // EIP line + compact label
   ctx.strokeStyle = css('--warm'); ctx.setLineDash([5,4]); ctx.lineWidth=1.5;
   ctx.beginPath(); ctx.moveTo(x(N),padT); ctx.lineTo(x(N),y(0)); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = css('--warm'); ctx.textAlign='left'; ctx.font='bold 12px -apple-system,Segoe UI,sans-serif';
-  ctx.fillText('day '+N+': parasite ready', x(N)+6, padT+12);
+  ctx.fillStyle = css('--warm'); ctx.textAlign='left'; ctx.font='bold 11px -apple-system,Segoe UI,sans-serif';
+  ctx.fillText('day '+N, x(N)+5, padT+10);
 
   // survival curve
   ctx.strokeStyle = css('--accent'); ctx.lineWidth=2.5;
   ctx.beginPath();
   for(let d=0; d<=days; d+=0.25){ const yy=y(Math.pow(p,d)); d===0?ctx.moveTo(x(d),yy):ctx.lineTo(x(d),yy); }
   ctx.stroke();
-
-  // annotation for tail
-  ctx.fillStyle = '#b34d1f'; ctx.font='bold 12px -apple-system,Segoe UI,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('these can transmit', x(15.5), y(Math.pow(p,15))-10);
 }
 
-// ---------- Chart 3: R0 vs coverage ----------
-function drawR0(C){
-  const c = document.getElementById('r0Chart');
-  const {ctx,W,H} = setup(c);
+// generic panel: o.curve = {fn,col}, o.marker = {x,y,col}
+function panel(id, o){
+  const c = document.getElementById(id); const s = setup(c); if(!s) return;
+  const {ctx,W,H} = s;
   ctx.clearRect(0,0,W,H);
-  const padL=40, padR=16, padT=18, padB=34;
-  const ymax = R0_BASE;
-  const x = cc => padL + cc*(W-padL-padR);
-  const y = v => padT + (1 - v/ymax)*(H-padT-padB);
+  const padL=48, padR=14, padT=12, padB=34;
+  const lo = o.xLog ? Math.log10(o.xMin) : 0, hi = o.xLog ? Math.log10(o.xMax) : o.xMax;
+  const ylo = o.yLog ? Math.log10(o.yMin) : 0, yhi = o.yLog ? Math.log10(o.yMax) : o.yMax;
+  const X = v => padL + ((o.xLog ? Math.log10(Math.max(v,o.xMin)) : v) - lo)/(hi-lo)*(W-padL-padR);
+  const Y = v => padT + (1 - ((o.yLog ? Math.log10(Math.max(v,o.yMin)) : v) - ylo)/(yhi-ylo))*(H-padT-padB);
+  const cy = v => o.yLog ? Math.max(o.yMin,Math.min(o.yMax,v)) : Math.max(0,Math.min(o.yMax,v));
+  const xAt = i => o.xLog ? Math.pow(10, lo + (i/120)*(hi-lo)) : (i/120)*o.xMax;
 
-  // axes
-  ctx.strokeStyle = css('--line'); ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,H-padB); ctx.lineTo(W-padR,H-padB); ctx.stroke();
-  ctx.fillStyle = css('--muted'); ctx.font='12px -apple-system,Segoe UI,sans-serif'; ctx.textAlign='center';
-  for(let p=0;p<=100;p+=25){ ctx.fillText(p+'%', x(p/100), H-padB+18); }
-  ctx.fillText('ITN coverage', (padL+W-padR)/2, H-6);
+  ctx.strokeStyle = css('--line'); ctx.fillStyle = css('--muted');
+  ctx.font='11px -apple-system,Segoe UI,sans-serif'; ctx.lineWidth=1;
   ctx.textAlign='right';
-  [0,25,50].forEach(v=>{ if(v<=ymax) ctx.fillText(v, padL-8, y(v)+4); });
-
-  // R0 = 1 threshold
-  ctx.strokeStyle = css('--accent'); ctx.setLineDash([5,4]); ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(padL,y(1)); ctx.lineTo(W-padR,y(1)); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle = css('--accent'); ctx.textAlign='left'; ctx.font='bold 11px -apple-system,Segoe UI,sans-serif';
-  ctx.fillText('R₀ = 1  (elimination threshold)', padL+6, y(1)-6);
-
-  // curve
-  ctx.strokeStyle = css('--warm'); ctx.lineWidth=3;
-  ctx.beginPath();
-  for(let i=0;i<=100;i++){ const cc=i/100; const yy=y(Math.min(model(cc).R0,ymax)); i===0?ctx.moveTo(x(cc),yy):ctx.lineTo(x(cc),yy);}
-  ctx.stroke();
-
-  // moving marker
-  const m = model(C);
-  const mx=x(C), my=y(Math.min(m.R0,ymax));
-  ctx.strokeStyle='rgba(0,0,0,.12)'; ctx.lineWidth=1; ctx.beginPath();
-  ctx.moveTo(mx,padT); ctx.lineTo(mx,H-padB); ctx.stroke();
-  ctx.beginPath(); ctx.arc(mx,my,7,0,2*Math.PI);
-  ctx.fillStyle = m.R0<1 ? css('--accent') : css('--warm'); ctx.fill();
-  ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
-}
-
-// ---------- slider wiring ----------
-const cov = document.getElementById('cov');
-function update(){
-  const C = cov.value/100;
-  cov.style.setProperty('--fill', cov.value+'%');
-  document.getElementById('covLabel').textContent = cov.value+'%';
-  const m = model(C);
-  document.getElementById('rSurv').textContent = m.p.toFixed(2);
-  document.getElementById('rLife').textContent = m.life.toFixed(1);
-  document.getElementById('rTail').textContent = Math.round(m.tail*100)+'%';
-  document.getElementById('rR0').textContent = m.R0<1 ? m.R0.toFixed(2) : m.R0.toFixed(1);
-  document.getElementById('rR0').style.color = m.R0<1 ? css('--accent') : css('--warm');
-
-  const v = document.getElementById('verdict');
-  if(m.R0<1){
-    v.className='verdict fade';
-    v.textContent='✓ R₀ is below 1 — each infection fails to replace itself, so transmission dies out.';
+  if(o.yLog){
+    for(let p=Math.ceil(ylo);p<=Math.floor(yhi);p++){ const v=Math.pow(10,p); const yy=Y(v);
+      ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(W-padR,yy); ctx.stroke();
+      ctx.fillText(v<1?String(v):String(Math.round(v)), padL-6, yy+4); }
   } else {
-    v.className='verdict spread';
-    v.textContent='✗ R₀ is still above 1 — malaria can keep spreading. Higher coverage needed.';
+    for(const t of [0,0.5,1]){ const yy=Y(t*o.yMax);
+      ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(W-padR,yy); ctx.stroke();
+      ctx.fillText(o.fmtY(t), padL-6, yy+4); }
   }
-  drawR0(C);
-}
-cov.addEventListener('input', update);
+  ctx.textAlign='center';
+  if(o.xLog){
+    for(let p=Math.ceil(lo); p<=Math.floor(hi); p++){ const v=Math.pow(10,p);
+      ctx.fillText(v<1 ? String(v) : String(Math.round(v)), X(v), H-padB+15); }
+  } else {
+    for(const t of [0,0.5,1]) ctx.fillText(o.fmtX(t), X(t*o.xMax), H-padB+15);
+  }
+  ctx.fillText(o.xlab, (padL+W-padR)/2, H-3);
+  ctx.save(); ctx.translate(12,(H-padB+padT)/2); ctx.rotate(-Math.PI/2); ctx.fillText(o.ylab, 0,0); ctx.restore();
 
-function redraw(){ drawExp(); update(); }
-window.addEventListener('resize', redraw);
-redraw();
+  if(o.points){ ctx.fillStyle='rgba(60,70,80,0.30)';
+    for(const [px,py] of o.points){ if(o.xLog && px<o.xMin) continue;
+      ctx.beginPath(); ctx.arc(X(px), Y(cy(py)), 2.4, 0, 2*Math.PI); ctx.fill(); }
+  }
+  if(o.pointSets){ for(const ps of o.pointSets){ ctx.fillStyle=ps.col;
+    for(const [px,py] of ps.pts){ if(o.xLog && px<o.xMin) continue;
+      ctx.beginPath(); ctx.arc(X(px), Y(cy(py)), 2.1, 0, 2*Math.PI); ctx.fill(); } }
+  }
+
+  const M=120;
+  const drawCurve = cv => {
+    ctx.strokeStyle=cv.col; ctx.lineWidth=cv.dash?2.5:3; ctx.setLineDash(cv.dash?[6,5]:[]);
+    ctx.beginPath();
+    for(let i=0;i<=M;i++){ const xv=xAt(i); const yy=Y(cy(cv.fn(xv))); i===0?ctx.moveTo(X(xv),yy):ctx.lineTo(X(xv),yy); }
+    ctx.stroke();
+  };
+  if(o.ref) drawCurve(o.ref);    // reference curve drawn underneath (dashed)
+  (o.curves || [o.curve]).forEach(drawCurve);
+  ctx.setLineDash([]);
+
+  const markers = o.markers || (o.marker ? [o.marker] : []);
+  for(const m of markers){
+    if(markers.length===1){   // guide lines to axes only for a single marker
+      ctx.strokeStyle='rgba(0,0,0,.10)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(X(m.x),Y(m.y)); ctx.lineTo(X(m.x),H-padB); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(X(m.x),Y(m.y)); ctx.lineTo(padL,Y(m.y)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.beginPath(); ctx.arc(X(m.x),Y(m.y),markers.length>1?5:6,0,2*Math.PI);
+    ctx.fillStyle=m.col; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+  }
+}
+
+// ---------- wiring ----------
+const use = document.getElementById('use');
+const eir0In = document.getElementById('eir0');
+const pct = v => Math.round(v*100)+'%';
+
+function update(){
+  EIR0 = Math.min(200, Math.max(0.1, +eir0In.value || 0.1));
+  PFPR0 = pfprFromEIR(EIR0);
+  eir0In.style.setProperty('--fill', (eir0In.value/eir0In.max*100)+'%');
+  document.getElementById('vEir').textContent = EIR0<10 ? (+EIR0.toFixed(1)).toString() : Math.round(EIR0);
+  document.getElementById('basePf').textContent = pct(PFPR0);
+
+  const u = +use.value/100;
+  use.style.setProperty('--fill', (use.value/use.max*100)+'%');
+  document.getElementById('vUse').textContent = use.value+'%';
+
+  const eirU = eirAt(u), pfU = pfAt(u);
+  const baseYoung = camYoungInc(PFPR0);                          // tallest curve's baseline → plot-5 y-axis
+  document.getElementById('rEir').textContent   = eirU<1 ? eirU.toFixed(2) : eirU<10 ? eirU.toFixed(1) : Math.round(eirU);
+  document.getElementById('rPf').textContent    = pct(pfU);
+  document.getElementById('rPfRed').textContent = pct(1 - pfU/PFPR0);
+  document.getElementById('rClin').textContent  = pct(1 - camYoungInc(pfU)/baseYoung);   // under-5 (0-5y), matching the Cochrane child measure
+
+  const ACC=css('--accent'), BLU=css('--blue'), CLN=css('--clin'), WRM=css('--warm'), INK=css('--ink');
+
+  // 1) EIR vs coverage
+  panel('pEIR', {
+    xMax:USE_MAX, yMax:EIR0, xlab:'bed-net coverage', ylab:'EIR',
+    fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:t=>Math.round(t*EIR0),
+    curve:{fn:x=>eirAt(x), col:ACC},
+    marker:{x:u,y:eirU,col:WRM}
+  });
+  // 2) PfPR vs EIR — Smith et al. data + fit
+  panel('pPfpr', {
+    xLog:true, xMin:0.02, xMax:1000, yMax:1, xlab:'EIR (log scale)', ylab:'prevalence (PfPR)',
+    fmtY:t=>Math.round(t*100)+'%',
+    points:SMITH_PTS,
+    curve:{fn:e=>pfprFromEIR(e), col:BLU},
+    marker:{x:eirU,y:pfU,col:WRM}
+  });
+  // 3) clinical incidence vs PfPR — Cameron model curves by age + field data
+  panel('pInc', {
+    xMax:0.8, yMax:3, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
+    fmtX:t=>Math.round(t*80)+'%', fmtY:t=>(t*3).toFixed(1),
+    pointSets:[{pts:DATA_YOUNG,col:'rgba(123,91,214,0.28)'},{pts:DATA_OLD,col:'rgba(47,143,126,0.30)'},{pts:DATA_ADULT,col:'rgba(61,111,180,0.32)'}],
+    curves:[{fn:camYoungInc,col:CLN},{fn:camOldInc,col:ACC},{fn:camAdultInc,col:BLU}],
+    markers:[{x:pfU,y:camYoungInc(pfU),col:CLN},{x:pfU,y:camOldInc(pfU),col:ACC},{x:pfU,y:camAdultInc(pfU),col:BLU}]
+  });
+  // 4) clinical incidence vs EIR — composed (EIR -> PfPR -> incidence); log EIR, linear incidence
+  panel('pIncEir', {
+    xLog:true, xMin:0.02, xMax:1000, yMax:3, xlab:'EIR (log scale)', ylab:'incidence (/person/yr)',
+    fmtY:t=>(t*3).toFixed(1),
+    curves:[{fn:e=>camYoungInc(pfprFromEIR(e)),col:CLN},{fn:e=>camOldInc(pfprFromEIR(e)),col:ACC},{fn:e=>camAdultInc(pfprFromEIR(e)),col:BLU}],
+    markers:[{x:eirU,y:camYoungInc(pfU),col:CLN},{x:eirU,y:camOldInc(pfU),col:ACC},{x:eirU,y:camAdultInc(pfU),col:BLU}]
+  });
+  // 5) clinical incidence vs coverage — fixed 0-3 axis to match plots 3 and 4
+  panel('pComb', {
+    xMax:USE_MAX, yMax:3, xlab:'bed-net coverage', ylab:'incidence (/person/yr)',
+    fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:t=>(t*3).toFixed(1),
+    curves:[{fn:x=>camYoungInc(pfAt(x)),col:CLN},{fn:x=>camOldInc(pfAt(x)),col:ACC},{fn:x=>camAdultInc(pfAt(x)),col:BLU}],
+    markers:[{x:u,y:camYoungInc(pfU),col:CLN},{x:u,y:camOldInc(pfU),col:ACC},{x:u,y:camAdultInc(pfU),col:BLU}]
+  });
+
+  drawExp();   // static survival chart (redraws on resize via update)
+}
+use.addEventListener('input', update);
+eir0In.addEventListener('input', update);
+window.addEventListener('resize', update);
+window.addEventListener('load', update);
+update();
+requestAnimationFrame(update);
 </script>
 </body>
 </html>
