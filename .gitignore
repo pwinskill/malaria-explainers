@@ -1,0 +1,12 @@
+# Papers / PDFs
+*.pdf
+
+# Raw data
+*.RData
+*.csv
+
+# Generated figures
+*.png
+
+# Local tooling / editor config
+.claude/
