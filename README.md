@@ -6,6 +6,8 @@ and how control interventions reshape it. Each explainer pairs a plain-language 
 
 Everything is plain HTML, CSS and vanilla JavaScript (canvas + SVG), with no build step or
 dependencies. `index.html` is a hub linking to the explainers; shared styling lives in `styles.css`.
+The R cross-check scripts live in `validation/`; their input data (`data/`), reference papers
+(`references/`), and generated figures (`figures/`) are kept out of version control.
 
 **Live page:** https://pwinskill.github.io/malaria-explainers/
 
@@ -14,7 +16,7 @@ dependencies. `index.html` is a hub linking to the explainers; shared styling li
 1. **Non-linearities in malaria epidemiology and control** ([`nonlinearities.html`](nonlinearities.html)).
    Why a modest change in mosquito survival or bed-net coverage can produce a much larger (or
    surprisingly small) change in prevalence and clinical cases. Traces a bed-net effect through the
-   EIR → prevalence → incidence cascade. Cross-check: `validate_cascade.R`.
+   EIR → prevalence → incidence cascade. Cross-check: `validation/validate_cascade.R`.
 
 2. **Rebounds: why protection can dip below baseline** ([`rebounds.html`](rebounds.html)).
    When transmission-reducing control is withdrawn, naturally-acquired immunity has waned underneath
@@ -22,15 +24,16 @@ dependencies. `index.html` is a hub linking to the explainers; shared styling li
    transmission, strength and duration of control, speed of withdrawal and loss of protection) plus
    a toy protection-over-time model. Structure and timescales sense-checked against the Griffin
    et al. / [malariasimulation](https://github.com/mrc-ide/malariasimulation) model.
-   Cross-check: `validate_rebounds.R`.
+   Cross-check: `validation/validate_rebounds.R`.
 
 ## R cross-checks
 
-The `validate_*.R` scripts independently reproduce each explainer's model in R/ggplot and print
-numeric checks, as a guard against bugs in the JavaScript. Run from the repository root, e.g.:
+The `validation/validate_*.R` scripts independently reproduce each explainer's model in R/ggplot
+and print numeric checks, as a guard against bugs in the JavaScript. Run from the repository root,
+e.g.:
 
 ```
-Rscript validate_rebounds.R
+Rscript validation/validate_rebounds.R
 ```
 
 > The numbers are illustrative. They show the shape of the relationships, not real-world impact,

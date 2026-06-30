@@ -16,7 +16,7 @@
 # structure and timescales. Not data-fitted.
 #
 # Run from the repository root:
-#   Rscript validate_rebounds.R
+#   Rscript validation/validate_rebounds.R
 # =============================================================================
 
 ## ---- libraries -------------------------------------------------------------
@@ -205,6 +205,7 @@ combined <- (p_main | p_gradual) / p_hump +
     caption = "Illustrative toy model. Not for decision making."
   )
 
-ggsave("rebounds_validation.png", combined,
+dir.create("figures", showWarnings = FALSE)
+ggsave("figures/rebounds_validation.png", combined,
        width = 11, height = 8, dpi = 130, bg = "white")
-cat("\nSaved rebounds_validation.png\n")
+cat("\nSaved figures/rebounds_validation.png\n")

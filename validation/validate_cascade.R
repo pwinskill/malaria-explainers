@@ -17,7 +17,7 @@
 #   [ASSUMED]   a fixed model choice (entomology, gonotrophic cycle, scenario)
 #
 # Run from the repository root (where the data files live):
-#   Rscript validate_cascade.R
+#   Rscript validation/validate_cascade.R
 # =============================================================================
 
 ## ---- libraries -------------------------------------------------------------
@@ -141,7 +141,7 @@ inc_adult <- make_cam(cam_adult, tail_exp = NA)
 ## Source: P. falciparum parasite rate in children (<15 y) vs annual EIR across
 ## African sites (Smith et al. 2005, Nature; data file named for senior author
 ## Hay). 130 site-level points.
-load("EIR_prev_hay2005.RData") # provides data frame EIR_prev_hay2005
+load("data/EIR_prev_hay2005.RData") # provides data frame EIR_prev_hay2005
 hay <- as.data.frame(EIR_prev_hay2005)
 names(hay) <- c("eir", "pfpr")
 
@@ -176,7 +176,7 @@ pf_at <- function(cov, eir0 = eir_base) {
 ## P. falciparum, sub-Saharan Africa, Cameron-calibration subset, one point per
 ## record, and bin each by its reported incidence age range.
 battle <- read.csv(
-  "PfPvAllData01042015_AgeStand.csv",
+  "data/PfPvAllData01042015_AgeStand.csv",
   fileEncoding = "latin1",
   stringsAsFactors = FALSE
 )
@@ -421,5 +421,6 @@ combined <- (p1 | p2 | p3) /
     theme = theme(plot.title = element_text(face = "bold"))
   )
 
-ggsave("cascade_validation.png", combined, width = 15, height = 8.5, dpi = 130)
-cat("\nSaved cascade_validation.png\n")
+dir.create("figures", showWarnings = FALSE)
+ggsave("figures/cascade_validation.png", combined, width = 15, height = 8.5, dpi = 130)
+cat("\nSaved figures/cascade_validation.png\n")

@@ -305,6 +305,7 @@ g2 <- ggplot(overlay, aes(t, rel, colour = src, linetype = src)) +
   theme_bw(base_size = 11) +
   theme(legend.position = "top")
 
-png_path2 <- file.path(getwd(), "toy_vs_malariasim_overlay.png")
+dir.create("figures", showWarnings = FALSE)
+png_path2 <- file.path(getwd(), "figures", "toy_vs_malariasim_overlay.png")
 ggsave(png_path2, g2, width = 12, height = 5, dpi = 120)
 cat("\nSaved overlay plot to: ", png_path2, "\n", sep = "")

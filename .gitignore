@@ -1,11 +1,11 @@
-# Papers / PDFs
+# Reference papers (references/)
 *.pdf
 
-# Raw data
+# Raw input data (data/)
 *.RData
 *.csv
 
-# Generated figures
+# Generated figures (figures/)
 *.png
 
 # Local tooling / editor config
