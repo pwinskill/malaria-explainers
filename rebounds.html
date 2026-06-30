@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebounds: why protection can dip below baseline</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">← All explainers</a></nav>
+
+<header class="hero">
+  <p class="kicker">An interactive explainer</p>
+  <h1>Rebounds in malaria transmission</h1>
+  <p class="lede">A <strong>rebound</strong> is when malaria burden, after a period of effective control, climbs back not just toward but <em>above</em> its level before the intervention. Because immunity fades while transmission is suppressed, a population that is protected and then loses that protection can end up worse off than if it had never been protected.<sup class="cite"><a href="#ref1">1</a></sup></p>
+</header>
+
+<div class="wrapwide">
+
+  <!-- TRIANGLE OVERVIEW -->
+  <section class="card">
+    <h2><span class="num">▲</span> The three drivers of a rebound</h2>
+    <p class="sub">A rebound requires three conditions acting together</p>
+    <p>Acquired immunity to clinical malaria is developed and maintained by repeated exposure. Preventative interventions, such as bed nets and indoor residual spraying, lower exposure and reduce cases. As the population is protected, population-level immunity falls: acquired immunity wanes, and newly born individuals develop immunity more slowly. Three drivers shape the dynamics of a rebound:</p>
+
+    <div class="triangle-wrap">
+      <svg viewBox="-40 0 760 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle of the three drivers of rebound: baseline transmission, strength and duration of control, and speed of loss of protection. The triangle interior represents rebound risk.">
+        <!-- triangle interior = rebound risk -->
+        <polygon points="340,78 92,386 588,386" fill="var(--danger-soft)" stroke="#e09aa8" stroke-width="2.5" stroke-linejoin="round"/>
+        <text x="340" y="272" text-anchor="middle" font-size="23" font-weight="800" fill="#9e3344">Rebound</text>
+        <text x="340" y="300" text-anchor="middle" font-size="23" font-weight="800" fill="#9e3344">risk</text>
+
+        <!-- corner 1: baseline transmission (top, blue) -->
+        <a href="#driver1" class="tri-corner" aria-label="Driver 1: baseline transmission">
+          <text x="340" y="26" text-anchor="middle" class="tri-lab" fill="var(--blue)">Baseline transmission</text>
+          <text x="340" y="48" text-anchor="middle" class="tri-sub">how much immunity there is to lose</text>
+          <circle cx="340" cy="78" r="26" fill="var(--blue)"/>
+          <text x="340" y="87" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">1</text>
+        </a>
+
+        <!-- corner 2: strength & duration (bottom-left, teal) -->
+        <a href="#driver2" class="tri-corner" aria-label="Driver 2: strength and duration of preventative control">
+          <circle cx="92" cy="386" r="26" fill="var(--accent)"/>
+          <text x="92" y="395" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">2</text>
+          <text x="92" y="426" text-anchor="middle" class="tri-lab" fill="var(--accent)">Strength &amp; duration</text>
+          <text x="92" y="446" text-anchor="middle" class="tri-sub">of preventative control</text>
+        </a>
+
+        <!-- corner 3: speed of loss (bottom-right, orange) -->
+        <a href="#driver3" class="tri-corner" aria-label="Driver 3: speed of loss of protection after stopping">
+          <circle cx="588" cy="386" r="26" fill="var(--warm)"/>
+          <text x="588" y="395" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">3</text>
+          <text x="588" y="426" text-anchor="middle" class="tri-lab" fill="#c45a25">Speed of loss</text>
+          <text x="588" y="446" text-anchor="middle" class="tri-sub">of protection after stopping</text>
+        </a>
+      </svg>
+    </div>
+    <p class="caption" style="text-align:center">Select a corner for detail.</p>
+  </section>
+
+  <!-- DRIVER 1 -->
+  <section class="card" id="driver1">
+    <h2><span class="num" style="background:var(--blue-soft);color:var(--blue)">1</span> Baseline transmission potential</h2>
+    <p class="sub">How much immunity there is to lose</p>
+
+    <h3>Evidence</h3>
+    <p>Acquired immunity to clinical malaria is built and maintained by exposure, so a population at higher baseline transmission holds more of it. That immunity is what a rebound puts at risk: the more a population has acquired, the more it can lose while control suppresses exposure, and the more clinical disease can return once control stops and exposure climbs back. Rebound risk is therefore greatest where pre-control immunity was high, broadly, in higher-transmission settings.<sup class="cite"><a href="#ref1">1</a></sup></p>
+
+    <h3>Mechanism</h3>
+    <p>In transmission models, the equilibrium level of acquired clinical immunity is a saturating function of exposure: it rises steeply at low transmission, then plateaus.<sup class="cite"><a href="#ref3">3</a></sup> A higher baseline therefore places a larger stock of immunity at risk.</p>
+    <p>When control is later removed, exposure returns close to that high baseline, now acting on a population whose immunity has fallen. Both terms point the same way, so the rebound after withdrawal is largest where baseline transmission was highest. (The level transmission settles at also matters, because clinical disease is highest at moderate transmission; that separate point is covered in the <a href="nonlinearities.html">non-linearities explainer</a>.)</p>
+  </section>
+
+  <!-- DRIVER 2 -->
+  <section class="card" id="driver2">
+    <h2><span class="num">2</span> Strength &amp; duration of control</h2>
+    <p class="sub">How far exposure is pushed down, and for how long</p>
+
+    <h3>Evidence</h3>
+    <p>This driver concerns <em>preventative</em> interventions: bed nets and indoor residual spraying, which lower people's exposure to infectious bites through both direct personal protection and a community effect on the mosquito population. Because they reduce exposure, they also slow the acquisition and maintenance of immunity. Interventions that treat disease without reducing exposure, such as case management, do not erode immunity in the same way. The stronger and longer the reduction in exposure, the further population immunity falls.</p>
+
+    <h3>Mechanism</h3>
+    <p>Lower exposure reduces population immunity in two ways:</p>
+    <ul class="facts">
+      <li><b>Less boosting.</b> People who are already immune receive fewer infectious bites, so their acquired immunity is topped up less often and gradually wanes.</li>
+      <li><b>Slower acquisition.</b> Children born during this period are exposed less, so they build immunity more slowly than they otherwise would.</li>
+    </ul>
+    <p>Two properties of the programme set how far immunity falls. A larger reduction in exposure lowers the level immunity settles toward, so it has further to fall. A longer programme matters because immunity changes over years: a short programme lowers it only slightly, while a sustained one lets immunity approach its suppressed level and adds successive birth cohorts with little acquired immunity. A strong, sustained programme therefore opens the largest gap between the lowered immunity and its original level.<sup class="cite"><a href="#ref1">1</a></sup></p>
+  </section>
+
+  <!-- DRIVER 3 -->
+  <section class="card" id="driver3">
+    <h2><span class="num" style="background:var(--warm-soft);color:#c45a25">3</span> Speed of withdrawal &amp; loss of protection</h2>
+    <p class="sub">How quickly residual protection fades once a programme stops</p>
+
+    <h3>Evidence</h3>
+    <p>When a programme is stopped, its protection does not disappear at once: some residual protection remains and then declines. Whether a rebound follows depends on whether that residual protection is lost before immunity has recovered. If it fades slowly, immunity can rebuild beneath it and total protection stays near baseline; if it is lost quickly while immunity is still low, total protection falls below its starting level.</p>
+
+    <h3>Mechanism</h3>
+    <p>The operational decision to stop can be abrupt, but how fast the protection already in place is then lost depends on the intervention:</p>
+    <ul class="facts">
+      <li><b>Indoor residual spraying</b> fades relatively quickly: the sprayed insecticide degrades over months to about a year.<sup class="cite"><a href="#ref5">5</a></sup></li>
+      <li><b>Insecticide-treated nets</b> last longer: their insecticide decays over roughly two to three years, and the physical barrier persists until nets are damaged or replaced.<sup class="cite"><a href="#ref3">3</a></sup></li>
+    </ul>
+    <p>The faster this residual protection is lost, the less time immunity has to recover, and the larger the rebound. A slower loss of protection lets immunity rebuild and softens or prevents it.</p>
+  </section>
+</div>
+
+<!-- INTERACTIVE TOY MODEL -->
+<div class="wrapwide">
+  <section class="card">
+    <h2><span class="num">▶</span> Explore a rebound</h2>
+    <p class="sub">A <strong style="color:var(--warm)">toy</strong> model of total protection over time</p>
+    <p>Total protection (top line) is acquired immunity (green) plus intervention protection (orange); the dashed line is the pre-intervention baseline. Set the three drivers to see whether total protection dips below baseline after control is withdrawn, producing a rebound.</p>
+
+    <div class="controls controls3">
+      <div class="slider-block base">
+        <div class="slider-top"><span class="label">Baseline transmission</span><span class="val" id="vTrans">45</span></div>
+        <input type="range" id="trans" min="10" max="90" value="45" step="1">
+      </div>
+      <div class="slider-block ctrl">
+        <div class="slider-top"><span class="label">Control strength</span><span class="val" id="vStrength">70%</span></div>
+        <input type="range" id="strength" min="0" max="90" value="70" step="1">
+        <div class="subslider">
+          <div class="slider-top"><span class="label">Control duration</span><span class="val" id="vDuration">6 yr</span></div>
+          <input type="range" id="duration" min="1" max="12" value="6" step="1">
+        </div>
+      </div>
+      <div class="slider-block loss">
+        <div class="slider-top"><span class="label">Speed of protection loss</span><span class="val" id="vLoss">-</span></div>
+        <input type="range" id="loss" min="0" max="100" value="75" step="1">
+      </div>
+    </div>
+
+    <div class="rebound-indicator" id="reboundBox">
+      <span class="rebound-chip" id="rChip">-</span>
+      <span class="rb-msg" id="rMsg">-</span>
+    </div>
+
+    <p class="chart-label">Total protection over time</p>
+    <canvas id="pRebound" height="280" aria-label="Total protection over time, showing immunity and intervention contributions and any dip below baseline"></canvas>
+    <div class="rb-legend">
+      <span><i style="background:var(--accent)"></i> Protection from immunity</span>
+      <span><i style="background:var(--warm)"></i> Protection from intervention</span>
+      <span><i style="background:var(--danger);opacity:.55"></i> Rebound (dip below baseline)</span>
+      <span><i style="background:var(--ink);width:16px;height:3px;border-radius:2px"></i> Total protection</span>
+    </div>
+    <p class="pcap" style="margin-top:14px">While control is in place, the intervention more than offsets the fading immunity, so total protection stays above baseline. After control stops, its protection is lost faster than immunity recovers, so total protection falls below baseline. Because transmission has by then returned to its original level, this shortfall in protection is realised as clinical cases rising above their pre-intervention level: the rebound.</p>
+  </section>
+</div>
+
+<div class="wrapwide">
+  <section class="card">
+    <h2>What to notice</h2>
+    <p><strong>Immunity declines during control.</strong> While exposure is suppressed, acquired immunity (green) declines through less boosting and slower acquisition in newborns (driver 2). The intervention (orange) more than offsets this at first, so total protection rises above baseline even as the immunity beneath it falls.</p>
+    <p><strong>Rebound depends on competing rates.</strong> After control ends, intervention protection (orange) decays while immunity (green) recovers. If protection is lost faster than immunity is regained, total protection falls below baseline, a rebound. Slower loss of protection, or faster immunity recovery, reduces it.</p>
+    <p><strong>Largest at high baseline transmission.</strong> Sweep the baseline slider: the dip deepens as transmission rises, for two reasons that compound. More immunity is acquired before control, so more is lost during it, and a higher force of infection returns when control stops, acting on the less-immune population.<sup class="cite"><a href="#ref1">1</a></sup></p>
+    <p><strong>Where transmission settles also matters.</strong> Clinical disease is highest at moderate transmission (an annual EIR around 30 infectious bites per person) and lower at very high transmission, where constant exposure maintains immunity. A <em>sustained</em> partial reduction that leaves transmission near this peak can hold clinical incidence above its pre-control level, whereas a deep reduction to low transmission does not.<sup class="cite"><a href="#ref1">1</a></sup> This toy models a <em>withdrawal</em> rather than a sustained partial reduction; that distinct case is examined in the <a href="nonlinearities.html">non-linearities explainer</a>.</p>
+    <p><strong>Resurgence after control is relaxed is well documented.</strong> Malaria burden has risen in several settings when vector control was scaled back or stopped, and fallen again when it resumed.<sup class="cite"><a href="#ref2">2</a>,<a href="#ref7">7</a></sup> A true rebound, with burden climbing above its pre-intervention level from lost immunity, is predicted by transmission models and would develop over years.<sup class="cite"><a href="#ref1">1</a></sup></p>
+  </section>
+
+  <div class="note">
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of a rebound, not a specific setting; not to be used for decision making. Protection is shown in relative units on an arbitrary scale.</p>
+    <ul>
+      <li><strong>Immunity.</strong> A single stock <span class="var">I</span>(<span class="var">t</span>) standing in for acquired clinical immunity. Its equilibrium given exposure <span class="var">x</span> is a saturating (Hill) function <span class="var">g</span>(<span class="var">x</span>) = <span class="var">x</span>²/(<span class="var">x</span>² + <span class="var">K</span>²); the baseline immunity floor is <span class="var">B</span> = <span class="var">g</span>(baseline transmission). Immunity relaxes toward its current setpoint, d<span class="var">I</span>/d<span class="var">t</span> = <span class="var">r</span>·(<span class="var">g</span>(<span class="var">x</span>) − <span class="var">I</span>), with the rate <span class="var">r</span> rising mildly with baseline transmission (faster rebuild where transmission is higher).</li>
+      <li><strong>Intervention.</strong> While control is on it provides protection <span class="var">S</span> (the strength slider) and suppresses exposure to (baseline)·(1 − <span class="var">S</span>). After withdrawal its protection decays exponentially; the half-life is set by the speed-of-loss slider, spanning ≈ 3 years (gradual waning) down to ≈ 2 months (abrupt stop). Here <span class="var">S</span> is the realised reduction in exposure, not a product's personal-protection efficacy.</li>
+      <li><strong>Rebound, and cases.</strong> Total protection = immunity + intervention. The rebound is how far it dips below the baseline floor <span class="var">B</span> after withdrawal (shown only when positive), classified none (&lt; 5 pts), mild (5–30 pts), strong (&gt; 30 pts) on the 0–100 protection scale. Because the intervention adds <em>on top</em> of immunity, total protection stays at or above baseline while control is active. A dip below baseline, and the clinical-case rebound it implies once the full force of infection returns, can only appear after withdrawal.</li>
+      <li><strong>Alignment with malariasimulation.</strong> The behaviour was sense-checked against <a href="https://github.com/mrc-ide/malariasimulation" target="_blank" rel="noopener">malariasimulation</a><sup class="cite"><a href="#ref6">6</a></sup> (the Griffin <em>et al.</em> model<sup class="cite"><a href="#ref3">3</a>,<a href="#ref4">4</a></sup>) running an IRS programme deployed then stopped: clinical incidence is suppressed during spraying and overshoots its pre-intervention level only after spraying stops, with the overshoot larger at higher baseline transmission. The toy reproduces this shape: protection (and the cases it implies) is held above baseline during control and dips below only after withdrawal, deepening with baseline transmission. It is a qualitative illustration. It collapses the model's age structure and several immunity functions (infection-blocking, clinical, detection) into one mean-field stock, and does not reproduce exact magnitudes. It also does not capture the separate disease–EIR peak across settings (the <em>sustained</em>-partial-reduction case in the non-linearities explainer).</li>
+    </ul>
+    <p><strong>References.</strong></p>
+    <ol class="refs">
+      <li id="ref1">Ghani <em>et al</em>, 2009. Loss of population levels of immunity to malaria as a result of exposure-reducing interventions: consequences for interpretation of disease trends. <em>PLoS ONE</em> 4:e4383. <a href="https://doi.org/10.1371/journal.pone.0004383" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0004383</a></li>
+      <li id="ref2">Cohen <em>et al</em>, 2012. Malaria resurgence: a systematic review and assessment of its causes. <em>Malaria Journal</em> 11:122. <a href="https://doi.org/10.1186/1475-2875-11-122" target="_blank" rel="noopener">doi.org/10.1186/1475-2875-11-122</a></li>
+      <li id="ref3">Griffin <em>et al</em>, 2010. Reducing <em>Plasmodium falciparum</em> malaria transmission in Africa: a model-based evaluation of intervention strategies. <em>PLoS Medicine</em> 7:e1000324. <a href="https://doi.org/10.1371/journal.pmed.1000324" target="_blank" rel="noopener">doi.org/10.1371/journal.pmed.1000324</a></li>
+      <li id="ref4">Griffin <em>et al</em>, 2014. Estimates of the changing age-burden of <em>Plasmodium falciparum</em> malaria disease in sub-Saharan Africa. <em>Nature Communications</em> 5:3136. <a href="https://doi.org/10.1038/ncomms4136" target="_blank" rel="noopener">doi.org/10.1038/ncomms4136</a></li>
+      <li id="ref5">Sherrard-Smith <em>et al</em>, 2018. Systematic review of indoor residual spray efficacy and effectiveness against <em>Plasmodium falciparum</em> in Africa. <em>Nature Communications</em> 9:4982. <a href="https://doi.org/10.1038/s41467-018-07357-w" target="_blank" rel="noopener">doi.org/10.1038/s41467-018-07357-w</a></li>
+      <li id="ref6">Charles <em>et al</em> / mrc-ide. malariasimulation: an individual-based model of <em>Plasmodium falciparum</em> transmission (Griffin model). R package. <a href="https://github.com/mrc-ide/malariasimulation" target="_blank" rel="noopener">github.com/mrc-ide/malariasimulation</a></li>
+      <li id="ref7">Namuganga <em>et al</em>, 2021. The impact of stopping and starting indoor residual spraying on malaria burden in Uganda. <em>Nature Communications</em> 12:2635. <a href="https://doi.org/10.1038/s41467-021-22896-5" target="_blank" rel="noopener">doi.org/10.1038/s41467-021-22896-5</a></li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>Numbers here are illustrative: they show the shape of a rebound, not real-world impact, which depends on local transmission, immunity, intervention mix and timing. Not to be used for decision making.</p>
+  </footer>
+</div>
+
+<script>
+// ---------- toy rebound model (illustrative) ----------
+// Single immunity stock I(t) ~ acquired clinical immunity (ICA analogue).
+// Saturating exposure->immunity setpoint g(x)=x^2/(x^2+K^2).
+// Intervention adds protection S while on, suppresses exposure, then decays after withdrawal.
+const K_HALF = 28;          // half-saturation of the immunity-exposure curve (transmission units)
+const T_MIN = -3, T_MAX = 20, DT = 0.02;   // time axis (years)
+// Fixed y-axis so the curve is never rescaled (avoids misleading zoom). Covers the
+// worst case: max baseline immunity g(90)=0.91 plus max control strength 0.90 = 1.81.
+const Y_MAX = 1.85;
+const g = x => { const x2 = x*x; return x2 / (x2 + K_HALF*K_HALF); };
+
+// immunity relaxes toward its current setpoint at a rate that increases mildly with
+// baseline transmission (faster rebuild where transmission is higher). "More immunity
+// to lose at higher transmission" dominates, so the rebound dip grows with baseline.
+const rateOf = Tr => 0.08 + 0.20 * (Tr/100);   // /yr
+
+// speed-of-loss slider (0..100) -> intervention decay half-life after withdrawal (years)
+//   0   = gradual waning  -> ~3.0 yr
+//   100 = abrupt stop     -> ~0.17 yr (~2 months)
+const lossHalfLife = v => 3.0 * Math.pow(0.17/3.0, v/100);
+
+// ---------- simulate ----------
+function simulate(Tr, S, D, lossV){
+  const B = g(Tr);                 // baseline immunity floor
+  const r = rateOf(Tr);
+  const hl = lossHalfLife(lossV);
+  const kDecay = Math.log(2)/hl;   // intervention decay rate after withdrawal
+  const pts = [];
+  let I = B;                       // start at baseline equilibrium
+  for(let t = T_MIN; t <= T_MAX + 1e-9; t += DT){
+    // intervention protection J(t)
+    let J = 0;
+    if(t >= 0 && t < D) J = S;                         // on: full strength
+    else if(t >= D)     J = S * Math.exp(-kDecay*(t-D)); // off: decay
+    // exposure suppressed by current intervention protection
+    const x = Tr * (1 - J);
+    const Ieq = g(x);
+    // relaxation step (Euler) toward the current immunity setpoint
+    if(pts.length) I += r * (Ieq - I) * DT;
+    pts.push({t, I: Math.max(0,I), J});
+  }
+  // rebound metric: how far total protection dips below baseline after withdrawal
+  let minTot = Infinity;
+  for(const p of pts){
+    if(p.t < D) continue;
+    const tot = p.I + p.J;
+    if(tot < minTot) minTot = tot;
+  }
+  const depth = Math.max(0, B - minTot);   // protection points below baseline
+  return {pts, B, depth, relDepth: B > 0 ? depth/B : 0, D, S};
+}
+
+// ---------- canvas helpers (match nonlinearities.html) ----------
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function setup(canvas){
+  if(!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  // logical height cached once (the backing store gets rescaled by dpr each draw,
+  // so it must NOT be re-read as the logical height, or it would compound)
+  if(!canvas.dataset.h) canvas.dataset.h = canvas.getAttribute('height') || 280;
+  const H = +canvas.dataset.h;
+  const W = canvas.getBoundingClientRect().width;
+  if(!W) return null;
+  canvas.style.height = H + 'px';              // lock display height
+  canvas.width = Math.round(W*dpr);
+  canvas.height = Math.round(H*dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  return {ctx, W, H};
+}
+
+// ---------- draw ----------
+function drawRebound(sim){
+  const c = document.getElementById('pRebound');
+  const s = setup(c); if(!s) return;
+  const {ctx, W, H} = s;
+  const padL = 30, padR = 16, padT = 16, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const {pts, B, D} = sim;
+
+  const X = t => padL + (t - T_MIN)/(T_MAX - T_MIN) * plotW;
+  const Y = v => padT + (1 - v/Y_MAX) * plotH;
+
+  // faint horizontal gridlines (protection units are relative/arbitrary, so unlabelled)
+  ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
+  for(const gv of [0.5, 1.0, 1.5]){
+    ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL+plotW, Y(gv)); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  // axes (L-shape)
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH); ctx.lineTo(padL+plotW, padT+plotH); ctx.stroke();
+
+  // stacked area: immunity (green) from 0 to I
+  ctx.fillStyle = css('--accent'); ctx.globalAlpha = 0.42;
+  ctx.beginPath(); ctx.moveTo(X(pts[0].t), Y(0));
+  for(const p of pts) ctx.lineTo(X(p.t), Y(p.I));
+  ctx.lineTo(X(pts[pts.length-1].t), Y(0)); ctx.closePath(); ctx.fill();
+
+  // intervention (orange) from I to I+J
+  ctx.fillStyle = css('--warm'); ctx.globalAlpha = 0.42;
+  ctx.beginPath();
+  for(const p of pts) ctx.lineTo(X(p.t), Y(p.I));
+  for(let i=pts.length-1; i>=0; i--) ctx.lineTo(X(pts[i].t), Y(pts[i].I + pts[i].J));
+  ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // thin stroke along the immunity/intervention boundary - a shape cue so the two
+  // bands are distinguishable without relying on the green/orange hue difference
+  ctx.strokeStyle = css('--accent'); ctx.lineWidth = 1.2; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  pts.forEach((p,i)=>{ const xx=X(p.t), yy=Y(p.I); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  ctx.stroke();
+
+  // rebound shading: where total < baseline after withdrawal (top=baseline, bottom=total)
+  drawDip(ctx, pts, B, D, X, Y);
+
+  // baseline dashed line
+  ctx.strokeStyle = css('--muted'); ctx.setLineDash([6,5]); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, Y(B)); ctx.lineTo(padL+plotW, Y(B)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = css('--muted'); ctx.font = '600 11px -apple-system,Segoe UI,Roboto,Arial';
+  ctx.textAlign = 'left'; ctx.fillText('baseline', padL+4, Y(B)-5);
+
+  // control on / off vertical guides
+  ctx.strokeStyle = css('--ink'); ctx.globalAlpha = 0.35; ctx.setLineDash([3,4]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(X(0), padT); ctx.lineTo(X(0), padT+plotH); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X(D), padT); ctx.lineTo(X(D), padT+plotH); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+  // labels sit in the top margin; "control on" grows left of its line and
+  // "control off" grows right of its, so they never collide even at short durations
+  ctx.fillStyle = css('--ink'); ctx.font = '600 11px -apple-system,Segoe UI,Roboto,Arial';
+  ctx.textAlign = 'right'; ctx.fillText('control on', X(0) - 5, padT - 4);
+  ctx.textAlign = 'left';  ctx.fillText('control off', X(D) + 5, padT - 4);
+
+  // total protection line
+  ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  pts.forEach((p,i)=>{ const xx=X(p.t), yy=Y(p.I+p.J); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  ctx.stroke();
+
+  // x axis labels (years relative to control start)
+  ctx.fillStyle = css('--muted'); ctx.font = '11px -apple-system,Segoe UI,Roboto,Arial'; ctx.textAlign = 'center';
+  for(let t=0; t<=T_MAX; t+=5){ ctx.fillText(t+' yr', X(t), padT+plotH+16); }
+}
+
+// dedicated dip filler: between baseline (top) and total (bottom) for each contiguous below-baseline run after D
+function drawDip(ctx, pts, B, D, X, Y){
+  ctx.fillStyle = css('--danger'); ctx.globalAlpha = 0.5;
+  let run = [];
+  const flush = () => {
+    if(run.length < 2){ run = []; return; }
+    ctx.beginPath();
+    ctx.moveTo(X(run[0].t), Y(B));
+    for(const p of run) ctx.lineTo(X(p.t), Y(B));               // top edge along baseline
+    for(let i=run.length-1;i>=0;i--) ctx.lineTo(X(run[i].t), Y(run[i].I+run[i].J)); // bottom edge along total
+    ctx.closePath(); ctx.fill();
+    run = [];
+  };
+  for(const p of pts){
+    const tot = p.I + p.J;
+    if(p.t >= D && tot < B) run.push(p);
+    else flush();
+  }
+  flush();
+  ctx.globalAlpha = 1;
+}
+
+// ---------- wiring ----------
+const trans = document.getElementById('trans');
+const strength = document.getElementById('strength');
+const duration = document.getElementById('duration');
+const loss = document.getElementById('loss');
+
+function fillPct(el){ el.style.setProperty('--fill', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
+
+function update(){
+  [trans,strength,duration,loss].forEach(fillPct);
+  const Tr = +trans.value;
+  const S  = +strength.value/100;
+  const D  = +duration.value;
+  const lossV = +loss.value;
+
+  // slider readouts
+  document.getElementById('vTrans').textContent = Tr;
+  document.getElementById('vStrength').textContent = strength.value+'%';
+  document.getElementById('vDuration').textContent = D+' yr';
+  const hl = lossHalfLife(lossV);
+  document.getElementById('vLoss').textContent =
+    lossV >= 80 ? 'abrupt' : lossV <= 20 ? 'gradual' : Math.round(hl*12)+' mo';
+
+  const sim = simulate(Tr, S, D, lossV);
+
+  // rebound indicator - classify on how far total protection dips below baseline
+  // after withdrawal
+  const d = sim.depth;
+  const box = document.getElementById('reboundBox');
+  const chip = document.getElementById('rChip');
+  const msg = document.getElementById('rMsg');
+  let lvl, chipText;
+  if(d < 0.05){ lvl='none'; chipText='No rebound'; }
+  else if(d < 0.30){ lvl='mild'; chipText='Mild rebound'; }
+  else { lvl='strong'; chipText='Strong rebound'; }
+  const msgText = d < 0.05
+    ? 'Total protection returns to baseline without dipping below it.'
+    : 'Total protection falls below baseline after control stops, so clinical cases rebound above their pre-control level.';
+  box.className = 'rebound-indicator lvl-'+lvl;
+  chip.className = 'rebound-chip chip-'+lvl;
+  chip.textContent = chipText;
+  msg.textContent = msgText;
+
+  drawRebound(sim);
+}
+
+[trans,strength,duration,loss].forEach(el => el.addEventListener('input', update));
+window.addEventListener('resize', update);
+window.addEventListener('load', update);
+update();
+</script>
+
+</body>
+</html>
