@@ -139,6 +139,8 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .lesson-card.soon .lc-num{background:var(--line);color:var(--muted)}
 .lesson-card.warm .lc-num{background:var(--warm-soft);color:#c45a25}
 .lesson-card.warm .go{color:var(--warm)}
+.lesson-card.blue .lc-num{background:var(--blue-soft);color:var(--blue)}
+.lesson-card.blue .go{color:var(--blue)}
 .crumb{max-width:1080px;margin:0 auto;padding:18px 22px 0}
 .crumb a{font-weight:700;font-size:14px;text-decoration:none}
 .lessons-h{font-size:18px;margin:6px 0 12px;color:var(--ink)}
@@ -226,3 +228,33 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .rb-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;margin:14px 0 0}
 .rb-legend span{display:inline-flex;align-items:center;gap:7px}
 .rb-legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+
+/* ============================================================
+   Seasonality lesson (seasonality.html)
+   ============================================================ */
+/* three control blocks: season (blue), SMC schedule (accent), coverage (warm) */
+.slider-block.season{background:var(--blue-soft)}
+.slider-block.smc{background:var(--accent-soft)}
+.slider-block.cover{background:var(--warm-soft)}
+.slider-block.season .val{color:var(--blue)}
+.slider-block.smc .val{color:var(--accent)}
+.slider-block.cover .val{color:#c45a25}
+#seasonality,#peakday{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
+#seasonality::-webkit-slider-thumb,#peakday::-webkit-slider-thumb{border:3px solid var(--blue)}
+#seasonality::-moz-range-thumb,#peakday::-moz-range-thumb{border:3px solid var(--blue)}
+#nrounds,#spacing,#firstround{background:linear-gradient(90deg,var(--accent) 0%,var(--accent) var(--fill,0%),#c7e0d8 var(--fill,0%),#c7e0d8 100%)}
+#nrounds::-webkit-slider-thumb,#spacing::-webkit-slider-thumb,#firstround::-webkit-slider-thumb{border:3px solid var(--accent)}
+#nrounds::-moz-range-thumb,#spacing::-moz-range-thumb,#firstround::-moz-range-thumb{border:3px solid var(--accent)}
+#coverage{background:linear-gradient(90deg,var(--warm) 0%,var(--warm) var(--fill,0%),#f4cdb6 var(--fill,0%),#f4cdb6 100%)}
+#coverage::-webkit-slider-thumb{border:3px solid var(--warm)} #coverage::-moz-range-thumb{border:3px solid var(--warm)}
+
+/* segmented "who is reached" toggle */
+.seg-label{font-size:12.5px;font-weight:700;margin:16px 0 6px;color:var(--ink)}
+.seg{display:flex;gap:4px;background:rgba(255,255,255,.7);border:1px solid #f0c9b3;
+  border-radius:10px;padding:4px}
+.seg-btn{flex:1 1 0;min-width:0;border:none;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:12.5px;font-weight:700;color:var(--muted);
+  padding:8px 6px;border-radius:7px;line-height:1.2;transition:background .12s ease,color .12s ease}
+.seg-btn:hover{background:rgba(255,255,255,.6);color:#c45a25}
+.seg-btn.active{background:#fff;color:#c45a25;box-shadow:0 1px 3px rgba(20,30,40,.14)}
+.seg-btn:focus-visible{outline:2px solid var(--warm);outline-offset:2px}

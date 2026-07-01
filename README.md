@@ -26,6 +26,16 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
    et al. / [malariasimulation](https://github.com/mrc-ide/malariasimulation) model.
    Cross-check: `validation/validate_rebounds.R`.
 
+3. **Seasonality and the timing of control** ([`seasonality.html`](seasonality.html)).
+   Where transmission is seasonal, cases arrive in a short window and each dose of seasonal malaria
+   chemoprevention (SMC) protects for only a few weeks, so a programme has to tile its rounds across
+   the season. A toy model of childhood cases through the year, with sliders for seasonality, peak
+   timing, the number, spacing and start of the SMC rounds, coverage per round, and whether the same,
+   random or different children are reached across rounds (inter-round correlation). Shows how impact
+   depends on when the rounds land and on who is reached. The drug-prophylaxis curve is taken directly
+   from [malariasimulation](https://github.com/mrc-ide/malariasimulation), and the seasonal SMC and
+   correlation behaviour is cross-checked against it. Cross-check: `validation/validate_seasonality.R`.
+
 ## R cross-checks
 
 The `validation/validate_*.R` scripts independently reproduce each explainer's model in R/ggplot
