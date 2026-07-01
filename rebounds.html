@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rebounds: why protection can dip below baseline</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,11 +22,11 @@
   <!-- TRIANGLE OVERVIEW -->
   <section class="card">
     <h2><span class="num">▲</span> The three drivers of a rebound</h2>
-    <p class="sub">A rebound requires three conditions acting together</p>
+    <p class="sub">Rebounds are driven by three conditions acting together</p>
     <p>Acquired immunity to clinical malaria is developed and maintained by repeated exposure. Preventative interventions, such as bed nets and indoor residual spraying, lower exposure and reduce cases. As the population is protected, population-level immunity falls: acquired immunity wanes, and newly born individuals develop immunity more slowly. Three drivers shape the dynamics of a rebound:</p>
 
     <div class="triangle-wrap">
-      <svg viewBox="-40 0 760 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle of the three drivers of rebound: baseline transmission, strength and duration of control, and speed of loss of protection. The triangle interior represents rebound risk.">
+      <svg viewBox="-50 0 780 466" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle of the three drivers of rebound: baseline transmission, strength and duration of control, and speed of loss of protection. The triangle interior represents rebound risk.">
         <!-- triangle interior = rebound risk -->
         <polygon points="340,78 92,386 588,386" fill="var(--danger-soft)" stroke="#e09aa8" stroke-width="2.5" stroke-linejoin="round"/>
         <text x="340" y="272" text-anchor="middle" font-size="23" font-weight="800" fill="#9e3344">Rebound</text>
@@ -33,8 +34,7 @@
 
         <!-- corner 1: baseline transmission (top, blue) -->
         <a href="#driver1" class="tri-corner" aria-label="Driver 1: baseline transmission">
-          <text x="340" y="26" text-anchor="middle" class="tri-lab" fill="var(--blue)">Baseline transmission</text>
-          <text x="340" y="48" text-anchor="middle" class="tri-sub">how much immunity there is to lose</text>
+          <text x="340" y="43" text-anchor="middle" class="tri-lab" fill="var(--blue)">Baseline transmission</text>
           <circle cx="340" cy="78" r="26" fill="var(--blue)"/>
           <text x="340" y="87" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">1</text>
         </a>
@@ -43,16 +43,16 @@
         <a href="#driver2" class="tri-corner" aria-label="Driver 2: strength and duration of preventative control">
           <circle cx="92" cy="386" r="26" fill="var(--accent)"/>
           <text x="92" y="395" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">2</text>
-          <text x="92" y="426" text-anchor="middle" class="tri-lab" fill="var(--accent)">Strength &amp; duration</text>
-          <text x="92" y="446" text-anchor="middle" class="tri-sub">of preventative control</text>
+          <text x="92" y="430" text-anchor="middle" class="tri-lab" fill="var(--accent)">Strength &amp; duration of</text>
+          <text x="92" y="450" text-anchor="middle" class="tri-lab" fill="var(--accent)">preventative control</text>
         </a>
 
         <!-- corner 3: speed of loss (bottom-right, orange) -->
         <a href="#driver3" class="tri-corner" aria-label="Driver 3: speed of loss of protection after stopping">
           <circle cx="588" cy="386" r="26" fill="var(--warm)"/>
           <text x="588" y="395" text-anchor="middle" fill="#fff" font-weight="800" font-size="21">3</text>
-          <text x="588" y="426" text-anchor="middle" class="tri-lab" fill="#c45a25">Speed of loss</text>
-          <text x="588" y="446" text-anchor="middle" class="tri-sub">of protection after stopping</text>
+          <text x="588" y="430" text-anchor="middle" class="tri-lab" fill="#c45a25">Speed of loss of protection</text>
+          <text x="588" y="450" text-anchor="middle" class="tri-lab" fill="#c45a25">after stopping</text>
         </a>
       </svg>
     </div>
@@ -62,20 +62,20 @@
   <!-- DRIVER 1 -->
   <section class="card" id="driver1">
     <h2><span class="num" style="background:var(--blue-soft);color:var(--blue)">1</span> Baseline transmission potential</h2>
-    <p class="sub">How much immunity there is to lose</p>
+    <p class="sub">The intrinsic potential for transmission</p>
 
     <h3>Evidence</h3>
     <p>Acquired immunity to clinical malaria is built and maintained by exposure, so a population at higher baseline transmission holds more of it. That immunity is what a rebound puts at risk: the more a population has acquired, the more it can lose while control suppresses exposure, and the more clinical disease can return once control stops and exposure climbs back. Rebound risk is therefore greatest where pre-control immunity was high, broadly, in higher-transmission settings.<sup class="cite"><a href="#ref1">1</a></sup></p>
 
     <h3>Mechanism</h3>
-    <p>In transmission models, the equilibrium level of acquired clinical immunity is a saturating function of exposure: it rises steeply at low transmission, then plateaus.<sup class="cite"><a href="#ref3">3</a></sup> A higher baseline therefore places a larger stock of immunity at risk.</p>
-    <p>When control is later removed, exposure returns close to that high baseline, now acting on a population whose immunity has fallen. Both terms point the same way, so the rebound after withdrawal is largest where baseline transmission was highest. (The level transmission settles at also matters, because clinical disease is highest at moderate transmission; that separate point is covered in the <a href="nonlinearities.html">non-linearities explainer</a>.)</p>
+    <p>In transmission models, the equilibrium level of acquired clinical immunity is a saturating function of exposure: it rises steeply at low transmission, then plateaus.<sup class="cite"><a href="#ref3">3</a></sup> A higher baseline therefore means more immunity has been built up, so there is more to lose when control suppresses exposure.</p>
+    <p>When control is later removed, exposure returns close to that high baseline, now acting on a population whose immunity has fallen. Both terms point the same way, so the rebound after withdrawal is largest where baseline transmission was highest.</p>
   </section>
 
   <!-- DRIVER 2 -->
   <section class="card" id="driver2">
     <h2><span class="num">2</span> Strength &amp; duration of control</h2>
-    <p class="sub">How far exposure is pushed down, and for how long</p>
+    <p class="sub">How effective the preventative interventions are, and how long they run for</p>
 
     <h3>Evidence</h3>
     <p>This driver concerns <em>preventative</em> interventions: bed nets and indoor residual spraying, which lower people's exposure to infectious bites through both direct personal protection and a community effect on the mosquito population. Because they reduce exposure, they also slow the acquisition and maintenance of immunity. Interventions that treat disease without reducing exposure, such as case management, do not erode immunity in the same way. The stronger and longer the reduction in exposure, the further population immunity falls.</p>
@@ -156,7 +156,7 @@
     <p><strong>Immunity declines during control.</strong> While exposure is suppressed, acquired immunity (green) declines through less boosting and slower acquisition in newborns (driver 2). The intervention (orange) more than offsets this at first, so total protection rises above baseline even as the immunity beneath it falls.</p>
     <p><strong>Rebound depends on competing rates.</strong> After control ends, intervention protection (orange) decays while immunity (green) recovers. If protection is lost faster than immunity is regained, total protection falls below baseline, a rebound. Slower loss of protection, or faster immunity recovery, reduces it.</p>
     <p><strong>Largest at high baseline transmission.</strong> Sweep the baseline slider: the dip deepens as transmission rises, for two reasons that compound. More immunity is acquired before control, so more is lost during it, and a higher force of infection returns when control stops, acting on the less-immune population.<sup class="cite"><a href="#ref1">1</a></sup></p>
-    <p><strong>Where transmission settles also matters.</strong> Clinical disease is highest at moderate transmission (an annual EIR around 30 infectious bites per person) and lower at very high transmission, where constant exposure maintains immunity. A <em>sustained</em> partial reduction that leaves transmission near this peak can hold clinical incidence above its pre-control level, whereas a deep reduction to low transmission does not.<sup class="cite"><a href="#ref1">1</a></sup> This toy models a <em>withdrawal</em> rather than a sustained partial reduction; that distinct case is examined in the <a href="nonlinearities.html">non-linearities explainer</a>.</p>
+    <p><strong>Non-linearities also shape the cases.</strong> This chart tracks total <em>protection</em>; the clinical cases it implies do not follow one-for-one. During the rebound period, the non-linear relationships between transmission (EIR), immunity and clinical disease also shape how cases respond. Clinical disease, for instance, is highest at moderate transmission rather than the very highest.<sup class="cite"><a href="#ref1">1</a></sup> These links are traced in the <a href="nonlinearities.html">non-linearities explainer</a>.</p>
     <p><strong>Resurgence after control is relaxed is well documented.</strong> Malaria burden has risen in several settings when vector control was scaled back or stopped, and fallen again when it resumed.<sup class="cite"><a href="#ref2">2</a>,<a href="#ref7">7</a></sup> A true rebound, with burden climbing above its pre-intervention level from lost immunity, is predicted by transmission models and would develop over years.<sup class="cite"><a href="#ref1">1</a></sup></p>
   </section>
 
