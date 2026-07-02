@@ -145,11 +145,12 @@ const GH_NODES = [-4.8594628,-3.5818235,-2.4843258,-1.4659891,-0.4849357,0.48493
 const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423e-01,3.446423e-01,1.354837e-01,1.911158e-02,7.580709e-04,4.310653e-06];
 
 const FT = 0;                                   // treatment coverage (off, for a simple toy)
-const AGE = [];                                 // age grid in years, uniform 0.25y from 0 to 80
-// NB: this grid must stay in step with validation/validate_age_distribution.R (seq(0,80,0.25))
-// so the R cross-check reproduces these numbers — the equilibrium is grid-dependent.
-for(let a = 0; a <= 80.0001; a += 0.25) AGE.push(+a.toFixed(2));
-const NAGE = AGE.length, AW = 0.25;             // number of ages, band width (years)
+const AGE = [];                                 // age grid in years, uniform 0.1y from 0 to 80
+// fine grid so the sharp young-age peak at high intensity draws smoothly. NB: it must stay in
+// step with validation/validate_age_distribution.R (seq(0,80,0.1)) — the equilibrium is
+// grid-dependent, so the R cross-check only matches on the same grid.
+for(let a = 0; a <= 80.0001; a += 0.1) AGE.push(+a.toFixed(2));
+const NAGE = AGE.length, AW = 0.1;              // number of ages, band width (years)
 const AGE_MAX = 60;                             // chart x-extent and peak-search cap (cases negligible beyond)
 
 // pre-compute the age-only structure that does not depend on EIR: aging rates r, population fractions prop,

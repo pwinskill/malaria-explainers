@@ -14,7 +14,7 @@
 #      share collapses. (Griffin et al. 2014, Nat Commun 5:3136.)
 #   3. All-age clinical incidence (episodes per person-year) rises then saturates.
 #
-# The JS port uses a uniform 0.25-year age grid 0-80 and treatment ft = 0; this
+# The JS port uses a uniform 0.1-year age grid 0-80 and treatment ft = 0; this
 # script matches that exactly, so the printed table should equal the page's
 # readouts to rounding.
 #
@@ -30,7 +30,7 @@ suppressMessages({
 
 p   <- load_parameter_set()          # standard Griffin fitted parameters
 ft  <- 0                             # treatment coverage off, matching the toy
-age <- seq(0, 80, 0.25)              # uniform grid, matching the JS port
+age <- seq(0, 80, 0.1)               # uniform grid, matching the JS port
 
 # ----------------------------------------------------------------------------
 # Aggregate one equilibrium into the quantities the explainer shows.
