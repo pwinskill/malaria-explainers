@@ -89,24 +89,33 @@ gA <- ggplot(df_share, aes(EIR, 100 * share, colour = band)) +
        x = "EIR (infectious bites / person / year, log scale)", y = "% of clinical cases") +
   theme_bw(base_size = 11) + theme(legend.position = "top")
 
-# density-by-age at three intensities (scaled to own peak, as the page draws it)
-dens_at <- function(EIR, lab) {
+# per-person clinical incidence RATE by age (= inc / prop), scaled to own peak, as the page's
+# bold line draws it. At low transmission this rises monotonically to ~20y (the Griffin shape);
+# at high transmission it peaks in the first years of life.
+rate_at <- function(EIR, lab) {
   m <- summarise_eq(EIR)$m
-  a <- m[, "age"]; d <- m[, "inc"]; d <- d / max(d[a <= 60])
-  data.frame(age = a, dens = d, level = lab)
+  a <- m[, "age"]; r <- m[, "inc"] / m[, "prop"]; r <- r / max(r[a <= 60])
+  data.frame(age = a, rate = r, level = lab)
 }
-df_age <- rbind(dens_at(2, "low (EIR 2)"), dens_at(20, "moderate (EIR 20)"),
-                dens_at(200, "high (EIR 200)"))
-df_age$level <- factor(df_age$level, levels = c("low (EIR 2)", "moderate (EIR 20)", "high (EIR 200)"))
+df_age <- rbind(rate_at(0.2, "low (EIR 0.2)"), rate_at(10, "moderate (EIR 10)"),
+                rate_at(200, "high (EIR 200)"))
+df_age$level <- factor(df_age$level, levels = c("low (EIR 0.2)", "moderate (EIR 10)", "high (EIR 200)"))
 
-gB <- ggplot(subset(df_age, age <= 60), aes(age, dens, colour = level)) +
+cat("\n================ PER-PERSON INCIDENCE-RATE PEAK AGE (rise-to-20 check) ================\n")
+for (E in c(0.2, 1, 10, 100)) {
+  m <- summarise_eq(E)$m; a <- m[, "age"]; r <- (m[, "inc"] / m[, "prop"])[a <= 60]
+  cat(sprintf("EIR %5.1f: per-person incidence rate peaks at age %.0f\n", E, a[a <= 60][which.max(r)]))
+}
+cat("Expect: at low EIR the per-person rate peaks at/after ~20y; at high EIR it peaks in infancy.\n")
+
+gB <- ggplot(subset(df_age, age <= 60), aes(age, rate, colour = level)) +
   geom_line(linewidth = 1) +
-  scale_colour_manual(values = c("low (EIR 2)" = "#9ec2e8",
-                                 "moderate (EIR 20)" = "#7b5bd6",
+  scale_colour_manual(values = c("low (EIR 0.2)" = "#9ec2e8",
+                                 "moderate (EIR 10)" = "#7b5bd6",
                                  "high (EIR 200)" = "#3b1f7a"), name = NULL) +
-  labs(title = "Where the cases are, by age",
-       subtitle = "Each curve scaled to its own peak (as the explainer draws it)",
-       x = "age (years)", y = "relative cases") +
+  labs(title = "Clinical incidence per person, by age",
+       subtitle = "Each curve scaled to its own peak (the explainer's bold line)",
+       x = "age (years)", y = "relative incidence per person") +
   theme_bw(base_size = 11) + theme(legend.position = "top")
 
 dir.create("figures", showWarnings = FALSE)

@@ -63,7 +63,7 @@
     <div class="controls" style="grid-template-columns:1fr;max-width:560px">
       <div class="slider-block intensity">
         <div class="slider-top"><span class="label">Transmission intensity</span><span class="val" id="vIntensity">moderate</span></div>
-        <input type="range" id="intensity" min="0" max="100" value="30" step="1" aria-label="Transmission intensity, from low to intense">
+        <input type="range" id="intensity" min="0" max="100" value="43" step="1" aria-label="Transmission intensity, from low to intense">
         <p class="slider-sub muted">Sets how many infectious bites people receive; parasite prevalence is shown as a more familiar index. At high intensity prevalence plateaus, but the age shift continues.</p>
       </div>
     </div>
@@ -73,8 +73,12 @@
       <div class="readout"><div class="v" id="rInc" style="color:var(--clin)">—</div><div class="l">episodes per year (all ages)</div></div>
     </div>
 
-    <p class="chart-label">Distribution of clinical cases by age <span class="muted">— each curve scaled to its own peak, so compare the shape, not the height</span></p>
-    <canvas id="ageChart" height="280" aria-label="Distribution of clinical malaria cases across age, which concentrates in young children as transmission intensity rises"></canvas>
+    <p class="chart-label">Clinical malaria by age <span class="muted">— per-person risk, and where the cases fall; each curve scaled to its own peak</span></p>
+    <canvas id="ageChart" height="280" aria-label="Clinical malaria by age: the per-person incidence rate and the distribution of cases, as transmission intensity changes"></canvas>
+    <div class="rb-legend">
+      <span><i style="background:var(--clin);height:3px;align-self:center"></i> incidence per person (risk at each age)</span>
+      <span><i style="background:var(--muted);opacity:.35"></i> share of cases (weighted by population)</span>
+    </div>
 
     <p class="chart-label" style="margin-top:20px">Share of clinical cases by age group</p>
     <div class="agebar" id="ageBar" role="img" aria-label="Share of clinical cases in each age group">
@@ -89,7 +93,7 @@
     </div>
     <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
 
-    <p class="pcap" style="margin-top:14px">Each curve is scaled to its own peak so the <em>shapes</em> can be compared (the bar and readouts carry the actual numbers). The peak shifts with transmission intensity: a broad distribution centred on school-age children at low transmission, and a narrow peak in the first years of life at high transmission.</p>
+    <p class="pcap" style="margin-top:14px">The bold line is clinical incidence per person, the risk an individual of each age faces: at low transmission it rises with age and is still climbing at 20; at high transmission it peaks in the first years of life. The shaded area is the share of cases by age, that same risk multiplied by how many people are each age; because young children are the largest group, it peaks young at every intensity. Both curves are scaled to their own peak, so compare shapes, not heights; the bar and readouts carry the actual numbers.</p>
   </section>
 </div>
 
@@ -231,14 +235,18 @@ function equilibrium(EIRyr){
     if(a >= 2 && a < 10){ pfNum += posM[i]; pfDen += prop[i]; }
   }
   const inv = total > 0 ? 1 / total : 0;         // guard the (never-zero over the slider range) denominator
-  let peakAge = 0, peakV = 0;                    // modal age of the case distribution (for the a11y summary),
-  for(let i = 0; i < NAGE; i++){                 // capped at AGE_MAX to skip the absorbing 80+ terminal band
+  const rate = inc.map((v, i) => prop[i] > 0 ? v / prop[i] : 0);  // per-person clinical incidence rate by age
+  // peak ages (for the a11y summary), capped at AGE_MAX to skip the absorbing 80+ terminal band
+  let peakAge = 0, peakV = 0, ratePeakAge = 0, ratePeakV = 0;
+  for(let i = 0; i < NAGE; i++){
     if(AGE[i] > AGE_MAX) break;
-    if(inc[i] > peakV){ peakV = inc[i]; peakAge = AGE[i]; }
+    if(inc[i] > peakV){ peakV = inc[i]; peakAge = AGE[i]; }        // where the case distribution peaks
+    if(rate[i] > ratePeakV){ ratePeakV = rate[i]; ratePeakAge = AGE[i]; }  // where per-person risk peaks
   }
   return {
-    peakAge,
-    dens: inc.map(v => v * inv / AW),            // density (per year of age), area = 1
+    peakAge, ratePeakAge,
+    dens: inc.map(v => v * inv / AW),            // case distribution: density per year of age, area = 1
+    rate,                                        // per-person incidence rate by age (rises to ~20y at low EIR)
     shares: {u5: u5 * inv, mid: mid * inv, ad: ad * inv},
     pfpr: pfDen > 0 ? pfNum / pfDen : 0,
     incPerYear: total * 365,                      // all-age episodes per person per year
@@ -248,7 +256,7 @@ function equilibrium(EIRyr){
 
 // intensity slider (0..100) -> EIR on a log scale spanning [EIR_MIN, EIR_MAX]
 // (EIR_MAX is the EIR at the top of the slider, i.e. at value = 100)
-const EIR_MIN = 0.5, EIR_MAX = 512;
+const EIR_MIN = 0.1, EIR_MAX = 512;
 const eirFromSlider = v => EIR_MIN * Math.pow(EIR_MAX / EIR_MIN, v / 100);
 function intensityLabel(pfpr){
   return pfpr < 0.10 ? 'low' : pfpr < 0.35 ? 'moderate' : pfpr < 0.60 ? 'high' : 'intense';
@@ -278,28 +286,29 @@ function drawAges(res){
   const {ctx, W, H} = s;
   const padL = 40, padR = 14, padT = 14, padB = 30;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  // scale each curve to its own peak (within the plotted range) so the shape fills the chart
-  // and low- vs high-transmission shapes are directly comparable; magnitudes live in the bar/readouts
-  let peak = 0;
-  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++) if(res.dens[i] > peak) peak = res.dens[i];
-  const YMAX = (peak || 1) * 1.08;
+  // two curves, each scaled to its own peak (within the plotted range) so both fill the chart and
+  // their shapes are directly comparable: the demographically-weighted case distribution always
+  // peaks young; the per-person incidence rate rises to ~20y at low transmission (the Griffin shape).
+  let peakD = 0, peakR = 0;
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++){ if(res.dens[i] > peakD) peakD = res.dens[i]; if(res.rate[i] > peakR) peakR = res.rate[i]; }
+  peakD = peakD || 1; peakR = peakR || 1;
   const X = a => padL + a / AGE_MAX * plotW;
-  const Y = v => padT + (1 - v / YMAX) * plotH;
+  const Y = v => padT + (1 - v / 1.08) * plotH;   // v is already scaled to [0,1] by its own peak
 
   // axis
   ctx.strokeStyle = css('--line'); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH); ctx.stroke();
 
-  // filled distribution
+  // case distribution: neutral filled area ("where the cases fall", weighted by population)
   ctx.beginPath(); ctx.moveTo(X(0), Y(0));
-  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++) ctx.lineTo(X(AGE[i]), Y(res.dens[i]));
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++) ctx.lineTo(X(AGE[i]), Y(res.dens[i] / peakD));
   ctx.lineTo(X(AGE_MAX), Y(0)); ctx.closePath();
-  ctx.fillStyle = css('--clin'); ctx.globalAlpha = 0.16; ctx.fill(); ctx.globalAlpha = 1;
-  // line
-  ctx.strokeStyle = css('--clin'); ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+  ctx.fillStyle = css('--muted'); ctx.globalAlpha = 0.18; ctx.fill(); ctx.globalAlpha = 1;
+  // incidence per person: bold line ("risk at each age"); rises to ~20y at low transmission
+  ctx.strokeStyle = css('--clin'); ctx.lineWidth = 2.6; ctx.lineJoin = 'round';
   ctx.beginPath();
   let started = false;
-  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++){ const xx = X(AGE[i]), yy = Y(res.dens[i]); started ? ctx.lineTo(xx, yy) : (ctx.moveTo(xx, yy), started = true); }
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++){ const xx = X(AGE[i]), yy = Y(res.rate[i] / peakR); started ? ctx.lineTo(xx, yy) : (ctx.moveTo(xx, yy), started = true); }
   ctx.stroke();
 
   // x labels
@@ -308,7 +317,7 @@ function drawAges(res){
   ctx.fillText('age (years)', (padL + W - padR) / 2, H - 2);
   // y title
   ctx.save(); ctx.translate(11, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
-  ctx.textAlign = 'center'; ctx.fillText('relative case density', 0, 0); ctx.restore();
+  ctx.textAlign = 'center'; ctx.fillText('relative to peak', 0, 0); ctx.restore();
 }
 
 function drawBar(shares){
@@ -335,7 +344,7 @@ function announce(res){
   announceTimer = setTimeout(() => {
     // headline only, to stay brief on keyboard drags; the bar/canvas aria-labels carry the full breakdown
     document.getElementById('srLive').textContent =
-      Math.round(res.pfpr * 100) + '% parasite prevalence; cases peak at ' + peakAgeStr(res.peakAge) + '; ' +
+      Math.round(res.pfpr * 100) + '% parasite prevalence; incidence per person peaks at ' + peakAgeStr(res.ratePeakAge) + '; ' +
       Math.round(res.shares.u5 * 100) + '% of cases in under-5s';
   }, 450);
 }
@@ -353,10 +362,10 @@ function update(){
 
   drawAges(res);
   drawBar(res.shares);
-  // describe the (visual-only) line chart for assistive tech: the peak age is the headline
+  // describe the (visual-only) chart for assistive tech: both curves' peaks are the headline
   document.getElementById('ageChart').setAttribute('aria-label',
-    'Distribution of clinical malaria cases by age; cases peak at ' + peakAgeStr(res.peakAge) +
-    ' and ' + Math.round(res.shares.u5 * 100) + '% are in under-5s at this transmission intensity');
+    'Clinical malaria by age at this transmission intensity: incidence per person peaks at ' + peakAgeStr(res.ratePeakAge) +
+    ', while the share of cases peaks at ' + peakAgeStr(res.peakAge) + ' (' + Math.round(res.shares.u5 * 100) + '% in under-5s)');
   announce(res);
   lastRes = res;
 }
