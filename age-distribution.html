@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The age distribution of malaria burden</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">← All explainers</a></nav>
+
+<header class="hero">
+  <p class="kicker">An interactive explainer</p>
+  <h1>The age distribution of malaria burden</h1>
+  <p class="lede">Malaria is often called a disease of young children, but that is really only true where transmission is intense. As transmission rises, clinical cases pile up in the very young and fade in older children and adults; as it falls, the burden spreads back out across ages. The reason is immunity: the more infectious bites a person receives, the faster they build protection against clinical disease.<sup class="cite"><a href="#ref1">1</a></sup></p>
+</header>
+
+<div class="wrapwide">
+
+  <!-- CONCEPT 1 -->
+  <section class="card">
+    <h2><span class="num">1</span> Where transmission is intense, malaria is a disease of the very young</h2>
+
+    <h3>Evidence</h3>
+    <p>Across African settings, the share of clinical malaria that falls in under-fives rises with transmission intensity: from below a fifth of cases where transmission is low to above three-fifths where it is high.<sup class="cite"><a href="#ref1">1</a></sup> Pooled analyses of age-stratified data show broadly consistent shifts, which also vary by clinical syndrome and season.<sup class="cite"><a href="#ref2">2</a></sup> The age at which severe disease and death occur also falls as transmission climbs, even though the total amount of severe disease does not simply rise with it.<sup class="cite"><a href="#ref3">3</a></sup></p>
+
+    <h3>Mechanism</h3>
+    <p>Exposure accumulates with age and with intensity. Where a child receives hundreds of infectious bites a year, they meet the parasite many times before school age; where they receive only a few, that same exposure is spread over decades. So the age by which a person has been infected often enough to be protected depends on how fast the bites arrive.</p>
+  </section>
+
+  <!-- CONCEPT 2 -->
+  <section class="card">
+    <h2><span class="num">2</span> Repeated infection builds clinical immunity</h2>
+
+    <h3>Evidence</h3>
+    <p>Immunity to malaria is acquired, not inborn, and it comes in stages. People in high-transmission areas keep getting <em>infected</em> throughout life, but with repeated exposure a smaller and smaller fraction of those infections turns into clinical illness.<sup class="cite"><a href="#ref1">1</a></sup><sup class="cite"><a href="#ref5">5</a></sup> Clinical immunity does not stop infection; it stops infection from making you ill.</p>
+
+    <h3>Mechanism</h3>
+    <p>In the transmission model used here, the chance that a new infection becomes a clinical case falls as acquired immunity builds, following a saturating curve of cumulative exposure. Because the protection saturates, extra exposure matters most early: the first infections buy the biggest reductions in the chance of disease. Under intense transmission older children and adults have climbed high on that curve and are largely protected, so the clinical cases that remain are concentrated in the young, who have not yet caught up. (Exposure also builds a separate immunity that modestly reduces the chance a bite infects at all, but it is this clinical immunity that drives the shift in <em>who gets ill</em>.)</p>
+  </section>
+
+  <!-- CONCEPT 3 -->
+  <section class="card">
+    <h2><span class="num">3</span> So the age of the burden tracks transmission</h2>
+
+    <h3>Evidence</h3>
+    <p>When transmission falls, whether over years of control or between neighbouring areas, the burden that remains shifts into older children and adults, who now acquire immunity more slowly.<sup class="cite"><a href="#ref4">4</a></sup> The total number of cases can drop while the <em>average age</em> of a case rises.</p>
+
+    <h3>Mechanism</h3>
+    <p>The age distribution of cases is not fixed: it is a readout of transmission intensity. That has practical consequences. Interventions aimed at young children (such as seasonal chemoprevention, or the current vaccines delivered in early childhood) capture most of the burden where transmission is high, but a smaller share where it is low; and surveillance that only counts young children will increasingly miss cases as transmission falls.</p>
+  </section>
+</div>
+
+<!-- INTERACTIVE TOY MODEL -->
+<div class="wrapwide">
+  <section class="card">
+    <h2><span class="num" aria-hidden="true">▶</span> Turn transmission up and down</h2>
+    <p class="sub">A <strong style="color:var(--warm)">toy</strong> implementation of the Griffin transmission model at equilibrium</p>
+    <p>Move the slider from low to intense transmission. The top chart is the distribution of clinical cases across age; the bar below splits those cases into under-5, 5–15 and 15+. As transmission rises, watch the cases pile into the youngest ages and the parasite prevalence (a common, more familiar index of transmission) climb with them.</p>
+
+    <div class="controls" style="grid-template-columns:1fr;max-width:560px">
+      <div class="slider-block intensity">
+        <div class="slider-top"><span class="label">Transmission intensity</span><span class="val" id="vIntensity">moderate</span></div>
+        <input type="range" id="intensity" min="0" max="100" value="30" step="1" aria-label="Transmission intensity, from low to intense">
+        <p class="slider-sub muted">Sets how many infectious bites people receive; the prevalence readout is the familiar handle. At the high end prevalence plateaus, but the age shift keeps going.</p>
+      </div>
+    </div>
+    <div class="readouts">
+      <div class="readout"><div class="v" id="rPfPR" style="color:var(--accent)">—</div><div class="l">parasite prevalence (2–10y)</div></div>
+      <div class="readout"><div class="v" id="rU5" style="color:#c45a25">—</div><div class="l">share in under-5s</div></div>
+      <div class="readout"><div class="v" id="rInc" style="color:var(--clin)">—</div><div class="l">episodes per person-year (all ages)</div></div>
+    </div>
+
+    <p class="chart-label">Distribution of clinical cases by age <span class="muted">— each curve scaled to its own peak, so compare the shape, not the height</span></p>
+    <canvas id="ageChart" height="280" aria-label="Distribution of clinical malaria cases across age, which concentrates in young children as transmission intensity rises"></canvas>
+
+    <p class="chart-label" style="margin-top:20px">Share of clinical cases by age group</p>
+    <div class="agebar" id="ageBar" role="img" aria-label="Share of clinical cases in each age group">
+      <div class="seg u5" id="segU5"></div>
+      <div class="seg mid" id="segMid"></div>
+      <div class="seg ad" id="segAd"></div>
+    </div>
+    <div class="rb-legend">
+      <span><i style="background:#c45a25"></i> Under 5</span>
+      <span><i style="background:var(--accent)"></i> 5–15</span>
+      <span><i style="background:var(--blue)"></i> 15 and over</span>
+    </div>
+    <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
+
+    <p class="pcap" style="margin-top:14px">Each curve is scaled to its own peak so the <em>shapes</em> line up for comparison (the bar and readouts carry the actual numbers). Watch the peak slide with transmission: a broad hump over school-age children when transmission is low, collapsing into a tall spike in the first years of life when it is high.</p>
+  </section>
+</div>
+
+<div class="wrapwide">
+  <section class="card">
+    <h2>What to notice</h2>
+    <p><strong>The young-child peak is made by immunity, not by biting.</strong> Infectious bites land on all ages (a little less on the very young, who are smaller). What concentrates <em>clinical</em> cases in young children at high transmission is that everyone older has already acquired protection.</p>
+    <p><strong>Prevalence saturates; the age shift does not.</strong> Push the slider through the high end: parasite prevalence barely moves once it is high, but the under-5 share keeps climbing. Intensity keeps rewriting <em>who</em> gets ill even after it stops changing <em>how many</em> carry the parasite.</p>
+    <p><strong>Falling transmission ages the burden.</strong> Slide back down from intense to low and the spike flattens into a broad curve reaching into adulthood. Control that lowers transmission does not just shrink the burden, it moves it older, which changes who interventions and surveillance should target.</p>
+  </section>
+
+  <div class="note">
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy that runs the equilibrium solution of the Griffin model of <em>Plasmodium falciparum</em> transmission<sup class="cite"><a href="#ref1">1</a></sup><sup class="cite"><a href="#ref5">5</a></sup> directly in your browser. It shows the <em>shape</em> of how the age distribution of disease depends on transmission intensity, not a specific place; not to be used for decision making.</p>
+    <ul>
+      <li><strong>The model.</strong> The page ports the human equilibrium solution from the <a href="https://github.com/mrc-ide/malariaEquilibrium" target="_blank" rel="noopener">malariaEquilibrium</a> package (mrc-ide),<sup class="cite"><a href="#ref6">6</a></sup> using its standard fitted parameter set. For a given entomological inoculation rate (EIR, infectious bites per person per year) it solves, by age, the equilibrium of acquired immunity and the infection states (susceptible, diseased, asymptomatic, sub-patent). Biting heterogeneity between people is integrated out with a 10-point Gaussian quadrature, exactly as the package does.</li>
+      <li><strong>Immunity and clinical disease.</strong> Three immunity functions build with cumulative exposure and age: pre-erythrocytic immunity (reducing the chance a bite infects), clinical immunity, and blood-stage/detection immunity. The probability that a new infection becomes a clinical case is <span class="var">φ</span> = <span class="var">φ</span><sub>0</sub>(<span class="var">φ</span><sub>1</sub> + (1−<span class="var">φ</span><sub>1</sub>)/(1 + ((<span class="var">I<sub>C</sub></span>)/<span class="var">I<sub>C0</sub></span>)<sup><span class="var">κ</span></sup>)), a saturating (Hill) function of acquired clinical immunity <span class="var">I<sub>C</sub></span>; this term is what shifts disease to the young as exposure rises. Maternal immunity protects the first months of life.</li>
+      <li><strong>Transmission intensity.</strong> The slider sets EIR on a log scale (roughly half a bite up to several hundred per person per year); the number itself is hidden because it is illustrative, and the parasite-prevalence readout gives the more familiar handle. Treatment is switched off (no antimalarial coverage) to keep the toy simple.</li>
+      <li><strong>Age distribution and readouts.</strong> Clinical incidence is computed per age over 0–80 years and combined with the model's demographic age structure. The top chart shows the resulting distribution of cases across age, normalised to constant area so only its shape is read. The bar sums that distribution into under-5, 5–15 and 15+ shares. Parasite prevalence is the model's microscopy-detectable prevalence in 2–10 year-olds; episodes per person-year is the all-age clinical incidence rate. All figures are illustrative and shown on friendly scales (percentages and per-year rates), not raw model units.</li>
+      <li><strong>Alignment with the model.</strong> Because the toy ports the equilibrium solver directly, it reproduces its outputs; the cross-check in <span class="var">validation/validate_age_distribution.R</span> runs <a href="https://github.com/mrc-ide/malariaEquilibrium" target="_blank" rel="noopener">malariaEquilibrium</a> across a range of EIRs and confirms the same age-group shares and prevalence, and that the under-5 share rises from well below a fifth at low transmission to above three-fifths at high transmission.</li>
+    </ul>
+    <p><strong>References.</strong></p>
+    <ol class="refs">
+      <li id="ref1">Griffin <em>et al</em>, 2014. Estimates of the changing age-burden of <em>Plasmodium falciparum</em> malaria disease in sub-Saharan Africa. <em>Nature Communications</em> 5:3136. <a href="https://doi.org/10.1038/ncomms4136" target="_blank" rel="noopener">doi.org/10.1038/ncomms4136</a></li>
+      <li id="ref2">Carneiro <em>et al</em>, 2010. Age-patterns of malaria vary with severity, transmission intensity and seasonality in sub-Saharan Africa: a systematic review and pooled analysis. <em>PLoS ONE</em> 5:e8988. <a href="https://doi.org/10.1371/journal.pone.0008988" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0008988</a></li>
+      <li id="ref3">Snow <em>et al</em>, 1997. Relation between severe malaria morbidity in children and level of <em>Plasmodium falciparum</em> transmission in Africa. <em>The Lancet</em> 349:1650–1654. <a href="https://doi.org/10.1016/S0140-6736(97)02038-2" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(97)02038-2</a></li>
+      <li id="ref4">O'Meara <em>et al</em>, 2008. Effect of a fall in malaria transmission on morbidity and mortality in Kilifi, Kenya. <em>The Lancet</em> 372:1555–1562. <a href="https://doi.org/10.1016/S0140-6736(08)61655-4" target="_blank" rel="noopener">doi.org/10.1016/S0140-6736(08)61655-4</a></li>
+      <li id="ref5">Griffin <em>et al</em>, 2010. Reducing <em>Plasmodium falciparum</em> malaria transmission in Africa: a model-based evaluation of intervention strategies. <em>PLoS Medicine</em> 7:e1000324. <a href="https://doi.org/10.1371/journal.pmed.1000324" target="_blank" rel="noopener">doi.org/10.1371/journal.pmed.1000324</a></li>
+      <li id="ref6">Verity, Winskill, Charles <em>et al</em> / mrc-ide. malariaEquilibrium: the canonical equilibrium solution for the Griffin model. R package. <a href="https://github.com/mrc-ide/malariaEquilibrium" target="_blank" rel="noopener">github.com/mrc-ide/malariaEquilibrium</a></li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>Numbers here are illustrative: they show the shape of how the age of malaria burden depends on transmission intensity, not real-world impact, which depends on local transmission, seasonality, interventions and care-seeking. Not to be used for decision making.</p>
+  </footer>
+</div>
+
+<script>
+// ---------- Griffin model, human equilibrium (illustrative port of mrc-ide/malariaEquilibrium) ----------
+// For a given EIR, solve by age the equilibrium of acquired immunity and infection states, then read off
+// the clinical-incidence-by-age (inc), microscopy prevalence (pos_M) and demographic age structure (prop).
+// Heterogeneity in biting between people is integrated out with a 10-point Gaussian quadrature, exactly as
+// human_equilibrium() does around human_equilibrium_no_het(). Parameters are the package's fitted set.
+const P = {
+  eta:1.304631e-04, rho:0.85, a0:2920, s2:1.67,
+  rA:0.005, rD:0.2, rU:0.00909091, rP:0.04, rT:0.2,
+  d1:0.161, dd:3650, ID0:1.58, kd:0.477, ud:9.45, ad0:7993.5, fd0:0.0071, gd:4.81,
+  b0:0.59, b1:0.5, db:3650, IB0:43.9, kb:2.16, ub:7.2,
+  phi0:0.792, phi1:0.00074, dc:10950, IC0:18, kc:2.37, uc:6.06,
+  PM:0.774, dm:67.7
+};
+// gq_normal(10): standard-normal Gauss quadrature nodes/weights (weights sum to 1)
+const GH_NODES = [-4.8594628,-3.5818235,-2.4843258,-1.4659891,-0.4849357,0.4849357,1.4659891,2.4843258,3.5818235,4.8594628];
+const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423e-01,3.446423e-01,1.354837e-01,1.911158e-02,7.580709e-04,4.310653e-06];
+
+const FT = 0;                                   // treatment coverage (off, for a simple toy)
+const AGE = [];                                 // age grid in years, uniform 0.25y from 0 to 80
+// NB: this grid must stay in step with validation/validate_age_distribution.R (seq(0,80,0.25))
+// so the R cross-check reproduces these numbers — the equilibrium is grid-dependent.
+for(let a = 0; a <= 80.0001; a += 0.25) AGE.push(+a.toFixed(2));
+const NAGE = AGE.length, AW = 0.25;             // number of ages, band width (years)
+const AGE_MAX = 60;                             // chart x-extent and peak-search cap (cases negligible beyond)
+
+// pre-compute the age-only structure that does not depend on EIR: aging rates r, population fractions prop,
+// midpoints, relative biting psi, maternal-immunity kernel, and the age-20 index
+const AGE_D = AGE.map(a => a * 365);
+const rAge = new Array(NAGE), prop = new Array(NAGE), midD = new Array(NAGE), psi = new Array(NAGE);
+for(let i = 0; i < NAGE; i++){
+  rAge[i] = (i === NAGE - 1) ? 0 : 1 / (AGE_D[i + 1] - AGE_D[i]);
+  prop[i] = (i === 0) ? P.eta / (rAge[0] + P.eta) : prop[i - 1] * rAge[i - 1] / (rAge[i] + P.eta);
+  midD[i] = (i === NAGE - 1) ? AGE_D[i] : (AGE_D[i] + AGE_D[i + 1]) / 2;
+  psi[i]  = 1 - P.rho * Math.exp(-midD[i] / P.a0);
+}
+let age20 = 0, best20 = Infinity;
+for(let i = 0; i < NAGE; i++){ const d = Math.abs(midD[i] - 20 * 365); if(d < best20){ best20 = d; age20 = i; } }
+
+// human_equilibrium_no_het: returns per-age inc (clinical cases / total-pop / day) and pos_M (prevalence)
+function noHet(EIRyr){
+  const eir = EIRyr / 365;
+  const ICA = new Array(NAGE), FOI = new Array(NAGE), q = new Array(NAGE), phi = new Array(NAGE);
+  let IB = 0, IC = 0, ID = 0;
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const eps = eir * psi[i];
+    IB = (eps / (eps * P.ub + 1) + re * IB) / (1 / P.db + re);
+    const b = P.b0 * (P.b1 + (1 - P.b1) / (1 + Math.pow(IB / P.IB0, P.kb)));
+    FOI[i] = b * eps;
+    IC = (FOI[i] / (FOI[i] * P.uc + 1) + re * IC) / (1 / P.dc + re);
+    ICA[i] = IC;
+    ID = (FOI[i] / (FOI[i] * P.ud + 1) + re * ID) / (1 / P.dd + re);
+    const fd = 1 - (1 - P.fd0) / (1 + Math.pow(midD[i] / P.ad0, P.gd));
+    q[i] = P.d1 + (1 - P.d1) / (1 + Math.pow(ID / P.ID0, P.kd) * fd);
+  }
+  const IM0 = ICA[age20] * P.PM;
+  for(let i = 0; i < NAGE; i++){
+    const ICM = (i === NAGE - 1) ? 0
+      : IM0 * P.dm / (AGE_D[i + 1] - AGE_D[i]) * (Math.exp(-AGE_D[i] / P.dm) - Math.exp(-AGE_D[i + 1] / P.dm));
+    phi[i] = P.phi0 * (P.phi1 + (1 - P.phi1) / (1 + Math.pow((ICA[i] + ICM) / P.IC0, P.kc)));
+  }
+  const inc = new Array(NAGE), posM = new Array(NAGE);
+  const T = new Array(NAGE), D = new Array(NAGE), A = new Array(NAGE), U = new Array(NAGE), Pc = new Array(NAGE);
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const betaT = P.rT + re, betaD = P.rD + re, betaA = FOI[i] * phi[i] + P.rA + re,
+          betaU = FOI[i] + P.rU + re, betaP = P.rP + re;
+    const aT = FT * phi[i] * FOI[i] / betaT;
+    const aP = P.rT * aT / betaP;
+    const aD = (1 - FT) * phi[i] * FOI[i] / betaD;
+    const bT = i ? rAge[i - 1] * T[i - 1] / betaT : 0;
+    const bD = i ? rAge[i - 1] * D[i - 1] / betaD : 0;
+    const bP = i ? P.rT * bT + rAge[i - 1] * Pc[i - 1] / betaP : 0;
+    const Y = (prop[i] - (bT + bD + bP)) / (1 + aT + aD + aP);
+    T[i] = aT * Y + bT; D[i] = aD * Y + bD; Pc[i] = aP * Y + bP;
+    const agedA = i ? rAge[i - 1] * A[i - 1] : 0;
+    const agedU = i ? rAge[i - 1] * U[i - 1] : 0;
+    A[i] = (agedA + (1 - phi[i]) * Y * FOI[i] + P.rD * D[i]) / (betaA + (1 - phi[i]) * FOI[i]);
+    U[i] = (agedU + P.rA * A[i]) / betaU;
+    posM[i] = D[i] + T[i] + A[i] * q[i];
+    inc[i]  = Y * FOI[i] * phi[i];
+  }
+  return {inc, posM};
+}
+
+// human_equilibrium: average no-het over the biting-heterogeneity quadrature
+function equilibrium(EIRyr){
+  const inc = new Array(NAGE).fill(0), posM = new Array(NAGE).fill(0);
+  for(let j = 0; j < GH_NODES.length; j++){
+    const zeta = Math.exp(-P.s2 * 0.5 + Math.sqrt(P.s2) * GH_NODES[j]);
+    const e = noHet(EIRyr * zeta), w = GH_WEIGHTS[j];
+    for(let i = 0; i < NAGE; i++){ inc[i] += e.inc[i] * w; posM[i] += e.posM[i] * w; }
+  }
+  // aggregate the outputs the UI needs
+  let total = 0, u5 = 0, mid = 0, ad = 0, pfNum = 0, pfDen = 0;
+  for(let i = 0; i < NAGE; i++){
+    total += inc[i];
+    const a = AGE[i];
+    if(a < 5) u5 += inc[i]; else if(a < 15) mid += inc[i]; else ad += inc[i];
+    if(a >= 2 && a < 10){ pfNum += posM[i]; pfDen += prop[i]; }
+  }
+  const inv = total > 0 ? 1 / total : 0;         // guard the (never-zero over the slider range) denominator
+  let peakAge = 0, peakV = 0;                    // modal age of the case distribution (for the a11y summary),
+  for(let i = 0; i < NAGE; i++){                 // capped at AGE_MAX to skip the absorbing 80+ terminal band
+    if(AGE[i] > AGE_MAX) break;
+    if(inc[i] > peakV){ peakV = inc[i]; peakAge = AGE[i]; }
+  }
+  return {
+    peakAge,
+    dens: inc.map(v => v * inv / AW),            // density (per year of age), area = 1
+    shares: {u5: u5 * inv, mid: mid * inv, ad: ad * inv},
+    pfpr: pfDen > 0 ? pfNum / pfDen : 0,
+    incPerYear: total * 365                       // all-age episodes per person per year
+  };
+}
+
+// intensity slider (0..100) -> EIR on a log scale spanning [EIR_MIN, EIR_MAX]
+// (EIR_MAX is the EIR at the top of the slider, i.e. at value = 100)
+const EIR_MIN = 0.5, EIR_MAX = 512;
+const eirFromSlider = v => EIR_MIN * Math.pow(EIR_MAX / EIR_MIN, v / 100);
+function intensityLabel(pfpr){
+  return pfpr < 0.10 ? 'low' : pfpr < 0.35 ? 'moderate' : pfpr < 0.60 ? 'high' : 'intense';
+}
+
+// ---------- canvas helpers (match the other explainers) ----------
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function setup(canvas){
+  if(!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  if(!canvas.dataset.h) canvas.dataset.h = canvas.getAttribute('height') || 280;
+  const H = +canvas.dataset.h;
+  const W = canvas.getBoundingClientRect().width;
+  if(!W) return null;
+  canvas.style.height = H + 'px';
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  return {ctx, W, H};
+}
+
+function drawAges(res){
+  const c = document.getElementById('ageChart');
+  const s = setup(c); if(!s) return;
+  const {ctx, W, H} = s;
+  const padL = 40, padR = 14, padT = 14, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  // scale each curve to its own peak (within the plotted range) so the shape fills the chart
+  // and low- vs high-transmission shapes are directly comparable; magnitudes live in the bar/readouts
+  let peak = 0;
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++) if(res.dens[i] > peak) peak = res.dens[i];
+  const YMAX = (peak || 1) * 1.08;
+  const X = a => padL + a / AGE_MAX * plotW;
+  const Y = v => padT + (1 - v / YMAX) * plotH;
+
+  // axis
+  ctx.strokeStyle = css('--line'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH); ctx.stroke();
+
+  // filled distribution
+  ctx.beginPath(); ctx.moveTo(X(0), Y(0));
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++) ctx.lineTo(X(AGE[i]), Y(res.dens[i]));
+  ctx.lineTo(X(AGE_MAX), Y(0)); ctx.closePath();
+  ctx.fillStyle = css('--clin'); ctx.globalAlpha = 0.16; ctx.fill(); ctx.globalAlpha = 1;
+  // line
+  ctx.strokeStyle = css('--clin'); ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  let started = false;
+  for(let i = 0; i < NAGE && AGE[i] <= AGE_MAX; i++){ const xx = X(AGE[i]), yy = Y(res.dens[i]); started ? ctx.lineTo(xx, yy) : (ctx.moveTo(xx, yy), started = true); }
+  ctx.stroke();
+
+  // x labels
+  ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+  for(let a = 0; a <= AGE_MAX; a += 10) ctx.fillText(a, X(a), padT + plotH + 15);
+  ctx.fillText('age (years)', (padL + W - padR) / 2, H - 2);
+  // y title
+  ctx.save(); ctx.translate(11, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center'; ctx.fillText('relative case density', 0, 0); ctx.restore();
+}
+
+function drawBar(shares){
+  const pct = f => Math.round(f * 100);
+  const set = (id, f, name) => {
+    const el = document.getElementById(id);
+    el.style.width = (f * 100) + '%';
+    el.textContent = f >= 0.08 ? pct(f) + '%' : '';   // hide the label on slivers; the title keeps it available
+    el.title = name + ': ' + pct(f) + '%';
+  };
+  set('segU5', shares.u5, 'Under 5'); set('segMid', shares.mid, '5 to 15'); set('segAd', shares.ad, '15 and over');
+  document.getElementById('ageBar').setAttribute('aria-label',
+    'Share of clinical cases: ' + pct(shares.u5) + '% under 5, ' + pct(shares.mid) + '% aged 5 to 15, ' + pct(shares.ad) + '% 15 and over');
+}
+
+// ---------- wiring ----------
+const intensity = document.getElementById('intensity');
+function fillPct(el){ el.style.setProperty('--fill', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
+const peakAgeStr = a => a < 1 ? 'under 1 year' : 'about ' + Math.round(a) + ' years';
+
+let announceTimer = null, lastRes = null;
+function announce(res){
+  clearTimeout(announceTimer);
+  announceTimer = setTimeout(() => {
+    // headline only, to stay brief on keyboard drags; the bar/canvas aria-labels carry the full breakdown
+    document.getElementById('srLive').textContent =
+      Math.round(res.pfpr * 100) + '% parasite prevalence; cases peak at ' + peakAgeStr(res.peakAge) + '; ' +
+      Math.round(res.shares.u5 * 100) + '% of cases in under-5s';
+  }, 450);
+}
+
+function update(){
+  fillPct(intensity);
+  const res = equilibrium(eirFromSlider(+intensity.value));
+  const lab = intensityLabel(res.pfpr);
+  document.getElementById('vIntensity').textContent = lab;
+  intensity.setAttribute('aria-valuetext', lab + ' transmission, ' + Math.round(res.pfpr * 100) + ' percent parasite prevalence');
+
+  document.getElementById('rPfPR').textContent = Math.round(res.pfpr * 100) + '%';
+  document.getElementById('rU5').textContent = Math.round(res.shares.u5 * 100) + '%';
+  document.getElementById('rInc').textContent = res.incPerYear.toFixed(2);
+
+  drawAges(res);
+  drawBar(res.shares);
+  // describe the (visual-only) line chart for assistive tech: the peak age is the headline
+  document.getElementById('ageChart').setAttribute('aria-label',
+    'Distribution of clinical malaria cases by age; cases peak at ' + peakAgeStr(res.peakAge) +
+    ' and ' + Math.round(res.shares.u5 * 100) + '% are in under-5s at this transmission intensity');
+  announce(res);
+  lastRes = res;
+}
+
+intensity.addEventListener('input', update);
+// resize only needs a redraw, not a full re-solve of the model
+window.addEventListener('resize', () => { if(lastRes){ drawAges(lastRes); drawBar(lastRes.shares); } });
+window.addEventListener('load', update);
+update();
+</script>
+
+</body>
+</html>

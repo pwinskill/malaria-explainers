@@ -150,6 +150,8 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .lesson-card.warm .go{color:var(--warm)}
 .lesson-card.blue .lc-num{background:var(--blue-soft);color:var(--blue)}
 .lesson-card.blue .go{color:var(--blue)}
+.lesson-card.clin .lc-num{background:var(--clin-soft);color:var(--clin)}
+.lesson-card.clin .go{color:var(--clin)}
 .crumb{max-width:1080px;margin:0 auto;padding:18px 22px 0}
 .crumb a{font-weight:700;font-size:14px;text-decoration:none}
 .lessons-h{font-size:18px;margin:6px 0 12px;color:var(--ink)}
@@ -284,3 +286,22 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 /* pulse the "cases averted" readout when the search settles */
 @keyframes readoutFlash{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
 .readout.flash{animation:readoutFlash .5s ease}
+
+/* ============================================================
+   Age-distribution explainer (age-distribution.html)
+   ============================================================ */
+/* single transmission-intensity slider (blue). A distinct class from .eir so the word-value
+   sizing here does not affect the numeric .eir slider on the nonlinearities page. */
+.slider-block.intensity{background:var(--blue-soft)}
+.slider-block.intensity .val{color:var(--blue);font-size:16px;white-space:nowrap}
+#intensity{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
+#intensity::-webkit-slider-thumb{border:3px solid var(--blue)} #intensity::-moz-range-thumb{border:3px solid var(--blue)}
+/* U5 / 5-15 / 15+ case-share bar (second visualisation) */
+.agebar{display:flex;height:46px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:6px 0 0}
+.agebar .seg{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;
+  min-width:0;overflow:hidden;white-space:nowrap;transition:width .18s ease;
+  text-shadow:0 1px 2px rgba(0,0,0,.35)}   /* lift the white % labels clear of WCAG AA on the mid-tone bands */
+.agebar .seg + .seg{border-left:1px solid #fff}   /* crisp divider between adjacent bands */
+.agebar .seg.u5{background:#c45a25}                /* darker warm: clears white-text contrast, matches the U5 readout */
+.agebar .seg.mid{background:var(--accent)}
+.agebar .seg.ad{background:var(--blue)}

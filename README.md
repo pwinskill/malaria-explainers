@@ -37,6 +37,14 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
    from [malariasimulation](https://github.com/mrc-ide/malariasimulation), and the seasonal SMC and
    correlation behaviour is cross-checked against it. Cross-check: `validation/validate_seasonality.R`.
 
+4. **The age distribution of malaria burden** ([`age-distribution.html`](age-distribution.html)).
+   Malaria is a disease of young children only where transmission is intense: as transmission rises,
+   acquired immunity builds faster and clinical cases concentrate in the very young, while older
+   children and adults are increasingly protected. A live, in-browser port of the Griffin-model
+   equilibrium ([malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium)) with a single
+   transmission-intensity slider, showing the case-by-age distribution and the under-5 / 5–15 / 15+
+   shares shift. Cross-check: `validation/validate_age_distribution.R`.
+
 ## R cross-checks
 
 The `validation/validate_*.R` scripts independently reproduce each explainer's model in R/ggplot
