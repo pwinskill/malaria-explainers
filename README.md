@@ -42,8 +42,10 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
    acquired immunity builds faster and clinical cases concentrate in the very young, while older
    children and adults are increasingly protected. A live, in-browser port of the Griffin-model
    equilibrium ([malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium)) with a single
-   transmission-intensity slider, showing the case-by-age distribution and the under-5 / 5–15 / 15+
-   shares shift. Cross-check: `validation/validate_age_distribution.R`.
+   transmission-intensity slider. The chart shows clinical incidence per person by age (rising into
+   adulthood at low transmission, concentrating in infancy at high transmission) alongside the
+   case distribution, with the under-5 / 5–15 / 15+ shares beside it. Cross-check:
+   `validation/validate_age_distribution.R`.
 
 ## R cross-checks
 
