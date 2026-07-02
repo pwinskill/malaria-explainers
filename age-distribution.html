@@ -24,10 +24,10 @@
     <h2><span class="num">1</span> Where transmission is intense, malaria is a disease of the very young</h2>
 
     <h3>Evidence</h3>
-    <p>Across African settings, the share of clinical malaria that falls in under-fives rises with transmission intensity: from below a fifth of cases where transmission is low to above three-fifths where it is high.<sup class="cite"><a href="#ref1">1</a></sup> Pooled analyses of age-stratified data show broadly consistent shifts, which also vary by clinical syndrome and season.<sup class="cite"><a href="#ref2">2</a></sup> The age at which severe disease and death occur also falls as transmission climbs, even though the total amount of severe disease does not simply rise with it.<sup class="cite"><a href="#ref3">3</a></sup></p>
+    <p>Across African settings, the share of clinical malaria that falls in under-fives rises with transmission intensity: from below a fifth of cases where transmission is low to above three-fifths where it is high.<sup class="cite"><a href="#ref1">1</a></sup> Pooled analyses of age-stratified data show broadly consistent shifts, which also vary by clinical syndrome and season.<sup class="cite"><a href="#ref2">2</a></sup> Severe disease and death also become concentrated in the youngest children as transmission increases.<sup class="cite"><a href="#ref3">3</a></sup></p>
 
     <h3>Mechanism</h3>
-    <p>Exposure accumulates with age and with intensity. Where a child receives hundreds of infectious bites a year, they meet the parasite many times before school age; where they receive only a few, that same exposure is spread over decades. So the age by which a person has been infected often enough to be protected depends on how fast the bites arrive.</p>
+    <p>Exposure accumulates with age and with transmission intensity. Where a child receives hundreds of infectious bites a year, they are infected many times before school age; where they receive only a few, the same exposure is spread over decades. The age by which a person has been infected often enough to become protected therefore depends on the rate at which infectious bites are received.</p>
   </section>
 
   <!-- CONCEPT 2 -->
@@ -35,21 +35,21 @@
     <h2><span class="num">2</span> Repeated infection builds clinical immunity</h2>
 
     <h3>Evidence</h3>
-    <p>Immunity to malaria is acquired, not inborn, and it comes in stages. People in high-transmission areas keep getting <em>infected</em> throughout life, but with repeated exposure a smaller and smaller fraction of those infections turns into clinical illness.<sup class="cite"><a href="#ref1">1</a></sup><sup class="cite"><a href="#ref5">5</a></sup> Clinical immunity does not stop infection; it stops infection from making you ill.</p>
+    <p>Immunity to malaria is largely acquired through repeated exposure, apart from limited protection passed from the mother in the first months of life, and it develops in stages. In high-transmission areas people continue to be <em>infected</em> throughout life, but with repeated exposure a progressively smaller fraction of those infections becomes clinical illness.<sup class="cite"><a href="#ref1">1</a></sup><sup class="cite"><a href="#ref5">5</a></sup> Clinical immunity does not prevent infection; it prevents infection from causing symptoms.</p>
 
     <h3>Mechanism</h3>
-    <p>In the transmission model used here, the chance that a new infection becomes a clinical case falls as acquired immunity builds, following a saturating curve of cumulative exposure. Because the protection saturates, extra exposure matters most early: the first infections buy the biggest reductions in the chance of disease. Under intense transmission older children and adults have climbed high on that curve and are largely protected, so the clinical cases that remain are concentrated in the young, who have not yet caught up. (Exposure also builds a separate immunity that modestly reduces the chance a bite infects at all, but it is this clinical immunity that drives the shift in <em>who gets ill</em>.)</p>
+    <p>In the transmission model used here, the probability that a new infection becomes a clinical case declines as acquired immunity builds, following a saturating (diminishing-returns) function of cumulative exposure. Because the response saturates, early exposure has the largest effect: the first infections lead to the largest reductions in the probability of disease. Under intense transmission, older children and adults are far along this curve and largely protected, so the remaining clinical cases are concentrated in young children, who have accumulated less exposure. (Cumulative exposure also builds a separate immunity that modestly reduces the probability that a bite establishes infection, but it is clinical immunity that drives the shift in which ages develop disease.)</p>
   </section>
 
   <!-- CONCEPT 3 -->
   <section class="card">
-    <h2><span class="num">3</span> So the age of the burden tracks transmission</h2>
+    <h2><span class="num">3</span> The age distribution of burden reflects transmission intensity</h2>
 
     <h3>Evidence</h3>
     <p>When transmission falls, whether over years of control or between neighbouring areas, the burden that remains shifts into older children and adults, who now acquire immunity more slowly.<sup class="cite"><a href="#ref4">4</a></sup> The total number of cases can drop while the <em>average age</em> of a case rises.</p>
 
     <h3>Mechanism</h3>
-    <p>The age distribution of cases is not fixed: it is a readout of transmission intensity. That has practical consequences. Interventions aimed at young children (such as seasonal chemoprevention, or the current vaccines delivered in early childhood) capture most of the burden where transmission is high, but a smaller share where it is low; and surveillance that only counts young children will increasingly miss cases as transmission falls.</p>
+    <p>The age distribution of cases is not fixed; it is determined by transmission intensity, and this has practical consequences. Interventions aimed at young children (such as seasonal chemoprevention, or the current vaccines delivered in early childhood) capture most of the burden where transmission is high, but a smaller share where it is low; and surveillance that only counts young children will increasingly miss cases as transmission falls.</p>
   </section>
 </div>
 
@@ -58,13 +58,13 @@
   <section class="card">
     <h2><span class="num" aria-hidden="true">▶</span> Turn transmission up and down</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> implementation of the Griffin transmission model at equilibrium</p>
-    <p>Move the slider from low to intense transmission. The top chart is the distribution of clinical cases across age; the bar below splits those cases into under-5, 5–15 and 15+. As transmission rises, watch the cases pile into the youngest ages and the parasite prevalence (a common, more familiar index of transmission) climb with them.</p>
+    <p>Move the slider from low to intense transmission. The top chart shows the distribution of clinical cases across age; the bar below divides those cases into under-5, 5–15 and 15+. As transmission intensity rises, cases become concentrated in the youngest ages and parasite prevalence (a common, more familiar index of transmission) increases.</p>
 
     <div class="controls" style="grid-template-columns:1fr;max-width:560px">
       <div class="slider-block intensity">
         <div class="slider-top"><span class="label">Transmission intensity</span><span class="val" id="vIntensity">moderate</span></div>
         <input type="range" id="intensity" min="0" max="100" value="30" step="1" aria-label="Transmission intensity, from low to intense">
-        <p class="slider-sub muted">Sets how many infectious bites people receive; the prevalence readout is the familiar handle. At the high end prevalence plateaus, but the age shift keeps going.</p>
+        <p class="slider-sub muted">Sets how many infectious bites people receive; parasite prevalence is shown as a more familiar index. At high intensity prevalence plateaus, but the age shift continues.</p>
       </div>
     </div>
     <div class="readouts">
@@ -89,16 +89,16 @@
     </div>
     <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
 
-    <p class="pcap" style="margin-top:14px">Each curve is scaled to its own peak so the <em>shapes</em> line up for comparison (the bar and readouts carry the actual numbers). Watch the peak slide with transmission: a broad hump over school-age children when transmission is low, collapsing into a tall spike in the first years of life when it is high.</p>
+    <p class="pcap" style="margin-top:14px">Each curve is scaled to its own peak so the <em>shapes</em> can be compared (the bar and readouts carry the actual numbers). The peak shifts with transmission intensity: a broad distribution centred on school-age children at low transmission, and a narrow peak in the first years of life at high transmission.</p>
   </section>
 </div>
 
 <div class="wrapwide">
   <section class="card">
     <h2>What to notice</h2>
-    <p><strong>The young-child peak is made by immunity, not by biting.</strong> Infectious bites land on all ages (a little less on the very young, who are smaller). What concentrates <em>clinical</em> cases in young children at high transmission is that everyone older has already acquired protection.</p>
-    <p><strong>Prevalence saturates; the age shift does not.</strong> Push the slider through the high end: parasite prevalence barely moves once it is high, but the under-5 share keeps climbing. Intensity keeps rewriting <em>who</em> gets ill even after it stops changing <em>how many</em> carry the parasite.</p>
-    <p><strong>Falling transmission shifts the age burden to older age groups.</strong> Slide back down from intense to low and the spike flattens into a broad curve reaching into adulthood. Control that lowers transmission does not just shrink the burden, it shifts it to older age groups, which changes who interventions and surveillance should target. Each slider position is a long-run equilibrium, though: it shows where the age pattern settles, not the year-by-year path it takes to get there.</p>
+    <p><strong>The young-child peak is produced by immunity, not by biting.</strong> Infectious bites reach all ages (slightly fewer to the very young, who are smaller). What concentrates <em>clinical</em> cases in young children at high transmission is that older individuals have already acquired protection.</p>
+    <p><strong>Prevalence saturates; the age shift does not.</strong> Move the slider through the high end: parasite prevalence changes little once it is high, but the under-5 share continues to rise. Transmission intensity keeps changing <em>which ages</em> develop disease even after it has stopped changing <em>how many</em> people carry the parasite.</p>
+    <p><strong>Falling transmission shifts the age burden to older age groups.</strong> Move the slider from intense to low and the narrow peak broadens into a distribution reaching into adulthood. Lowering transmission does not only reduce the burden; it shifts it to older age groups, which changes who interventions and surveillance should target. Each slider position is a long-run equilibrium, however: it shows where the age pattern settles, not the path taken to reach it.</p>
     <p><strong>Severe disease and death concentrate too.</strong> This toy tracks uncomplicated clinical cases, but the same shift onto the youngest children, if anything sharper, is seen for severe malaria and malaria deaths as transmission rises.<sup class="cite"><a href="#ref2">2</a></sup><sup class="cite"><a href="#ref3">3</a></sup></p>
   </section>
 

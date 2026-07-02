@@ -12,6 +12,14 @@ This file only notes things specific to working on the repo with Claude.
   the hub and carries no script.
 - **Numbers are illustrative.** They show the shape of relationships, not
   real-world impact. Never frame them as fit for decision-making.
+- **Prose is precise and neutral, not conversational.** Write plain, factual
+  descriptions. Avoid chatty framing ("often called…"), second person ("makes
+  you ill"), and colloquial/metaphorical verbs ("cases pile up", "buy the
+  biggest reduction", "meet the parasite", "keeps rewriting who gets ill").
+  Prefer exact terms: name what a quantity is the intensity/distribution *of*,
+  say "lead to" not "buy", "are infected" not "meet the parasite", "determined
+  by" not "a readout of". Short interactive prompts ("Move the slider…") are
+  fine; the explanatory prose should read like a careful technical note.
 
 ## Verifying changes
 
