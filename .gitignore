@@ -10,3 +10,6 @@
 
 # Local tooling / editor config
 .claude/
+
+# Working review / change-log notes (kept locally, not part of the published site)
+review/

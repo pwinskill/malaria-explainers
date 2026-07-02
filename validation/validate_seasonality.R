@@ -228,8 +228,8 @@ cat("\nExpect: rho = 0 (random) averts MORE than rho = 1 (same children) at equa
 # ----------------------------------------------------------------------------
 # ---- toy model, identical functions to seasonality.html ---------------------
 toy_seasonal <- function(t, S, peak) {
-  k <- 1 + 8 * S; floor <- 1 - 0.9 * S
-  s <- ((1 + cos(2 * pi * (t - peak) / year)) / 2) ^ k
+  p <- 1 + 8 * S + 16 * S^4; floor <- (1 - S) ^ 1.5
+  s <- ((1 + cos(2 * pi * (t - peak) / year)) / 2) ^ p
   floor + (1 - floor) * s
 }
 # DRUG_EFF matches seasonality.html: a covered child's protection is 0.9 * e(t). The
@@ -238,7 +238,9 @@ toy_seasonal <- function(t, S, peak) {
 DRUG_EFF <- 0.9
 toy_protection <- function(t, rounds_doy) {
   best <- 0
-  for (ti in rounds_doy) if (t >= ti) { e <- e_dose(t - ti); if (e > best) best <- e }
+  # days since dose measured around the year (matches seasonality.html): a late round
+  # carries protection into the start of the season, as the periodic case curve does.
+  for (ti in rounds_doy) { dt <- (t - ti) %% year; e <- e_dose(dt); if (e > best) best <- e }
   DRUG_EFF * best
 }
 

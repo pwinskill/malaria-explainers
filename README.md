@@ -31,8 +31,9 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
    chemoprevention (SMC) protects for only a few weeks, so a programme has to tile its rounds across
    the season. A toy model of childhood cases through the year, with sliders for seasonality, peak
    timing, the number, spacing and start of the SMC rounds, coverage per round, and whether the same,
-   random or different children are reached across rounds (inter-round correlation). Shows how impact
-   depends on when the rounds land and on who is reached. The drug-prophylaxis curve is taken directly
+   random or different children are reached across rounds (inter-round correlation), plus an
+   "optimise timing" button that searches for the round schedule averting the most cases. Shows how
+   impact depends on when the rounds land and on who is reached. The drug-prophylaxis curve is taken directly
    from [malariasimulation](https://github.com/mrc-ide/malariasimulation), and the seasonal SMC and
    correlation behaviour is cross-checked against it. Cross-check: `validation/validate_seasonality.R`.
 

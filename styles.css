@@ -72,6 +72,15 @@ sup{font-size:.7em}
 .chartbox{float:right;width:330px;max-width:46%;margin:2px 0 10px 22px}
 .chartbox .caption{margin-top:6px;font-size:12px}
 @media(max-width:560px){.chartbox{float:none;width:100%;max-width:none;margin:10px 0}}
+/* concept 2: text and the decay chart as two balanced columns, so a short body
+   doesn't leave a tall gap beside the floated chart. Stacks below 760px, where a
+   two-column split would leave the text column too narrow to read comfortably. */
+.c2cols{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:center}
+.c2cols .chartbox{float:none;width:auto;max-width:none;margin:0}
+@media(max-width:760px){
+  .c2cols{grid-template-columns:1fr;gap:4px}
+  .c2cols .chartbox{max-width:420px;margin-top:8px}
+}
 
 /* ---- controls ---- */
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
@@ -239,6 +248,9 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .slider-block.season .val{color:var(--blue)}
 .slider-block.smc .val{color:var(--accent)}
 .slider-block.cover .val{color:#c45a25}
+/* the seasonality value is a word ("highly seasonal"), not a number: keep it on one
+   line at a size that sits with the label rather than dwarfing it */
+.slider-block.season > .slider-top .val{font-size:16px;white-space:nowrap}
 #seasonality,#peakday{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
 #seasonality::-webkit-slider-thumb,#peakday::-webkit-slider-thumb{border:3px solid var(--blue)}
 #seasonality::-moz-range-thumb,#peakday::-moz-range-thumb{border:3px solid var(--blue)}
@@ -249,7 +261,9 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 #coverage::-webkit-slider-thumb{border:3px solid var(--warm)} #coverage::-moz-range-thumb{border:3px solid var(--warm)}
 
 /* segmented "who is reached" toggle */
-.seg-label{font-size:12.5px;font-weight:700;margin:16px 0 6px;color:var(--ink)}
+/* visually hidden, still announced by screen readers (used for debounced readout updates) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.seg-label{font-size:15px;font-weight:700;margin:16px 0 6px;color:var(--ink)}
 .seg{display:flex;gap:4px;background:rgba(255,255,255,.7);border:1px solid #f0c9b3;
   border-radius:10px;padding:4px}
 .seg-btn{flex:1 1 0;min-width:0;border:none;background:transparent;cursor:pointer;
@@ -258,3 +272,15 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .seg-btn:hover{background:rgba(255,255,255,.6);color:#c45a25}
 .seg-btn.active{background:#fff;color:#c45a25;box-shadow:0 1px 3px rgba(20,30,40,.14)}
 .seg-btn:focus-visible{outline:2px solid var(--warm);outline-offset:2px}
+
+/* "optimise timing" button: searches start-day + spacing for maximum cases averted */
+.opt-btn{margin-top:14px;width:100%;border:none;cursor:pointer;font-family:inherit;
+  font-size:13px;font-weight:700;color:#fff;background:var(--accent);
+  padding:10px 12px;border-radius:9px;line-height:1.2;
+  transition:filter .12s ease,opacity .12s ease}
+.opt-btn:hover{filter:brightness(.93)}
+.opt-btn:disabled{opacity:.6;cursor:default}
+.opt-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* pulse the "cases averted" readout when the search settles */
+@keyframes readoutFlash{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.readout.flash{animation:readoutFlash .5s ease}
