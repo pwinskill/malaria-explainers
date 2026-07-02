@@ -227,9 +227,14 @@ cat("\nExpect: rho = 0 (random) averts MORE than rho = 1 (same children) at equa
 #             malariasimulation (solid) with the toy model (dashed) overlaid.
 # ----------------------------------------------------------------------------
 # ---- toy model, identical functions to seasonality.html ---------------------
-toy_seasonal <- function(t, S, peak) {
+# rise = fraction of the year the trough-to-peak rise spans (speed of take-off slider:
+# 0.67 slow, 0.5 medium, 0.33 fast). rise = 0.5 is the symmetric ((1+cos)/2)^p curve.
+toy_seasonal <- function(t, S, peak, rise = 0.5) {
   p <- 1 + 8 * S + 16 * S^4; floor <- (1 - S) ^ 1.5
-  s <- ((1 + cos(2 * pi * (t - peak) / year)) / 2) ^ p
+  R <- rise * year; F <- year - R
+  d <- (t - peak) %% year                                   # days since peak, 0..year
+  phi <- ifelse(d <= F, pi * d / F, pi * (d - year) / R)    # falling 0..pi, then rising -pi..0
+  s <- ((1 + cos(phi)) / 2) ^ p
   floor + (1 - floor) * s
 }
 # DRUG_EFF matches seasonality.html: a covered child's protection is 0.9 * e(t). The

@@ -84,7 +84,7 @@
   <section class="card">
     <h2><span class="num">▶</span> Place SMC rounds through a season</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> model of childhood cases with and without SMC</p>
-    <p>Set how seasonal transmission is and when cases peak, then choose the SMC schedule (number of rounds, spacing and first round), the coverage per round, and who is reached across rounds: the same children each time, a random draw, or deliberately different children. The chart shows childhood cases through the year without SMC (blue) and with it (purple); the shaded area is the cases averted.</p>
+    <p>Set how seasonal transmission is, when cases peak and how fast they take off into the peak, then choose the SMC schedule (number of rounds, spacing and first round), the coverage per round, and who is reached across rounds: the same children each time, a random draw, or deliberately different children. The chart shows childhood cases through the year without SMC (blue) and with it (purple); the shaded area is the cases averted.</p>
     <p class="muted" style="font-size:14px;margin-top:-4px">Two things to try: shift the case peak while leaving the rounds fixed, to see a fixed calendar fall out of step; and switch who is reached, to compare covering the same, random or different children. The slider sets the peak in <em>cases</em>, which in reality lags the rains by a few weeks; the toy places that case peak directly rather than simulating the rainfall and the mosquito lag.</p>
 
     <div class="controls controls3">
@@ -94,6 +94,10 @@
         <div class="subslider">
           <div class="slider-top"><span class="label">Peak in cases</span><span class="val" id="vPeak">Sep</span></div>
           <input type="range" id="peakday" min="1" max="365" value="258" step="1" aria-label="Month of the peak in cases">
+        </div>
+        <div class="subslider">
+          <div class="slider-top"><span class="label">Speed of take-off</span><span class="val" id="vTakeoff">medium</span></div>
+          <input type="range" id="takeoff" min="0" max="2" value="1" step="1" aria-label="Speed of take-off in the rainy season, from slow to fast">
         </div>
       </div>
       <div class="slider-block smc">
@@ -153,7 +157,7 @@
   <div class="note">
     <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how SMC impact depends on timing, not a specific setting; not to be used for decision making. Cases are shown in relative units on an arbitrary scale, so only the shape and the relative reductions are meaningful.</p>
     <ul>
-      <li><strong>Seasonal cases.</strong> Childhood cases without SMC follow a periodic curve <span class="var">c</span><sub>0</sub>(<span class="var">t</span>) = <span class="var">f</span> + (1 − <span class="var">f</span>)·<span class="var">s</span>(<span class="var">t</span>), where <span class="var">s</span>(<span class="var">t</span>) = ((1 + cos(2π(<span class="var">t</span> − <span class="var">t</span><sub>peak</sub>)/365))/2)<sup><span class="var">p</span></sup> is a single yearly peak. The slider sets <span class="var">t</span><sub>peak</sub> as the peak in cases; the toy does not simulate rainfall or the mosquito aquatic-stage lag (described in the concept sections), it places the case peak directly. The seasonality slider raises the peakiness <span class="var">p</span> and lowers the off-season floor <span class="var">f</span> together, from a near-flat perennial year to a sharp two-to-three month peak. The peak stays at the same height as seasonality changes, so the fixed vertical axis is comparable across settings; a consequence is that the total annual cases (the area) fall as seasonality rises, which is a display choice, not a claim that more seasonal places have less malaria, so the annual cases-averted percentage is best compared within a fixed seasonality. This is an illustrative stand-in for the seasonal clinical-incidence output of a full model in young children (the 3 to 59 month SMC age group); the immunity and prevalence detail is kept out of this page, as it lives in the other two explainers.</li>
+      <li><strong>Seasonal cases.</strong> Childhood cases without SMC follow a periodic curve <span class="var">c</span><sub>0</sub>(<span class="var">t</span>) = <span class="var">f</span> + (1 − <span class="var">f</span>)·<span class="var">s</span>(<span class="var">t</span>), where <span class="var">s</span>(<span class="var">t</span>) = ((1 + cos(<span class="var">φ</span>(<span class="var">t</span>)))/2)<sup><span class="var">p</span></sup> is a single yearly peak. The slider sets <span class="var">t</span><sub>peak</sub> as the peak in cases; the toy does not simulate rainfall or the mosquito aquatic-stage lag (described in the concept sections), it places the case peak directly. The seasonality slider raises the peakiness <span class="var">p</span> and lowers the off-season floor <span class="var">f</span> together, from a near-flat perennial year to a sharp two-to-three month peak. The <em>speed of take-off</em> control skews the phase <span class="var">φ</span>(<span class="var">t</span>): the trough-to-peak rise is made to span a fraction <span class="var">r</span> of the year and the peak-to-trough fall the remaining 1 − <span class="var">r</span>, with the peak held at <span class="var">t</span><sub>peak</sub> (<span class="var">r</span> = 0.67, 0.5, 0.33 for slow, medium and fast). A faster take-off gives a shorter, steeper rise into the peak and a correspondingly longer, gentler decline; at medium, <span class="var">r</span> = 0.5 and <span class="var">φ</span>(<span class="var">t</span>) = 2π(<span class="var">t</span> − <span class="var">t</span><sub>peak</sub>)/365, the symmetric curve. The peak stays at the same height as seasonality changes, so the fixed vertical axis is comparable across settings; a consequence is that the total annual cases (the area) fall as seasonality rises, which is a display choice, not a claim that more seasonal places have less malaria, so the annual cases-averted percentage is best compared within a fixed seasonality. This is an illustrative stand-in for the seasonal clinical-incidence output of a full model in young children (the 3 to 59 month SMC age group); the immunity and prevalence detail is kept out of this page, as it lives in the other two explainers.</li>
       <li><strong>Protection per dose.</strong> One dose gives protection <span class="var">e</span>(<span class="var">t</span>) = exp(−(<span class="var">t</span>/<span class="var">λ</span>)<sup><span class="var">k</span></sup>) against new infection at <span class="var">t</span> days after the dose, the Weibull survival curve used for drug prophylaxis in <a href="https://github.com/mrc-ide/malariasimulation" target="_blank" rel="noopener">malariasimulation</a>,<sup class="cite"><a href="#ref4">4</a></sup> with the model's fitted SP-AQ parameters shape <span class="var">k</span> = 4.3 and scale <span class="var">λ</span> = 38.1 days. Panel 2 plots this curve directly.</li>
       <li><strong>An individual child's protection.</strong> Rounds are given at times <span class="var">t</span><sub>i</sub> (first round plus spacing times round number). A child's protection at time <span class="var">t</span> comes from its most recent dose, efficacy × max<sub><span class="var">i</span></sub> <span class="var">e</span>(<span class="var">t</span> − <span class="var">t</span><sub>i</sub>), with the days since a dose measured around the year, so a late round carries protection into the start of the season just as the case curve wraps; the dose efficacy is fixed at 0.9. In the code each covered child's protection is scaled by 0.9; this is equivalent, under the linear cases-to-protection reduction below, to 90% of doses fully protecting. Using the most recent dose (rather than adding doses) reflects that overlapping courses do not stack protection beyond a single effective course.</li>
       <li><strong>Coverage and who is reached.</strong> Coverage is the share of eligible children reached in each round. Population protection <span class="var">P</span>(<span class="var">t</span>) is the average of individual protection over children, which depends on how coverage is correlated between rounds. <em>Same children</em>: a fixed share equal to the coverage receives every round and the rest receive none. <em>Random</em>: each round reaches an independent draw, so the share receiving a given set of rounds follows independent per-round coverage. <em>Different children</em>: each round's covered group is rotated across children to minimise overlap, so the most children receive at least one course. All three hold the per-round coverage fixed and differ only in overlap between rounds.</li>
@@ -199,11 +203,22 @@ const PROPH_SHAPE = 4.3, PROPH_SCALE = 38.1;
 const eDose = t => t < 0 ? 0 : Math.exp(-Math.pow(t / PROPH_SCALE, PROPH_SHAPE));
 const DRUG_EFF = 0.9;   // probability a dose protects; a covered child's protection is DRUG_EFF * e
 
-// seasonal case curve; S in [0,1] sets peakiness and floor together, peak height fixed at 1
-function seasonalCases(t, S, peakDay){
+// speed of take-off: fraction of the year the rise into the peak occupies. Medium (0.5) makes
+// the rise and fall equal, reducing seasonalCases to the symmetric cosine below; a faster take-off
+// gives a shorter, steeper rise (and a correspondingly longer, gentler decline) and vice versa.
+const RISE_FRAC = [0.67, 0.5, 0.33];   // [slow, medium, fast], indexed by the takeoff slider (0..2)
+
+// seasonal case curve; S in [0,1] sets peakiness and floor together, peak height fixed at 1.
+// riseFrac in (0,1) skews the rise/fall split: the phase is warped so the peak-to-trough fall
+// spans a fraction (1-riseFrac) of the year and the trough-to-peak rise the rest, keeping the
+// peak at peakDay. At riseFrac = 0.5 this is exactly the symmetric ((1+cos)/2)^p curve.
+function seasonalCases(t, S, peakDay, riseFrac){
   const p = 1 + 8 * S + 16 * Math.pow(S, 4);    // peakiness rises with seasonality; the S^4 term sharpens the top end
   const floor = Math.pow(1 - S, 1.5);           // off-season level falls (steeply) with seasonality
-  const s = Math.pow((1 + Math.cos(2 * Math.PI * (t - peakDay) / YEAR)) / 2, p);
+  const R = riseFrac * YEAR, F = YEAR - R;      // rise / fall lengths (days); R = F = 182.5 at medium
+  const d = ((t - peakDay) % YEAR + YEAR) % YEAR;                 // days since the peak, 0..YEAR
+  const phi = d <= F ? Math.PI * d / F : Math.PI * (d - YEAR) / R; // 0..π falling, then -π..0 rising
+  const s = Math.pow((1 + Math.cos(phi)) / 2, p);
   return floor + (1 - floor) * s;
 }
 
@@ -280,11 +295,11 @@ function childrenReached(classes){
 }
 
 // ---------- simulate over the year ----------
-function simulate(S, peakDay, rounds, classes){
+function simulate(S, peakDay, riseFrac, rounds, classes){
   const pts = [];
   let total = 0, averted = 0, peakTot = 0, peakAv = 0;
   for(let t = 0; t <= YEAR; t += DT){
-    const c0 = seasonalCases(t, S, peakDay);
+    const c0 = seasonalCases(t, S, peakDay, riseFrac);
     const P  = protection(t, rounds, classes);
     const c  = c0 * (1 - P);
     pts.push({t, c0, c, P});
@@ -439,11 +454,13 @@ function drawSeason(sim, rounds){
 // ---------- wiring ----------
 const seasonality = document.getElementById('seasonality');
 const peakday = document.getElementById('peakday');
+const takeoff = document.getElementById('takeoff');
 const nrounds = document.getElementById('nrounds');
 const spacing = document.getElementById('spacing');
 const firstround = document.getElementById('firstround');
 const coverage = document.getElementById('coverage');
-const allSliders = [seasonality, peakday, nrounds, spacing, firstround, coverage];
+const allSliders = [seasonality, peakday, takeoff, nrounds, spacing, firstround, coverage];
+const TAKEOFF_LABELS = ['slow', 'medium', 'fast'];
 const corrBtns = [...document.querySelectorAll('.seg-btn')];
 let corrMode = 'random';   // same | random | different
 
@@ -455,6 +472,7 @@ function update(){
   allSliders.forEach(fillPct);
   const S = +seasonality.value / 100;
   const peakDay = +peakday.value;
+  const riseFrac = RISE_FRAC[+takeoff.value];
   const nR = +nrounds.value;
   const spWk = +spacing.value;
   const firstDay = +firstround.value;
@@ -462,6 +480,7 @@ function update(){
 
   document.getElementById('vSeason').textContent = seasonLabel(S);
   document.getElementById('vPeak').textContent = doyLabel(peakDay);
+  document.getElementById('vTakeoff').textContent = TAKEOFF_LABELS[+takeoff.value];
   document.getElementById('vRounds').textContent = nR;
   document.getElementById('vSpacing').textContent = spWk + ' wk';
   document.getElementById('vFirst').textContent = doyLabel(firstDay);
@@ -470,6 +489,7 @@ function update(){
   // announce human-readable values to assistive tech (the sliders carry raw numbers)
   seasonality.setAttribute('aria-valuetext', seasonLabel(S));
   peakday.setAttribute('aria-valuetext', doyLabel(peakDay));
+  takeoff.setAttribute('aria-valuetext', TAKEOFF_LABELS[+takeoff.value] + ' take-off');
   nrounds.setAttribute('aria-valuetext', nR + (nR === 1 ? ' round' : ' rounds'));
   spacing.setAttribute('aria-valuetext', spWk + ' weeks');
   firstround.setAttribute('aria-valuetext', doyLabel(firstDay));
@@ -477,7 +497,7 @@ function update(){
 
   const rounds = roundDays(nR, spWk, firstDay);
   const classes = coverageClasses(corrMode, nR, cov);
-  const sim = simulate(S, peakDay, rounds, classes);
+  const sim = simulate(S, peakDay, riseFrac, rounds, classes);
 
   document.getElementById('rAverted').textContent = Math.round(sim.avertedFrac * 100) + '%';
   document.getElementById('rPeakCov').textContent = Math.round(sim.peakFrac * 100) + '%';
@@ -514,11 +534,11 @@ const optBtn = document.getElementById('optBtn');
 
 // cases averted for a given first-round day and spacing, holding the other controls fixed
 function avertedFor(firstDay, spWk){
-  const S = +seasonality.value / 100, peakDay = +peakday.value;
+  const S = +seasonality.value / 100, peakDay = +peakday.value, riseFrac = RISE_FRAC[+takeoff.value];
   const nR = +nrounds.value, cov = +coverage.value / 100;
   const rounds = roundDays(nR, spWk, firstDay);
   const classes = coverageClasses(corrMode, nR, cov);   // fixed across the search, so memoised once
-  return simulate(S, peakDay, rounds, classes).avertedFrac;
+  return simulate(S, peakDay, riseFrac, rounds, classes).avertedFrac;
 }
 
 // grid search over first-round day and integer spacing for the global best
