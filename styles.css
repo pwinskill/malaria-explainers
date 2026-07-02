@@ -48,6 +48,32 @@ canvas{width:100%;display:block}
 .pill.warm{background:var(--warm-soft);color:#c45a25}
 .pill.blue{background:var(--blue-soft);color:#345f9c}
 
+/* work-in-progress status badge (landing hero): a soft-warm pill with a live dot */
+.wip-badge{display:inline-flex;align-items:center;gap:7px;margin:0 auto 20px;
+  background:var(--warm-soft);color:#c45a25;border:1px solid #f3c9b3;
+  padding:5px 13px 5px 11px;border-radius:999px;font-size:13px;font-weight:700;
+  text-decoration:none;white-space:nowrap;transition:filter .15s}
+.wip-badge:hover{filter:brightness(.97)}
+.wip-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--warm);flex:none;
+  box-shadow:0 0 0 0 rgba(232,128,75,.55);animation:wipPulse 2.4s ease-out infinite}
+@keyframes wipPulse{0%{box-shadow:0 0 0 0 rgba(232,128,75,.5)}
+  70%{box-shadow:0 0 0 7px rgba(232,128,75,0)}100%{box-shadow:0 0 0 0 rgba(232,128,75,0)}}
+@media (prefers-reduced-motion:reduce){.wip-badge .dot{animation:none}}
+
+/* illustrative-only tag pinned to each explainer's interactive toy card */
+.card.toy{position:relative}
+.toy-tag{position:absolute;top:26px;right:28px;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--warm-soft);color:#c45a25;border:1px solid #f3c9b3;
+  padding:3px 11px;border-radius:999px;font-size:11.5px;font-weight:700;
+  letter-spacing:.01em;white-space:nowrap}
+.toy-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--warm);flex:none}
+.card.toy > h2{padding-right:240px}
+@media(max-width:640px){
+  .toy-tag{position:static;margin:0 0 12px}
+  .card.toy > h2{padding-right:0}
+}
+
 .eqline{font-family:Georgia,"Times New Roman",serif;font-size:16px;background:#f4f2ec;border:1px solid var(--line);
   border-radius:10px;padding:14px 16px;margin:16px 0;text-align:center}
 .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 5px}
