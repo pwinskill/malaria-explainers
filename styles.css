@@ -49,7 +49,7 @@ canvas{width:100%;display:block}
 .pill.blue{background:var(--blue-soft);color:#345f9c}
 
 /* work-in-progress status badge (landing hero): a soft-warm pill with a live dot */
-.wip-badge{display:inline-flex;align-items:center;gap:7px;margin:0 auto 20px;
+.wip-badge{display:inline-flex;align-items:center;gap:7px;margin:14px auto 20px;
   background:var(--warm-soft);color:#c45a25;border:1px solid #f3c9b3;
   padding:5px 13px 5px 11px;border-radius:999px;font-size:13px;font-weight:700;
   text-decoration:none;white-space:nowrap;transition:filter .15s}
