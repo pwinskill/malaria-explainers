@@ -135,9 +135,16 @@ input[type=range]:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
 .readout .v{font-size:23px;font-weight:800;line-height:1.1}
 .readout .l{font-size:12px;color:var(--muted);margin-top:3px}
 
-.plots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 18px;margin-top:22px;align-items:start}
+.plots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 18px;margin-top:14px;align-items:start}
 @media(max-width:860px){.plots{grid-template-columns:repeat(2,1fr);gap:22px}}
 @media(max-width:520px){.plots{grid-template-columns:1fr}}
+/* the coverage-cascade row has only two plots; centre it under the three-wide general row */
+.plots.plots2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:66%;margin-inline:auto}
+@media(max-width:860px){.plots.plots2{max-width:none}}
+@media(max-width:520px){.plots.plots2{grid-template-columns:1fr}}
+/* heading above each plot group */
+.panel-group-h{font-size:14px;font-weight:750;margin:24px 0 0}
+.panel-group-h .muted{font-weight:400}
 .panel{min-width:0}
 .panel-h{font-size:14px;font-weight:750;margin:0 0 4px;display:flex;align-items:center;gap:8px}
 .panel-h .step{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;

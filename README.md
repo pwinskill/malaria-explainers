@@ -16,7 +16,11 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
 1. **Non-linearities in malaria epidemiology and control** ([`nonlinearities.html`](nonlinearities.html)).
    Why a modest change in mosquito survival or bed-net coverage can produce a much larger (or
    surprisingly small) change in prevalence and clinical cases. Traces a bed-net effect through the
-   EIR → prevalence → incidence cascade. Cross-check: `validation/validate_cascade.R`.
+   coverage → EIR → prevalence → incidence cascade. The coverage → EIR step is a mechanistic
+   experimental-hut net model; the EIR → PfPR and EIR → clinical-incidence relationships both come
+   from the Griffin-model equilibrium ([malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium)),
+   the same solver used by the age-distribution explainer, with overall incidence split into age-group
+   contributions. Cross-check: `validation/validate_cascade.R`.
 
 2. **Rebounds: why protection can dip below baseline** ([`rebounds.html`](rebounds.html)).
    When transmission-reducing control is withdrawn, naturally-acquired immunity has waned underneath

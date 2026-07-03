@@ -1,28 +1,30 @@
 # =============================================================================
 # validate_cascade.R
 #
-# Static R/ggplot reproduction of the four plots in index.html, as an
+# Static R/ggplot reproduction of the five plots in nonlinearities.html, as an
 # independent cross-check of the interactive model. It re-implements the same
 # cascade
 #
 #        bed-net coverage  ->  EIR  ->  { PfPR , clinical incidence }
 #
-# in R, reading the underlying data where the web page uses it, and refitting /
-# documenting every parameter.
+# in R. Since the explainer was simplified, both the EIR -> PfPR and the
+# EIR -> clinical-incidence relationships come from the canonical Griffin-model
+# equilibrium (mrc-ide/malariaEquilibrium), the same solver the age-distribution
+# explainer uses; only the coverage -> EIR step is a separate mechanistic model.
 #
 # Parameter provenance is labelled throughout as one of:
-#   [DATA]      read from a file (Hay EIR-PfPR; Battle incidence-prevalence)
-#   [FITTED]    estimated here from the data (the EIR->PfPR curve)
-#   [DIGITISED] read off a published figure (Cameron age curves, Fig. 1)
 #   [ASSUMED]   a fixed model choice (entomology, gonotrophic cycle, scenario)
+#   [MODEL]     the Griffin equilibrium (malariaEquilibrium fitted parameters)
+#   [DATA]      field observations (Smith et al. 2005 EIR-PfPR), plotted on the PfPR~EIR panel
 #
-# Run from the repository root (where the data files live):
-#   Rscript validation/validate_cascade.R
+# Run from the repository root:
+#   & 'C:/Program Files/R-aarch64/R-4.5.2/bin/Rscript' validation/validate_cascade.R
 # =============================================================================
 
 ## ---- libraries -------------------------------------------------------------
-#.libPaths("C:/Users/pwinskil/Documents/r_packages_arm64")  # user's package lib
+.libPaths("C:/Users/pwinskil/Documents/r_packages_arm64")  # user's package lib
 suppressPackageStartupMessages({
+  library(malariaEquilibrium)
   library(ggplot2)
   library(dplyr)
   library(patchwork)
@@ -53,35 +55,20 @@ use_max <- 0.80 # [ASSUMED] coverage capped at 80% (as in the web page)
 eir_base <- 20 # [ASSUMED] baseline annual EIR with no nets
 cov_mark <- 0.50 # [ASSUMED] coverage at which the operating-point marker sits
 
-## --- EIR -> PfPR saturating curve -------------------------------------------
-## Form: PfPR = 1 - exp(-a * EIR^b). a, b are [FITTED] to the Hay data below;
-## these starting values are also the constants used in the web page.
-hay_a_start <- 0.455
-hay_b_start <- 0.216
-
-## --- Cameron et al. (2015) PfPR2-10 -> clinical incidence -------------------
-## [DIGITISED] from Fig. 1 (Griffin individual-based model, low seasonality),
-## absolute incidence (cases person^-1 yr^-1) vs PfPR2-10, by age group.
-cam_young <- data.frame( # 0-5y  (convex)
-  pfpr = c(0, .05, .10, .15, .20, .25, .30, .35, .40, .45, .50, .55, .60),
-  inc = c(0, .055, .133, .232, .354, .498, .653, .808, .973, 1.139, 1.305, 1.471, 1.637)
-)
-cam_old <- data.frame( # 5-15y (saturating)
-  pfpr = c(0, .05, .10, .15, .20, .25, .30, .35, .45, .50, .55),
-  inc = c(0, .077, .177, .277, .387, .476, .553, .608, .675, .697, .719)
-)
-cam_adult <- data.frame( # >15y  (low, peaks at intermediate PfPR)
-  pfpr = c(0, .05, .10, .15, .20, .35, .40, .45, .50),
-  inc = c(0, .055, .122, .166, .21, .232, .221, .221, .21)
-)
+## --- Griffin equilibrium settings (must match the JS port) ------------------
+pset <- load_parameter_set() # [MODEL] standard Griffin fitted parameters
+ft <- 0                      # [ASSUMED] treatment coverage off, matching the toy
+age <- seq(0, 80, 0.1)       # uniform 0.1y grid to 80; the equilibrium is
+#                              grid-dependent, so this MUST match the JS AGE grid
 
 ## --- Colours (match the web page) -------------------------------------------
 col_accent <- "#2f8f7e"
 col_blue <- "#3d6fb4"
 col_clin <- "#7b5bd6"
 col_warm <- "#e8804b"
-col_grey <- "#5b6573"
-age_cols <- c("0-5y" = col_clin, "5-15y" = col_accent, ">15y" = col_blue)
+col_ink <- "#26303b"
+col_grey <- "#6b7785"  # matches CSS --muted
+age_cols <- c("under 5" = col_clin, "5-15" = col_accent, "15+" = col_blue)
 
 ## ===========================================================================
 ## 2. MODEL FUNCTIONS  (identical logic to the JavaScript)
@@ -108,131 +95,58 @@ eir_at <- function(cov, eir0 = eir_base) {
   eir0 * g_net(cov)
 }
 
-## Monotone cubic (Fritsch-Carlson) interpolation of a digitised Cameron curve,
-## matching the web page's PCHIP. Beyond the last digitised point we extrapolate:
-##   tail_exp = a number -> power-law  last_y * (pr/last_x)^tail_exp  (young: 1.2)
-##   tail_exp = NA        -> flat       last_y                        (older / adult)
-make_cam <- function(pts, tail_exp = NA_real_) {
-  sp <- splinefun(pts$pfpr, pts$inc, method = "monoH.FC")
-  last_x <- tail(pts$pfpr, 1)
-  last_y <- tail(pts$inc, 1)
-  function(pr) {
-    pr <- pmax(pr, 0)
-    out <- sp(pmin(pr, last_x)) # monotone interp within range
-    beyond <- pr > last_x
-    if (any(beyond)) {
-      out[beyond] <- if (!is.na(tail_exp)) {
-        last_y * (pr[beyond] / last_x)^tail_exp
-      } else {
-        last_y
-      }
-    }
-    out[pr <= 0] <- 0
-    pmax(out, 0)
-  }
+## Aggregate one Griffin equilibrium into the quantities the explainer shows.
+## Mirrors equilibrium() in nonlinearities.html / age-distribution.html:
+##   pfpr        microscopy prevalence in 2-10y  = sum(pos_M[2-10]) / sum(prop[2-10])
+##   inc_py      all-age episodes per person per year = sum(inc) * 365
+##   incU5_py    episodes per under-5 child per year  = sum(inc[<5]) / sum(prop[<5]) * 365
+##   share_*     fraction of clinical cases in each age band (sum to 1)
+summarise_eq <- function(EIR) {
+  m <- human_equilibrium(EIR = EIR, ft = ft, p = pset, age = age)$states
+  a <- m[, "age"]
+  inc <- m[, "inc"]
+  tot <- sum(inc)
+  u5 <- sum(inc[a < 5]); mid <- sum(inc[a >= 5 & a < 15]); ad <- sum(inc[a >= 15])
+  sel <- a >= 2 & a < 10
+  propU5 <- sum(m[a < 5, "prop"])
+  list(
+    EIR = EIR,
+    pfpr = sum(m[sel, "pos_M"]) / sum(m[sel, "prop"]),
+    inc_py = tot * 365,
+    incU5_py = if (propU5 > 0) u5 / propU5 * 365 else 0,
+    share_u5 = u5 / tot, share_mid = mid / tot, share_ad = ad / tot
+  )
 }
-inc_young <- make_cam(cam_young, tail_exp = 1.2)
-inc_old <- make_cam(cam_old, tail_exp = NA)
-inc_adult <- make_cam(cam_adult, tail_exp = NA)
 
-## ===========================================================================
-## 3. EIR -> PfPR : read the Hay data and REFIT the saturating curve  [DATA/FITTED]
-## ===========================================================================
-## Source: P. falciparum parasite rate in children (<15 y) vs annual EIR across
-## African sites (Smith et al. 2005, Nature; data file named for senior author
-## Hay). 130 site-level points.
-load("data/EIR_prev_hay2005.RData") # provides data frame EIR_prev_hay2005
-hay <- as.data.frame(EIR_prev_hay2005)
-names(hay) <- c("eir", "pfpr")
-
-## Refit PfPR = 1 - exp(-a * EIR^b) to the data (EIR > 0; the curve is 0 at EIR 0).
-hay_fit <- nls(
-  pfpr ~ 1 - exp(-a * eir^b),
-  data = subset(hay, eir > 0),
-  start = list(a = hay_a_start, b = hay_b_start)
-)
-hay_a <- coef(hay_fit)[["a"]]
-hay_b <- coef(hay_fit)[["b"]]
-cat(sprintf(
-  "[FITTED] EIR->PfPR:  a = %.3f, b = %.3f  (web page uses %.3f, %.3f)\n",
-  hay_a,
-  hay_b,
-  hay_a_start,
-  hay_b_start
-))
-
-## Now that a, b are known, define the prevalence map and the cascade prevalence.
-pfpr_from_eir <- function(eir) {
-  ifelse(eir <= 0, 0, 1 - exp(-hay_a * eir^hay_b))
-}
-pf_at <- function(cov, eir0 = eir_base) {
-  pfpr_from_eir(eir_at(cov, eir0))
+## Vectorised helper: a data frame of the equilibrium over a vector of EIRs.
+eq_grid <- function(eirs) {
+  do.call(rbind, lapply(eirs, function(E) as.data.frame(summarise_eq(E))))
 }
 
 ## ===========================================================================
-## 4. PfPR -> incidence : read & process the Battle field data  [DATA]
+## 3. NUMERIC CROSS-CHECK at the plotted scenario
 ## ===========================================================================
-## Source: matched incidence-prevalence records (Battle et al. 2015). We take the
-## P. falciparum, sub-Saharan Africa, Cameron-calibration subset, one point per
-## record, and bin each by its reported incidence age range.
-battle <- read.csv(
-  "data/PfPvAllData01042015_AgeStand.csv",
-  fileEncoding = "latin1",
-  stringsAsFactors = FALSE
-)
-names(battle) <- tolower(names(battle)) # lowercase all column names
-
-battle_pts <- battle %>%
-  filter(species == "Pf", region == "Africa+", cameron == "Yes") %>%
-  transmute(
-    pfpr = suppressWarnings(as.numeric(pfpr2_10)), # standardised PfPR2-10
-    inc = suppressWarnings(as.numeric(inc)) / 1000, # raw inc is per 1000 PYO -> per person-yr
-    lar = suppressWarnings(as.numeric(inc_lar)),
-    uar = suppressWarnings(as.numeric(inc_uar))
-  ) %>%
-  filter(pfpr > 0, inc > 0) %>%
-  mutate(
-    age = case_when(
-      uar <= 6 & lar < 6 ~ "0-5y", # young children
-      lar >= 4 & uar <= 16 ~ "5-15y", # older children
-      lar >= 15 ~ ">15y", # adults
-      TRUE ~ "mixed" # spans groups -> dropped
-    )
-  ) %>%
-  filter(age != "mixed") %>%
-  mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
-
+eq0 <- as.data.frame(summarise_eq(eir_base))         # baseline (no nets)
+eqC <- as.data.frame(summarise_eq(eir_at(cov_mark))) # at the marker coverage
 cat(sprintf(
-  "[DATA] Battle points: %d (0-5y), %d (5-15y), %d (>15y)\n",
-  sum(battle_pts$age == "0-5y"),
-  sum(battle_pts$age == "5-15y"),
-  sum(battle_pts$age == ">15y")
-))
-
-## ===========================================================================
-## 5. NUMERIC CROSS-CHECK at the plotted scenario
-## ===========================================================================
-pf0 <- pf_at(0, eir_base) # baseline PfPR (no nets)
-pf_cov <- pf_at(cov_mark, eir_base) # PfPR at the marker coverage
-cat(sprintf(
-  "\nScenario: baseline EIR = %.0f, coverage = %.0f%%\n",
-  eir_base,
-  100 * cov_mark
+  "\nScenario: baseline EIR = %.0f, coverage = %.0f%%\n", eir_base, 100 * cov_mark
 ))
 cat(sprintf(
   "  EIR reduction at %.0f%% coverage : %.0f%%\n",
-  100 * use_max,
-  100 * (1 - g_net(use_max))
+  100 * use_max, 100 * (1 - g_net(use_max))
 ))
-cat(sprintf("  baseline PfPR (<15)             : %.0f%%\n", 100 * pf0))
-cat(sprintf("  PfPR with nets                  : %.0f%%\n", 100 * pf_cov))
+cat(sprintf("  EIR with nets (%.0f%%)           : %.1f\n", 100 * cov_mark, eir_at(cov_mark)))
+cat(sprintf("  baseline PfPR (2-10)            : %.0f%%\n", 100 * eq0$pfpr))
+cat(sprintf("  PfPR with nets                  : %.0f%%\n", 100 * eqC$pfpr))
+cat(sprintf("  prevalence reduction            : %.0f%%\n", 100 * (1 - eqC$pfpr / eq0$pfpr)))
 cat(sprintf(
   "  under-5 clinical reduction      : %.0f%%\n",
-  100 * (1 - inc_young(pf_cov) / inc_young(pf0))
+  100 * (1 - eqC$incU5_py / eq0$incU5_py)
 ))
+cat("  These should match the explainer's readouts (same solver, grid, ft = 0).\n")
 
 ## ===========================================================================
-## 6. THE FIVE PLOTS
+## 4. THE FIVE PLOTS
 ## ===========================================================================
 base_theme <- theme_minimal(base_size = 11) +
   theme(
@@ -241,182 +155,116 @@ base_theme <- theme_minimal(base_size = 11) +
     plot.subtitle = element_text(color = col_grey, size = 9.5)
   )
 
-cov_grid <- seq(0, use_max, length.out = 200)
-pfpr_grid <- seq(0.001, 0.80, length.out = 300)
+## Upper EIR bound, shared with the web page (nonlinearities.html LUT_EMAX): capped just past
+## the incidence plateau, before the Griffin equilibrium's extreme-EIR upturn.
+eir_top <- 300
+cov_grid <- seq(0, use_max, length.out = 120)
+eir_curve <- 10^seq(log10(0.02), log10(eir_top), length.out = 120)
+inc_ymax <- NA_real_ # filled after the grids are computed
 
-## --- Plot 1: EIR vs coverage ------------------------------------------------
-p1 <- ggplot(
-  data.frame(cov = cov_grid, eir = eir_at(cov_grid)),
-  aes(cov, eir)
-) +
-  geom_line(colour = col_accent, linewidth = 1) +
-  geom_point(
-    data = data.frame(cov = cov_mark, eir = eir_at(cov_mark)),
-    aes(cov, eir),
-    colour = col_warm,
-    size = 3
-  ) +
-  scale_x_continuous(labels = percent) +
-  labs(
-    title = "1. EIR vs coverage",
-    subtitle = "barrier (a^2) + killing (p^n)",
-    x = "bed-net coverage",
-    y = "EIR"
-  ) +
-  base_theme
+## Equilibrium over the EIR curve (general relationships) and the coverage grid.
+eq_eir <- eq_grid(eir_curve)
+eq_cov <- eq_grid(eir_at(cov_grid))
+eq_cov$cov <- cov_grid
+inc_ymax <- max(c(eq_eir$inc_py, eq_cov$inc_py)) * 1.1
 
-## --- Plot 2: PfPR vs EIR (data + fitted curve) ------------------------------
-eir_curve <- 10^seq(log10(0.02), log10(1000), length.out = 300)
-p2 <- ggplot() +
-  geom_point(
-    data = subset(hay, eir >= 0.02),
-    aes(eir, pfpr),
-    colour = col_grey,
-    alpha = 0.45,
-    size = 1.3
-  ) +
-  geom_line(
-    data = data.frame(eir = eir_curve, pfpr = pfpr_from_eir(eir_curve)),
-    aes(eir, pfpr),
-    colour = col_blue,
-    linewidth = 1
-  ) +
-  geom_point(
-    data = data.frame(eir = eir_at(cov_mark), pfpr = pf_at(cov_mark)),
-    aes(eir, pfpr),
-    colour = col_warm,
-    size = 3
-  ) +
+## Field observations for the PfPR~EIR panel: Smith et al. (2005) annual EIR vs PfPR in
+## children <15 across African sites [DATA]. Only sites within the plotted range are shown
+## (as on the web page); a handful of high-transmission sites lie beyond the EIR 300 cap.
+load("data/EIR_prev_hay2005.RData") # provides data frame EIR_prev_hay2005
+smith <- as.data.frame(EIR_prev_hay2005)
+names(smith) <- c("eir", "pfpr")
+smith <- subset(smith, eir >= 0.02 & eir <= eir_top)
+
+## Stack the age-band contributions (inc * share) into long form for geom_area.
+stack_long <- function(df, xcol) {
+  x <- df[[xcol]]
+  rbind(
+    data.frame(x = x, band = "under 5", y = df$inc_py * df$share_u5),
+    data.frame(x = x, band = "5-15", y = df$inc_py * df$share_mid),
+    data.frame(x = x, band = "15+", y = df$inc_py * df$share_ad)
+  ) %>% mutate(band = factor(band, levels = c("under 5", "5-15", "15+")))
+}
+
+## --- Plot 1: PfPR vs EIR (Griffin equilibrium; log EIR) ---------------------
+p1 <- ggplot(eq_eir, aes(EIR, pfpr)) +
+  geom_point(data = smith, aes(eir, pfpr), colour = col_grey, alpha = 0.30, size = 1.3) +
+  geom_line(colour = col_blue, linewidth = 1) +
+  geom_point(data = eqC, aes(EIR, pfpr), colour = col_warm, size = 3) +
   scale_x_log10(
-    limits = c(0.02, 1000),
-    oob = scales::squish,
-    breaks = c(0.1, 1, 10, 100, 1000),
-    labels = c("0.1", "1", "10", "100", "1000")
+    limits = c(0.02, eir_top), oob = scales::squish,
+    breaks = c(0.1, 1, 10, 100), labels = c("0.1", "1", "10", "100")
   ) +
   scale_y_continuous(labels = percent, limits = c(0, 1), oob = scales::squish) +
-  labs(
-    title = "2. PfPR vs EIR",
-    subtitle = "dots: Smith et al. 2005 (children <15); curve: fitted saturating model",
-    x = "EIR (log scale)",
-    y = "prevalence (PfPR)"
-  ) +
+  labs(title = "1. PfPR vs EIR", subtitle = "line: Griffin equilibrium; points: Smith 2005 (PfPR<15)",
+       x = "EIR (log scale)", y = "prevalence (PfPR 2-10)") +
   base_theme
 
-## --- Plot 4: incidence vs EIR (composed; log EIR, linear incidence) ---------
-## incidence(EIR) = cameron_age( pfpr_from_eir(EIR) ): the fork's second arm.
-curve_ie <- bind_rows(
-  data.frame(eir = eir_curve, inc = inc_young(pfpr_from_eir(eir_curve)), age = "0-5y"),
-  data.frame(eir = eir_curve, inc = inc_old(pfpr_from_eir(eir_curve)), age = "5-15y"),
-  data.frame(eir = eir_curve, inc = inc_adult(pfpr_from_eir(eir_curve)), age = ">15y")
-) %>%
-  mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
-
-marker_ie <- data.frame(
-  eir = eir_at(cov_mark),
-  inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
-  age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
-)
-
-p4 <- ggplot() +
-  geom_line(data = curve_ie, aes(eir, inc, colour = age), linewidth = 1) +
-  geom_point(data = marker_ie, aes(eir, inc), colour = col_warm, size = 2.6) +
-  scale_colour_manual(values = age_cols, name = NULL) +
-  scale_x_log10(
-    limits = c(0.02, 1000),
-    oob = scales::squish,
-    breaks = c(0.1, 1, 10, 100, 1000),
-    labels = c("0.1", "1", "10", "100", "1000")
-  ) +
-  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
-  labs(
-    title = "4. Incidence vs EIR",
-    subtitle = "log EIR, linear incidence: older ages plateau, young keep rising",
-    x = "EIR (log scale)",
-    y = "incidence (/person/yr)"
-  ) +
-  base_theme +
-  theme(legend.position = "none")
-
-## --- Plot 3: incidence vs PfPR (3 age curves + field data; linear) ----------
-curve_pfpr <- bind_rows(
-  data.frame(pfpr = pfpr_grid, inc = inc_young(pfpr_grid), age = "0-5y"),
-  data.frame(pfpr = pfpr_grid, inc = inc_old(pfpr_grid), age = "5-15y"),
-  data.frame(pfpr = pfpr_grid, inc = inc_adult(pfpr_grid), age = ">15y")
-) %>%
-  mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
-
-marker_pfpr <- data.frame(
-  pfpr = pf_cov,
-  inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
-  age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
-)
-
-## Linear incidence axis (0-3) to match plot 4; the highest field records
-## (incidence > 3) are squished to the top edge, as on the web page.
-p3 <- ggplot() +
-  geom_point(
-    data = battle_pts,
-    aes(pfpr, inc, colour = age),
-    alpha = 0.30,
-    size = 1.1
-  ) +
-  geom_line(data = curve_pfpr, aes(pfpr, inc, colour = age), linewidth = 1) +
-  geom_point(data = marker_pfpr, aes(pfpr, inc), colour = col_warm, size = 2.6) +
-  scale_colour_manual(values = age_cols, name = NULL) +
+## --- Plot 2: incidence vs PfPR (overall line + age ribbon; parametric) ------
+ribbon_pf <- stack_long(eq_eir, "pfpr")
+p2 <- ggplot() +
+  geom_area(data = ribbon_pf, aes(x, y, fill = band), alpha = 0.34, position = "stack") +
+  geom_line(data = eq_eir, aes(pfpr, inc_py), colour = col_ink, linewidth = 1) +
+  geom_point(data = eqC, aes(pfpr, inc_py), colour = col_warm, size = 3) +
+  scale_fill_manual(values = age_cols, name = NULL) +
   scale_x_continuous(labels = percent, limits = c(0, 0.80), oob = scales::squish) +
-  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
-  labs(
-    title = "3. Incidence vs PfPR",
-    subtitle = "curves: Cameron 2015 by age; dots: Battle 2015 (highest run off top)",
-    x = "PfPR (2-10)",
-    y = "incidence (/person/yr)"
+  coord_cartesian(ylim = c(0, inc_ymax)) +
+  labs(title = "3. Incidence vs PfPR", subtitle = "all-age; bands = age groups",
+       x = "PfPR (2-10)", y = "incidence (/person/yr)") +
+  base_theme + theme(legend.position = c(0.20, 0.78),
+                     legend.background = element_rect(fill = "white", colour = NA))
+
+## --- Plot 3: incidence vs EIR (overall line + age ribbon; log EIR) ----------
+ribbon_eir <- stack_long(eq_eir, "EIR")
+p3 <- ggplot() +
+  geom_area(data = ribbon_eir, aes(x, y, fill = band), alpha = 0.34, position = "stack") +
+  geom_line(data = eq_eir, aes(EIR, inc_py), colour = col_ink, linewidth = 1) +
+  geom_point(data = eqC, aes(EIR, inc_py), colour = col_warm, size = 3) +
+  scale_fill_manual(values = age_cols, name = NULL, guide = "none") +
+  scale_x_log10(
+    limits = c(0.02, eir_top), oob = scales::squish,
+    breaks = c(0.1, 1, 10, 100), labels = c("0.1", "1", "10", "100")
   ) +
-  base_theme +
-  theme(
-    legend.position = c(0.18, 0.80),
-    legend.background = element_rect(fill = "white", colour = NA)
-  )
+  coord_cartesian(ylim = c(0, inc_ymax)) +
+  labs(title = "2. Incidence vs EIR", subtitle = "all-age; rises then plateaus",
+       x = "EIR (log scale)", y = "incidence (/person/yr)") +
+  base_theme
 
-## --- Plot 5: incidence vs coverage (3 age curves) ---------------------------
-curve_cov <- bind_rows(
-  data.frame(cov = cov_grid, inc = inc_young(pf_at(cov_grid)), age = "0-5y"),
-  data.frame(cov = cov_grid, inc = inc_old(pf_at(cov_grid)), age = "5-15y"),
-  data.frame(cov = cov_grid, inc = inc_adult(pf_at(cov_grid)), age = ">15y")
-) %>%
-  mutate(age = factor(age, levels = c("0-5y", "5-15y", ">15y")))
-
-marker_cov <- data.frame(
-  cov = cov_mark,
-  inc = c(inc_young(pf_cov), inc_old(pf_cov), inc_adult(pf_cov)),
-  age = factor(c("0-5y", "5-15y", ">15y"), levels = c("0-5y", "5-15y", ">15y"))
-)
-
-## fixed 0-3 incidence axis, matching plots 3 and 4 (as on the web page).
-p5 <- ggplot() +
-  geom_line(data = curve_cov, aes(cov, inc, colour = age), linewidth = 1) +
-  geom_point(data = marker_cov, aes(cov, inc), colour = col_warm, size = 2.6) +
-  scale_colour_manual(values = age_cols, name = NULL) +
+## --- Plot 4: EIR vs coverage (mechanistic net effect) -----------------------
+p4 <- ggplot(
+  data.frame(cov = cov_grid, eir = eir_at(cov_grid)), aes(cov, eir)
+) +
+  geom_line(colour = col_accent, linewidth = 1) +
+  geom_point(data = data.frame(cov = cov_mark, eir = eir_at(cov_mark)),
+             aes(cov, eir), colour = col_warm, size = 3) +
   scale_x_continuous(labels = percent) +
-  scale_y_continuous(limits = c(0, 3), oob = scales::squish) +
-  labs(
-    title = "5. Incidence vs coverage",
-    subtitle = "absolute incidence by age group",
-    x = "bed-net coverage",
-    y = "incidence (/person/yr)"
-  ) +
-  base_theme +
-  theme(legend.position = "none")
+  labs(title = "4. EIR vs coverage", subtitle = "barrier (a^2) + killing (p^n)",
+       x = "bed-net coverage", y = "EIR") +
+  base_theme
+
+## --- Plot 5: incidence vs coverage (full cascade; overall line + ribbon) ----
+ribbon_cov <- stack_long(eq_cov, "cov")
+p5 <- ggplot() +
+  geom_area(data = ribbon_cov, aes(x, y, fill = band), alpha = 0.34, position = "stack") +
+  geom_line(data = eq_cov, aes(cov, inc_py), colour = col_ink, linewidth = 1) +
+  geom_point(data = data.frame(cov = cov_mark, inc = eqC$inc_py),
+             aes(cov, inc), colour = col_warm, size = 3) +
+  scale_fill_manual(values = age_cols, name = NULL, guide = "none") +
+  scale_x_continuous(labels = percent) +
+  coord_cartesian(ylim = c(0, inc_ymax)) +
+  labs(title = "5. Incidence vs coverage", subtitle = "full cascade",
+       x = "bed-net coverage", y = "incidence (/person/yr)") +
+  base_theme
 
 ## ===========================================================================
-## 7. COMBINE & SAVE
+## 5. COMBINE & SAVE
 ## ===========================================================================
-combined <- (p1 | p2 | p3) /
+combined <- (p1 | p3 | p2) /
   (p4 | p5 | plot_spacer()) +
   plot_annotation(
     title = sprintf(
-      "Bed-net cascade (baseline EIR = %.0f, marker at %.0f%% coverage)",
-      eir_base,
-      100 * cov_mark
+      "Bed-net cascade via the Griffin equilibrium (baseline EIR = %.0f, marker at %.0f%% coverage)",
+      eir_base, 100 * cov_mark
     ),
     theme = theme(plot.title = element_text(face = "bold"))
   )

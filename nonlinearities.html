@@ -14,7 +14,7 @@
 <header class="hero">
   <p class="kicker">An interactive explainer</p>
   <h1>Non-linearities in malaria epidemiology and control</h1>
-  <p class="lede">This page helps us consider and explore a number of non-linearities in malaria transmission and control.</p>
+  <p class="lede">This explainer examines several non-linearities in malaria transmission and control.</p>
 </header>
 
 <div class="wrapwide">
@@ -58,12 +58,12 @@
 
     <div class="chartbox">
       <canvas id="expChart" width="300" height="190" aria-label="Exponential mosquito survival curve"></canvas>
-      <p class="caption">Mosquitoes still alive each day. Only the shaded tail past day 10 can transmit, and lowering daily survival shrinks it fast.</p>
+      <p class="caption">Mosquitoes still alive each day. Only the shaded tail past day 10 can transmit, and lowering daily survival shrinks it sharply.</p>
     </div>
 
-    <p>When a mosquito bites an infected person it does not become infectious straight away. The parasite must develop inside it for about <span class="var">n</span> ≈ 10 days: the <span class="pill warm">extrinsic incubation period</span>. Only a mosquito that survives those 10 days can transmit. Lifespans are roughly exponential: each day a mosquito survives with probability <span class="var">p</span>, so its chance of still being alive after <span class="var">n</span> days is <span class="var">p</span><sup>n</sup>. Because that is a <em>power</em>, a small nudge to daily survival is amplified enormously over 10 days.</p>
+    <p>When a mosquito bites an infected person it does not become infectious straight away. The parasite must develop inside it for about <span class="var">n</span> ≈ 10 days: the <span class="pill warm">extrinsic incubation period</span>. Only a mosquito that survives those 10 days can transmit. Lifespans are roughly exponential: each day a mosquito survives with probability <span class="var">p</span>, so its chance of still being alive after <span class="var">n</span> days is <span class="var">p</span><sup>n</sup>. Because that is a <em>power</em>, a small change in daily survival is amplified substantially over 10 days.</p>
 
-    <p>Drop daily survival from 0.90 to 0.80 and survival to day 10 falls from about 35% to 11%, roughly a three-fold reduction. That exponential leverage is what makes the bed-net effect on transmission non-linear, and it propagates through every step that follows.</p>
+    <p>Lowering daily survival from 0.90 to 0.80 reduces survival to day 10 from about 35% to 11%, roughly a three-fold reduction. This exponential sensitivity is the source of the non-linear bed-net effect on transmission, and it carries through each subsequent step.</p>
     <div style="clear:both"></div>
   </section>
 
@@ -76,7 +76,7 @@
     <p>Two features sustain this. Biting is heterogeneous (a minority of people receive most infectious bites), and infections last around six months, so prevalence integrates exposure over time rather than tracking it instantly<sup class="cite"><a href="#ref6">6</a></sup>.</p>
 
     <h3>Mechanism</h3>
-    <p>A minimal prevalence model captures the shape:</p>
+    <p>A minimal prevalence model captures the shape (the curve plotted in the model below is the fuller Griffin equilibrium<sup class="cite"><a href="#ref8">8</a>,<a href="#ref9">9</a></sup>, which reproduces the same saturation through the mechanisms noted here):</p>
     <div class="eqline">
       PfPR ≈
       <span class="frac">
@@ -92,7 +92,7 @@
     <h2><span class="num">3</span> From prevalence to clinical incidence</h2>
 
     <h3>Evidence</h3>
-    <p>We use the fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship between PfPR and clinical incidence, and plot the matched field data it draws on<sup class="cite"><a href="#ref8">8</a></sup> alongside it. Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
+    <p>The interactive model below reads clinical incidence from the same Griffin-model equilibrium<sup class="cite"><a href="#ref8">8</a>,<a href="#ref9">9</a></sup> that produces prevalence, so the two curves are internally consistent. The PfPR–incidence relationship has been characterised in detail from field data and models.<sup class="cite"><a href="#ref7">7</a></sup> Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
     <p>At low transmission, incidence scales roughly linearly with prevalence. As transmission rises, prevalence saturates while clinical episodes continue through repeated infection and superinfection, producing convexity, most strongly in young children. Older children and adults, with years of cumulative exposure, acquire immunity to clinical disease, so their incidence plateaus at a low level as transmission rises, while young children (not yet protected) keep accumulating episodes. The age pattern shifts with it: below about 10% PfPR much of the burden falls on adults; at higher transmission it concentrates in children. After a recent decline in transmission, young children carry a larger share, because older groups retain immunity acquired under previously higher transmission.</p>
 
     <h3>Mechanism</h3>
@@ -108,17 +108,17 @@
     <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative — not for decision making</span>
     <h2><span class="num">▶</span> Trace a bed-net effect through the cascade</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> model to trace the impact of non-linearities</p>
-    <p>Set the no-net baseline transmission, then adjust coverage. Each plot shows the combined bed-net effect (barrier plus insecticidal killing) as it propagates down the cascade.</p>
+    <p>Set the no-net baseline transmission, then adjust coverage. The top row is the general relationship between transmission, prevalence and clinical incidence; the bottom row is the specific bed-net cascade, where higher coverage lowers EIR and moves the operating point along those relationships.</p>
 
     <div class="controls">
       <div class="slider-block eir">
         <div class="slider-top"><span class="label">Baseline EIR (no nets)</span><span class="val" id="vEir">20</span></div>
-        <input type="range" id="eir0" min="0.1" max="200" value="20" step="0.1">
+        <input type="range" id="eir0" min="0.1" max="300" value="20" step="0.1" aria-label="Baseline EIR with no nets, infectious bites per person per year">
         <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence <strong id="basePf" style="color:var(--blue)">—</strong></div>
       </div>
       <div class="slider-block cov">
         <div class="slider-top"><span class="label">Bed-net coverage</span><span class="val" id="vUse">50%</span></div>
-        <input type="range" id="use" min="0" max="80" value="50" step="1">
+        <input type="range" id="use" min="0" max="80" value="50" step="1" aria-label="Bed-net coverage, percent of people sleeping under a net">
         <div class="slider-sub muted">share of people sleeping under a net (capped at 80%)</div>
       </div>
     </div>
@@ -127,38 +127,42 @@
       <div class="readout"><div class="v" id="rEir" style="color:var(--blue)">—</div><div class="l">EIR with nets</div></div>
       <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">—</div><div class="l">prevalence with nets</div></div>
       <div class="readout"><div class="v" id="rPfRed" style="color:var(--accent)">—</div><div class="l">prevalence reduction</div></div>
-      <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">—</div><div class="l">clinical reduction (0–5y)</div></div>
+      <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">—</div><div class="l">clinical reduction (under-5)</div></div>
     </div>
 
+    <p class="panel-group-h">General relationships <span class="muted">— how transmission intensity maps to prevalence and to clinical disease (independent of the intervention)</span></p>
     <div class="plots">
       <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--accent)">1</span> EIR vs coverage</p>
+        <p class="panel-h"><span class="step" style="background:var(--blue)">1</span> PfPR vs EIR</p>
+        <canvas id="pPfpr" height="190" aria-label="Prevalence versus EIR"></canvas>
+        <p class="pcap">Parasite prevalence rises steeply at low EIR then plateaus. Line: Griffin-model equilibrium.<sup class="cite"><a href="#ref8">8</a>,<a href="#ref9">9</a></sup> Points: field observations (PfPR in children &lt;15).<sup class="cite"><a href="#ref6">6</a></sup> Log EIR axis.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--clin)">2</span> Incidence vs EIR</p>
+        <canvas id="pIncEir" height="190" aria-label="All-age clinical incidence versus EIR"></canvas>
+        <p class="pcap">All-age clinical incidence against EIR. It rises then plateaus as prevalence saturates. Log EIR axis.<br>
+          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+      </div>
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
+        <canvas id="pInc" height="190" aria-label="All-age clinical incidence versus prevalence"></canvas>
+        <p class="pcap">The same incidence plotted against prevalence rather than EIR. The shaded bands split the total by age group.<br>
+          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+      </div>
+    </div>
+    <p class="panel-group-h">Bed-net cascade <span class="muted">— the specific intervention: coverage lowers EIR, which moves prevalence and incidence along the curves above</span></p>
+    <div class="plots plots2">
+      <div class="panel">
+        <p class="panel-h"><span class="step" style="background:var(--accent)">4</span> EIR vs coverage</p>
         <canvas id="pEIR" height="190" aria-label="EIR versus coverage"></canvas>
         <p class="pcap">Direct protection lowers the biting rate (<span class="var">a</span><sup>2</sup>) and insecticidal killing reduces mosquito survival (<span class="var">p</span><sup><span class="var">n</span></sup>), so EIR falls more than proportionally.</p>
       </div>
       <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--blue)">2</span> PfPR vs EIR</p>
-        <canvas id="pPfpr" height="190" aria-label="Prevalence versus EIR"></canvas>
-        <p class="pcap">Prevalence rises steeply at low EIR then plateaus. Points: field data<sup class="cite"><a href="#ref6">6</a></sup>. Line: a saturating fit. Log EIR axis.</p>
-      </div>
-      <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
-        <canvas id="pInc" height="190" aria-label="Clinical incidence versus prevalence"></canvas>
-        <p class="pcap">Clinical incidence by age against PfPR. Cameron model curves<sup class="cite"><a href="#ref7">7</a></sup> and field data by age. Points: 279 matched records<sup class="cite"><a href="#ref8">8</a></sup>, coloured by age group. Wide variation in data.<br>
-          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
-      </div>
-      <div class="panel">
-        <p class="panel-h"><span class="step" style="background:var(--clin)">4</span> Incidence vs EIR</p>
-        <canvas id="pIncEir" height="190" aria-label="Clinical incidence versus EIR"></canvas>
-        <p class="pcap">Clinical incidence by age against EIR (composing steps 2 and 3). Clinical incidence plateaus at higher EIR: older children and adults level off once EIR passes roughly 10, while young-child incidence keeps climbing. Log EIR axis.<br>
-          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
-      </div>
-      <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--warm)">5</span> Incidence vs coverage</p>
-        <canvas id="pComb" height="190" aria-label="Clinical incidence versus coverage"></canvas>
-        <p class="pcap">Clinical incidence by age against bed-net coverage (composing steps 1, 2 and 3). Illustrates the impact of net coverage on incidence, and the changing age distribution of cases with baseline transmission.<br>
-          <span style="color:var(--clin);font-weight:750">● 0–5y</span> <span style="color:var(--accent);font-weight:750">● 5–15y</span> <span style="color:var(--blue);font-weight:750">● &gt;15y</span></p>
-        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> ~50% fewer uncomplicated episodes vs no nets<sup class="cite"><a href="#ref9">9</a></sup>, a child measure (Cochrane ITN review). The 0–5y line (the readout) reaches ~50% at high EIR and ~80% coverage.</p>
+        <canvas id="pComb" height="190" aria-label="All-age clinical incidence versus coverage"></canvas>
+        <p class="pcap">All-age clinical incidence against bed-net coverage (the full cascade). The shaded bands show the age split shifting as transmission falls.<br>
+          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> the Cochrane ITN review found roughly 50% fewer uncomplicated episodes in children versus no nets<sup class="cite"><a href="#ref10">10</a></sup>. The model's under-5 readout runs higher than this across the plotted range (about 80–95% at 80% coverage), because it assumes an idealised net (full potency, no resistance, decay or residual transmission) and reports a per-child incidence-rate reduction rather than a measured trial-arm effect. The two are not directly comparable.</p>
       </div>
     </div>
     <p class="muted" style="font-size:14px;margin-top:18px">The cascade composes <strong style="color:var(--warm)">equilibrium</strong> relationships: it shows roughly where a setting would settle at each coverage level, not the dynamic trajectory after nets are deployed. The PfPR → incidence step in particular reflects long-run immunity and exposure history, so "moving along the curve" with coverage is a simplification, not a post-intervention prediction.</p>
@@ -168,19 +172,19 @@
 <div class="wrapwide">
   <section class="card">
     <h2>What to notice</h2>
-    <p><strong>Each step is non-linear in a different way, and they compound.</strong> Plot 1 falls steeply then flattens (biting squared, survival exponential). Plot 2 saturates, so the same EIR reduction buys less prevalence change when baseline transmission is high. Plot 3's slope depends on age (convex in young children, near-flat in adults), so a prevalence fall reduces young-child cases substantially but adult cases little. Plot 4 carries that EIR saturation straight through to clinical incidence.</p>
-    <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction moves prevalence only slightly. Clinical incidence is buffered too, but less completely: young-child incidence can still fall appreciably even when prevalence barely shifts, because episodes accumulate through repeated infection. At low baseline EIR the same coverage produces a much larger prevalence and case response. Returns therefore increase as transmission falls.</p>
-    <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be hidden within a saturated prevalence figure while still lowering clinical disease. The conclusion depends on which outcome is measured.</p>
+    <p><strong>Each step is non-linear in a different way, and they compound.</strong> The EIR–coverage curve falls steeply then flattens (biting enters squared, survival exponentially). The PfPR–EIR curve saturates, so the same EIR reduction produces less prevalence change when baseline transmission is high. Clinical incidence carries that saturation through: it rises with EIR then plateaus, and its age composition (the shaded bands) shifts from adults towards young children as transmission rises.</p>
+    <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction changes prevalence only slightly. Clinical incidence is also less responsive at high transmission, but not to the same degree: young-child incidence can still fall appreciably even when prevalence barely shifts, because episodes accumulate through repeated infection. At low baseline EIR the same coverage produces a much larger prevalence and case response. The proportional effect of a given coverage therefore increases as transmission falls.</p>
+    <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be obscured by a saturated prevalence figure while still lowering clinical disease. The conclusion depends on which outcome is measured.</p>
   </section>
 
   <div class="note">
     <p><strong>Methods.</strong> An illustrative model showing the <em>shape</em> of these relationships, not a specific setting. Not to be used for decision making. The no-net baseline EIR is set by the slider and coverage is capped at 80%.</p>
     <ul>
-      <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days)<sup class="cite"><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>. These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, not an input, and should be read as an <em>idealised ceiling</em>: it assumes a brand-new net, full insecticidal potency, every relevant bite interceptable, and no behavioural avoidance or net decay. Because biting enters squared and survival exponentially, these assumptions compound, so the figure sits at the optimistic end. Real-world reductions are smaller, eroded by pyrethroid resistance, outdoor and early biting (residual transmission), imperfect and partial use, and ageing nets, closer to the ~87% operational estimate of Unwin et al.<sup class="cite"><a href="#ref4">4</a></sup> and lower again where residual transmission is high. This step is more mechanistic than the two data-fitted steps below.</li>
-      <li><strong>EIR → PfPR.</strong> A saturating fit to <em>P. falciparum</em> PfPR in children &lt;15 against annual EIR across African sites<sup class="cite"><a href="#ref6">6</a></sup>.</li>
-      <li><strong>PfPR → incidence.</strong> The fitted Cameron et al.<sup class="cite"><a href="#ref7">7</a></sup> relationship (Griffin individual-based model, low seasonality), digitised in absolute units (cases·person⁻¹·yr⁻¹) for three age groups. The dots are 279 matched incidence and prevalence records for <em>P. falciparum</em> in sub-Saharan Africa<sup class="cite"><a href="#ref8">8</a></sup> (Cameron calibration subset), one point per record, coloured by reported age group (young ≤6, older 4–16, adult ≥15).</li>
-      <li><strong>Summary readout.</strong> The reduction in under-5 (0–5y) clinical incidence, matching the age range of the Cochrane trial measure.</li>
-      <li><strong>Age band.</strong> The EIR–PfPR data is PfPR in children &lt;15<sup class="cite"><a href="#ref6">6</a></sup>; Cameron's relationship uses PfPR<sub>2–10</sub>. Both are childhood references, so the cascade runs on roughly one scale; PfPR&lt;15 sits slightly below PfPR<sub>2–10</sub>, but the offset is small and largely cancels in the relative reduction. The cross-site incidence scatter is dominated by study design (detection method, case definition).</li>
+      <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days)<sup class="cite"><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>. These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, not an input, and should be read as an <em>idealised ceiling</em>: it assumes a brand-new net, full insecticidal potency, every relevant bite interceptable, and no behavioural avoidance or net decay. Because biting enters squared and survival exponentially, these assumptions compound, so the figure sits at the optimistic end. Real-world reductions are smaller, eroded by pyrethroid resistance, outdoor and early biting (residual transmission), imperfect and partial use, and ageing nets, closer to the ~87% operational estimate of Unwin et al.<sup class="cite"><a href="#ref4">4</a></sup> and lower again where residual transmission is high. This step is more mechanistic than the equilibrium relationships below.</li>
+      <li><strong>EIR → PfPR and PfPR → incidence.</strong> Both come from the Griffin transmission model at equilibrium<sup class="cite"><a href="#ref8">8</a></sup>, run through the canonical <em>malariaEquilibrium</em> solver<sup class="cite"><a href="#ref9">9</a></sup> ported to the browser (treatment coverage <span class="var">f<sub>T</sub></span> = 0, a 0.1-year age grid to age 80, biting heterogeneity integrated out). For each EIR it returns parasite prevalence (PfPR<sub>2–10</sub>) and all-age clinical incidence, so the two curves share one internally-consistent model. This is the same equilibrium used by the age-distribution explainer, and it is cross-checked in <code>validation/validate_cascade.R</code>.</li>
+      <li><strong>PfPR–EIR field data.</strong> The grey points on the PfPR-vs-EIR panel are cross-site observations of <em>P. falciparum</em> prevalence in children &lt;15 against annual EIR<sup class="cite"><a href="#ref6">6</a></sup>, shown as a check that the equilibrium curve tracks the observed relationship. They are PfPR in under-15s whereas the curve is PfPR<sub>2–10</sub> (which sits slightly higher), and the wide scatter is dominated by site and survey design; a few high-transmission sites lie beyond the EIR 300 axis and are not shown.</li>
+      <li><strong>Age bands.</strong> The shaded ribbon splits all-age clinical incidence into under-5, 5–15 and 15+ contributions using the model's case shares by age; the three bands sum to the overall line. The shift towards young children as transmission rises is the age-distribution effect explored in more detail in that explainer.</li>
+      <li><strong>Summary readout.</strong> The reduction in incidence per under-5 child (episodes per under-5 per year, distinct from the under-5 contribution shown in the ribbon), matching the age range of the Cochrane trial measure.</li>
     </ul>
     <p><strong>References.</strong></p>
     <ol class="refs">
@@ -191,8 +195,9 @@
       <li id="ref5">Beier <em>et al</em>, 1999. Entomologic inoculation rates and <em>Plasmodium falciparum</em> malaria prevalence in Africa. <em>American Journal of Tropical Medicine and Hygiene</em> 61:109–113. <a href="https://doi.org/10.4269/ajtmh.1999.61.109" target="_blank" rel="noopener">doi.org/10.4269/ajtmh.1999.61.109</a></li>
       <li id="ref6">Smith <em>et al</em>, 2005. The entomological inoculation rate and <em>Plasmodium falciparum</em> infection in African children. <em>Nature</em> 438:492–495. <a href="https://doi.org/10.1038/nature04024" target="_blank" rel="noopener">doi.org/10.1038/nature04024</a></li>
       <li id="ref7">Cameron <em>et al</em>, 2015. Defining the relationship between infection prevalence and clinical incidence of <em>Plasmodium falciparum</em> malaria. <em>Nature Communications</em> 6:8170. <a href="https://doi.org/10.1038/ncomms9170" target="_blank" rel="noopener">doi.org/10.1038/ncomms9170</a></li>
-      <li id="ref8">Battle <em>et al</em>, 2015. Global database of matched <em>Plasmodium falciparum</em> and <em>P. vivax</em> incidence and prevalence records from 1985–2013. <em>Scientific Data</em> 2:150012. <a href="https://doi.org/10.1038/sdata.2015.12" target="_blank" rel="noopener">doi.org/10.1038/sdata.2015.12</a></li>
-      <li id="ref9">Lengeler, 2004. Insecticide-treated bed nets and curtains for preventing malaria. <em>Cochrane Database of Systematic Reviews</em> CD000363. <a href="https://doi.org/10.1002/14651858.CD000363.pub2" target="_blank" rel="noopener">doi.org/10.1002/14651858.CD000363.pub2</a></li>
+      <li id="ref8">Griffin <em>et al</em>, 2014. Estimates of the changing age-burden of <em>Plasmodium falciparum</em> malaria disease in sub-Saharan Africa. <em>Nature Communications</em> 5:3136. <a href="https://doi.org/10.1038/ncomms4136" target="_blank" rel="noopener">doi.org/10.1038/ncomms4136</a></li>
+      <li id="ref9">Verity, Winskill, Charles <em>et al</em> / mrc-ide. malariaEquilibrium: the canonical equilibrium solution for the Griffin model. R package. <a href="https://github.com/mrc-ide/malariaEquilibrium" target="_blank" rel="noopener">github.com/mrc-ide/malariaEquilibrium</a></li>
+      <li id="ref10">Lengeler, 2004. Insecticide-treated bed nets and curtains for preventing malaria. <em>Cochrane Database of Systematic Reviews</em> CD000363. <a href="https://doi.org/10.1002/14651858.CD000363.pub2" target="_blank" rel="noopener">doi.org/10.1002/14651858.CD000363.pub2</a></li>
     </ol>
   </div>
 
@@ -215,10 +220,8 @@ const GONO = 3;       // gonotrophic cycle length (days), bridges per-encounter 
 const f = p => Math.pow(p, N) / (-Math.log(p));      // survival leverage term p^n / -ln p
 const F0 = f(P0);
 
-// EIR -> prevalence: saturating fit to Smith et al. (2005), prev = 1 - exp(-A*EIR^B)
-const SMITH_A = 0.455, SMITH_B = 0.216;
-const pfprFromEIR = E => E <= 0 ? 0 : 1 - Math.exp(-SMITH_A * Math.pow(E, SMITH_B));
-let   PFPR0 = pfprFromEIR(EIR0);                     // baseline prevalence (recomputed when EIR0 changes)
+// EIR -> prevalence and EIR -> clinical incidence both come from the Griffin equilibrium ported
+// below (pfprFromEIR / the LUT), so there is no separate fitted prevalence curve here.
 
 // combined bed-net effect on transmission, from EHT-derived changes to a and p:
 //   biting:   a -> a0(1 - BETA*C)            — feeding inhibition on the covered fraction; enters squared
@@ -229,52 +232,160 @@ const gNet = C => {
   return a * a * (f(p) / F0);
 };
 
-// --- prevalence -> clinical incidence: Cameron et al. (2015) age-group curves ---
-// Three separate age-group curves (0-5, 5-15, >15) are digitised from Fig. 1 (Griffin
-// individual-based model, low seasonality): clinical incidence (cases·person⁻¹·yr⁻¹) vs
-// PfPR2-10. They are interpolated below (camYoungInc/camOldInc/camAdultInc) and plotted
-// separately; the young (0-5) curve drives the headline readout. y-units cancel on normalising.
 
-// --- field data: clinical incidence (cases·person⁻¹·yr⁻¹) vs PfPR2-10, by age group ---
-// P. falciparum, sub-Saharan Africa, Battle et al. (2015) matched database, Cameron calibration
-// subset; one point per matched record, binned by reported age range (young ≤6, older 4–16,
-// adult ≥15). Wide scatter is largely study design (detection frequency, case definition).
-const DATA_YOUNG = [[0.0087,0.862],[0.0087,1.408],[0.0087,1.462],[0.0087,1.513],[0.0087,1.541],[0.0087,1.574],[0.0113,0.0179],[0.0113,0.0294],[0.0122,0.0296],[0.0392,1.902],[0.0392,2.181],[0.0392,2.579],[0.0392,2.879],[0.0392,2.962],[0.0392,2.983],[0.044,0.0229],[0.0987,0.4286],[0.1045,0.1768],[0.1045,0.185],[0.1045,0.198],[0.1045,0.2088],[0.1045,0.2253],[0.1045,0.2293],[0.1045,0.2611],[0.1073,0.1925],[0.1073,0.22],[0.1073,0.5682],[0.1073,0.7149],[0.1138,0.0205],[0.1138,0.6362],[0.1138,1.0723],[0.1138,1.8],[0.1138,1.871],[0.1138,2.25],[0.1138,2.681],[0.1138,3.187],[0.1138,3.269],[0.1138,4.833],[0.1138,5.065],[0.1138,6.132],[0.118,1.1852],[0.118,1.75],[0.118,2.6],[0.1279,0.1021],[0.1279,0.1293],[0.1279,0.1387],[0.1279,0.1744],[0.1279,0.2126],[0.1447,1.087],[0.1447,1.17],[0.1447,1.233],[0.1447,1.4444],[0.1447,1.6062],[0.1526,0.46],[0.1526,0.982],[0.1526,1.337],[0.1526,1.34],[0.1526,1.411],[0.1526,1.503],[0.195,0.34],[0.195,0.63],[0.2199,5.7],[0.2199,5.8929],[0.2199,6.0],[0.2354,0.6324],[0.2354,1.2281],[0.2354,3.1436],[0.2354,3.8126],[0.2354,3.8585],[0.2832,0.0457],[0.2832,0.0516],[0.2832,0.146],[0.2832,0.1579],[0.2832,0.1889],[0.2832,0.257],[0.2832,0.3198],[0.2832,0.3221],[0.2832,0.3592],[0.2832,0.3835],[0.2832,0.4586],[0.2832,0.5015],[0.2832,0.5055],[0.2832,0.5804],[0.2832,0.6032],[0.2832,0.7178],[0.2832,0.8216],[0.2832,0.8674],[0.2832,0.9682],[0.3864,0.7451],[0.3864,1.6379],[0.4016,4.3025],[0.4016,6.3391],[0.4016,7.0042],[0.4016,8.4564],[0.4016,8.5467],[0.4063,0.5776],[0.4063,0.6146],[0.4063,1.4769],[0.4063,1.6372],[0.4063,2.5907],[0.4124,0.1747],[0.4124,0.1814],[0.4124,0.189],[0.4124,0.1931],[0.4347,1.1927],[0.4719,0.9873],[0.4719,1.8158],[0.4728,0.4],[0.4728,1.0],[0.5093,2.0],[0.5207,1.1649],[0.5207,2.9688],[0.5207,3.0621],[0.5207,3.0748],[0.5323,1.47],[0.5323,2.0],[0.5431,1.4766],[0.5431,2.2051],[0.5431,2.5445],[0.5431,2.7027],[0.5431,2.8047],[0.5542,2.295],[0.5542,4.8272],[0.5911,3.367],[0.5911,7.3345],[0.5955,0.9385],[0.5955,1.5508],[0.5955,2.1711],[0.5955,2.1791],[0.5955,2.6051]];
-const DATA_OLD = [[0.0087,0.425],[0.0087,0.501],[0.0087,0.765],[0.0087,0.924],[0.0087,1.073],[0.0087,1.658],[0.0113,0.0292],[0.0122,0.0089],[0.0122,0.0288],[0.0392,1.487],[0.0392,1.859],[0.0392,2.111],[0.0392,2.202],[0.0392,2.49],[0.0392,2.714],[0.0392,2.722],[0.0392,2.75],[0.0392,2.877],[0.044,0.0313],[0.0987,0.375],[0.0987,0.7273],[0.1045,0.1883],[0.1073,0.1192],[0.1138,0.0714],[0.1138,0.0875],[0.1138,0.1077],[0.1138,0.114],[0.1138,0.259],[0.1138,0.265],[0.1138,0.2917],[0.1138,0.438],[0.1138,0.57],[0.1138,0.6621],[0.1138,0.7216],[0.1138,0.8032],[0.1138,0.838],[0.1138,1.171],[0.1138,1.39],[0.1138,1.944],[0.1138,2.615],[0.118,1.6],[0.118,2.4921],[0.1526,0.276],[0.1526,0.279],[0.1526,0.304],[0.1526,0.372],[0.1526,0.477],[0.1526,0.51],[0.1791,0.1008],[0.195,0.08],[0.195,0.26],[0.2199,0.2609],[0.2199,2.9062],[0.2354,0.3849],[0.2354,0.4124],[0.2832,0.139],[0.2832,0.1981],[0.2832,0.2038],[0.2832,0.2439],[0.2832,0.3428],[0.3864,0.9184],[0.3864,1.2642],[0.3864,1.9796],[0.3864,2.1042],[0.4063,0.2179],[0.4063,0.2402],[0.4347,0.13],[0.4347,0.4674],[0.4347,0.8652],[0.4719,0.4528],[0.4719,0.7971],[0.4728,0.25],[0.4728,0.6207],[0.5093,1.0],[0.5093,1.1538],[0.5093,1.3958],[0.5093,1.6346],[0.5207,0.8281],[0.5207,1.1768],[0.5323,1.18],[0.5323,1.91],[0.5323,1.97],[0.5542,0.512],[0.5911,0.37],[0.5911,0.5873],[0.5911,2.709]];
-const DATA_ADULT = [[0.0087,0.047],[0.0087,0.048],[0.0087,0.106],[0.0087,0.377],[0.0113,0.0085],[0.0113,0.0183],[0.0122,0.0039],[0.0122,0.0266],[0.0392,0.386],[0.0392,0.406],[0.0392,0.428],[0.0392,0.52],[0.0392,0.646],[0.0392,0.843],[0.0392,1.053],[0.044,0.0071],[0.044,0.0167],[0.0987,0.1579],[0.1073,0.11],[0.1138,0.0073],[0.1138,0.0324],[0.1138,0.0419],[0.1138,0.0891],[0.1138,0.153],[0.1138,0.167],[0.1138,0.1781],[0.1138,0.188],[0.1138,0.226],[0.1138,0.256],[0.1138,0.263],[0.1138,0.2917],[0.1138,0.3243],[0.1138,0.423],[0.1138,0.5297],[0.1138,0.5378],[0.118,0.5],[0.118,0.6021],[0.118,0.75],[0.118,0.8],[0.1526,0.029],[0.1526,0.048],[0.1526,0.099],[0.1526,0.234],[0.195,0.04],[0.195,0.04],[0.195,0.07],[0.2199,0.2609],[0.2199,0.3],[0.2199,0.3261],[0.2354,0.3116],[0.3864,1.0217],[0.3864,1.8696],[0.4719,0.1285],[0.4728,0.1636],[0.5093,0.6744],[0.5093,0.7209],[0.5207,0.0479],[0.5207,0.0841],[0.5207,0.1359],[0.5207,0.2564],[0.5323,0.67],[0.5542,0.2174],[0.5542,0.3569]];
-// Cameron/Griffin MODEL curves by age group (cases·person⁻¹·yr⁻¹), digitised from Fig. 1 (c,f,i).
-const CAM_YOUNG = [[0,0],[0.05,0.055],[0.1,0.133],[0.15,0.232],[0.2,0.354],[0.25,0.498],[0.3,0.653],[0.35,0.808],[0.4,0.973],[0.45,1.139],[0.5,1.305],[0.55,1.471],[0.6,1.637]];
-const CAM_OLD   = [[0,0],[0.05,0.077],[0.1,0.177],[0.15,0.277],[0.2,0.387],[0.25,0.476],[0.3,0.553],[0.35,0.608],[0.45,0.675],[0.5,0.697],[0.55,0.719]];
-const CAM_ADULT = [[0,0],[0.05,0.055],[0.1,0.122],[0.15,0.166],[0.2,0.21],[0.35,0.232],[0.4,0.221],[0.45,0.221],[0.5,0.21]];
-// monotone cubic (PCHIP) interpolation through the digitised points — smooth and shape-preserving
-const camCurve = (PTS,tail) => {
-  const n=PTS.length, xs=PTS.map(p=>p[0]), ys=PTS.map(p=>p[1]), h=[], d=[];
-  for(let i=0;i<n-1;i++){ h[i]=xs[i+1]-xs[i]; d[i]=(ys[i+1]-ys[i])/h[i]; }
-  const m=new Array(n); m[0]=d[0]; m[n-1]=d[n-2];
-  for(let i=1;i<n-1;i++){
-    if(d[i-1]*d[i]<=0) m[i]=0;
-    else { const w1=2*h[i]+h[i-1], w2=h[i]+2*h[i-1]; m[i]=(w1+w2)/(w1/d[i-1]+w2/d[i]); }
-  }
-  const last=PTS[n-1];
-  return P => {
-    if(P<=0) return 0;
-    if(P>=last[0]) return tail!=null ? last[1]*Math.pow(P/last[0],tail) : last[1];
-    let i=0; while(i<n-2 && P>xs[i+1]) i++;
-    const t=(P-xs[i])/h[i], t2=t*t, t3=t2*t;
-    const v=(2*t3-3*t2+1)*ys[i] + (t3-2*t2+t)*h[i]*m[i] + (-2*t3+3*t2)*ys[i+1] + (t3-t2)*h[i]*m[i+1];
-    return Math.max(0,v);
-  };
+// ---------- Griffin model, human equilibrium (illustrative port of mrc-ide/malariaEquilibrium) ----------
+// Shared with the age-distribution explainer. For a given EIR, solve by age the equilibrium of acquired
+// immunity and infection states, then read off clinical incidence, microscopy prevalence and demographic
+// structure; heterogeneity in biting is integrated out with a 10-point Gaussian quadrature. This one
+// mechanistic model now supplies both EIR -> PfPR and EIR -> clinical incidence, replacing the earlier
+// fitted prevalence curve and the digitised Cameron age curves. Parameters are the package's fitted set.
+const P = {
+  eta:1.304631e-04, rho:0.85, a0:2920, s2:1.67,
+  rA:0.005, rD:0.2, rU:0.00909091, rP:0.04, rT:0.2,
+  d1:0.161, dd:3650, ID0:1.58, kd:0.477, ud:9.45, ad0:7993.5, fd0:0.0071, gd:4.81,
+  b0:0.59, b1:0.5, db:3650, IB0:43.9, kb:2.16, ub:7.2,
+  phi0:0.792, phi1:0.00074, dc:10950, IC0:18, kc:2.37, uc:6.06,
+  PM:0.774, dm:67.7
 };
-const camYoungInc = camCurve(CAM_YOUNG,1.2);   // 0-5y, convex, gentle power-law tail
-const camOldInc   = camCurve(CAM_OLD,null);    // 5-15y, saturating (flat tail)
-const camAdultInc = camCurve(CAM_ADULT,null);  // >15y, low & flat
+// gq_normal(10): standard-normal Gauss quadrature nodes/weights (weights sum to 1)
+const GH_NODES = [-4.8594628,-3.5818235,-2.4843258,-1.4659891,-0.4849357,0.4849357,1.4659891,2.4843258,3.5818235,4.8594628];
+const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423e-01,3.446423e-01,1.354837e-01,1.911158e-02,7.580709e-04,4.310653e-06];
+
+const FT = 0;                                   // treatment coverage (off, for a simple toy)
+const AGE = [];                                 // age grid in years, uniform 0.1y from 0 to 80
+// fine grid so the sharp young-age peak at high intensity is captured. NB: it must stay in step with
+// validation/validate_cascade.R (seq(0,80,0.1)) — the equilibrium is grid-dependent, so the R
+// cross-check only matches on the same grid.
+for(let a = 0; a <= 80.0001; a += 0.1) AGE.push(+a.toFixed(2));
+const NAGE = AGE.length, AW = 0.1;              // number of ages, band width (years)
+const AGE_MAX = 60;                             // peak-search cap (cases negligible beyond)
+
+// pre-compute the age-only structure that does not depend on EIR: aging rates r, population fractions prop,
+// midpoints, relative biting psi, and the age-20 index
+const AGE_D = AGE.map(a => a * 365);
+const rAge = new Array(NAGE), prop = new Array(NAGE), midD = new Array(NAGE), psi = new Array(NAGE);
+for(let i = 0; i < NAGE; i++){
+  rAge[i] = (i === NAGE - 1) ? 0 : 1 / (AGE_D[i + 1] - AGE_D[i]);
+  prop[i] = (i === 0) ? P.eta / (rAge[0] + P.eta) : prop[i - 1] * rAge[i - 1] / (rAge[i] + P.eta);
+  midD[i] = (i === NAGE - 1) ? AGE_D[i] : (AGE_D[i] + AGE_D[i + 1]) / 2;
+  psi[i]  = 1 - P.rho * Math.exp(-midD[i] / P.a0);
+}
+let age20 = 0, best20 = Infinity;
+for(let i = 0; i < NAGE; i++){ const d = Math.abs(midD[i] - 20 * 365); if(d < best20){ best20 = d; age20 = i; } }
+
+// human_equilibrium_no_het: returns per-age inc (clinical cases / total-pop / day) and pos_M (prevalence)
+function noHet(EIRyr){
+  const eir = EIRyr / 365;
+  const ICA = new Array(NAGE), FOI = new Array(NAGE), q = new Array(NAGE), phi = new Array(NAGE);
+  let IB = 0, IC = 0, ID = 0;
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const eps = eir * psi[i];
+    IB = (eps / (eps * P.ub + 1) + re * IB) / (1 / P.db + re);
+    const b = P.b0 * (P.b1 + (1 - P.b1) / (1 + Math.pow(IB / P.IB0, P.kb)));
+    FOI[i] = b * eps;
+    IC = (FOI[i] / (FOI[i] * P.uc + 1) + re * IC) / (1 / P.dc + re);
+    ICA[i] = IC;
+    ID = (FOI[i] / (FOI[i] * P.ud + 1) + re * ID) / (1 / P.dd + re);
+    const fd = 1 - (1 - P.fd0) / (1 + Math.pow(midD[i] / P.ad0, P.gd));
+    q[i] = P.d1 + (1 - P.d1) / (1 + Math.pow(ID / P.ID0, P.kd) * fd);
+  }
+  const IM0 = ICA[age20] * P.PM;
+  for(let i = 0; i < NAGE; i++){
+    const ICM = (i === NAGE - 1) ? 0
+      : IM0 * P.dm / (AGE_D[i + 1] - AGE_D[i]) * (Math.exp(-AGE_D[i] / P.dm) - Math.exp(-AGE_D[i + 1] / P.dm));
+    phi[i] = P.phi0 * (P.phi1 + (1 - P.phi1) / (1 + Math.pow((ICA[i] + ICM) / P.IC0, P.kc)));
+  }
+  const inc = new Array(NAGE), posM = new Array(NAGE);
+  const T = new Array(NAGE), D = new Array(NAGE), A = new Array(NAGE), U = new Array(NAGE), Pc = new Array(NAGE);
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const betaT = P.rT + re, betaD = P.rD + re, betaA = FOI[i] * phi[i] + P.rA + re,
+          betaU = FOI[i] + P.rU + re, betaP = P.rP + re;
+    const aT = FT * phi[i] * FOI[i] / betaT;
+    const aP = P.rT * aT / betaP;
+    const aD = (1 - FT) * phi[i] * FOI[i] / betaD;
+    const bT = i ? rAge[i - 1] * T[i - 1] / betaT : 0;
+    const bD = i ? rAge[i - 1] * D[i - 1] / betaD : 0;
+    const bP = i ? P.rT * bT + rAge[i - 1] * Pc[i - 1] / betaP : 0;
+    const Y = (prop[i] - (bT + bD + bP)) / (1 + aT + aD + aP);
+    T[i] = aT * Y + bT; D[i] = aD * Y + bD; Pc[i] = aP * Y + bP;
+    const agedA = i ? rAge[i - 1] * A[i - 1] : 0;
+    const agedU = i ? rAge[i - 1] * U[i - 1] : 0;
+    A[i] = (agedA + (1 - phi[i]) * Y * FOI[i] + P.rD * D[i]) / (betaA + (1 - phi[i]) * FOI[i]);
+    U[i] = (agedU + P.rA * A[i]) / betaU;
+    posM[i] = D[i] + T[i] + A[i] * q[i];
+    inc[i]  = Y * FOI[i] * phi[i];
+  }
+  return {inc, posM};
+}
+
+// human_equilibrium: average no-het over the biting-heterogeneity quadrature, then aggregate the
+// scalar outputs this explainer needs (prevalence, all-age and under-5 incidence, age-group shares)
+function equilibrium(EIRyr){
+  const inc = new Array(NAGE).fill(0), posM = new Array(NAGE).fill(0);
+  for(let j = 0; j < GH_NODES.length; j++){
+    const zeta = Math.exp(-P.s2 * 0.5 + Math.sqrt(P.s2) * GH_NODES[j]);
+    const e = noHet(EIRyr * zeta), w = GH_WEIGHTS[j];
+    for(let i = 0; i < NAGE; i++){ inc[i] += e.inc[i] * w; posM[i] += e.posM[i] * w; }
+  }
+  let total = 0, u5 = 0, mid = 0, ad = 0, pfNum = 0, pfDen = 0, propU5 = 0;
+  for(let i = 0; i < NAGE; i++){
+    total += inc[i];
+    const a = AGE[i];
+    if(a < 5){ u5 += inc[i]; propU5 += prop[i]; } else if(a < 15) mid += inc[i]; else ad += inc[i];
+    if(a >= 2 && a < 10){ pfNum += posM[i]; pfDen += prop[i]; }
+  }
+  const inv = total > 0 ? 1 / total : 0;
+  return {
+    shares: {u5: u5 * inv, mid: mid * inv, ad: ad * inv},
+    pfpr: pfDen > 0 ? pfNum / pfDen : 0,
+    incPerYear: total * 365,                          // all-age episodes per person per year
+    incU5PerYear: propU5 > 0 ? u5 / propU5 * 365 : 0  // episodes per under-5 child per year
+  };
+}
+
+// ---------- precomputed Griffin lookup over EIR (log-spaced), interpolated on slider drag ----------
+// equilibrium() is ~10 quadrature nodes x 801 ages, far too heavy to call live for every plot on every
+// drag. Build it once over a log-EIR grid at load, then interpolate; the general-relationship curves
+// then only move a marker, and the coverage cascade is a cheap lookup of eirAt(C).
+// LUT_EMAX is the single upper EIR bound used everywhere (lookup table, plot x-axes and the
+// baseline slider). It is capped just past the incidence plateau, before the Griffin equilibrium's
+// extreme-EIR upturn (a faithful but distracting model feature above ~EIR 300).
+const LUT_N = 160, LUT_EMIN = 0.01, LUT_EMAX = 300;
+const LUT_LOGMIN = Math.log10(LUT_EMIN), LUT_LOGMAX = Math.log10(LUT_EMAX);
+const lut = {pfpr:[], inc:[], incU5:[], su5:[], smid:[], sad:[]};
+for(let k = 0; k <= LUT_N; k++){
+  const r = equilibrium(Math.pow(10, LUT_LOGMIN + k / LUT_N * (LUT_LOGMAX - LUT_LOGMIN)));
+  lut.pfpr.push(r.pfpr); lut.inc.push(r.incPerYear); lut.incU5.push(r.incU5PerYear);
+  lut.su5.push(r.shares.u5); lut.smid.push(r.shares.mid); lut.sad.push(r.shares.ad);
+}
+// linear interpolation in log-EIR; EIR is clamped into the tabulated range (below LUT_EMIN incidence
+// is negligible), and the three age shares are renormalised so the stacked ribbon sums to the line.
+function lutAt(E){
+  const le = Math.min(LUT_LOGMAX, Math.max(LUT_LOGMIN, Math.log10(Math.max(E, 1e-9))));
+  const t = (le - LUT_LOGMIN) / (LUT_LOGMAX - LUT_LOGMIN) * LUT_N;
+  const i = Math.min(LUT_N - 1, Math.max(0, Math.floor(t))), fr = t - i;
+  const at = arr => arr[i] + fr * (arr[i + 1] - arr[i]);
+  let su5 = at(lut.su5), smid = at(lut.smid), sad = at(lut.sad);
+  const ss = (su5 + smid + sad) || 1; su5 /= ss; smid /= ss; sad /= ss;
+  return {pfpr: at(lut.pfpr), inc: at(lut.inc), incU5: at(lut.incU5), su5, smid, sad};
+}
+const pfprFromEIR = E => lutAt(E).pfpr;
+let PFPR0 = pfprFromEIR(EIR0);                         // baseline prevalence (recomputed when EIR0 changes)
+// incidence y-axis: Griffin all-age incidence sits well below the old fixed 3, so scale to the LUT peak
+const niceCeil = v => { if(!(v > 0)) return 1; const s = Math.pow(10, Math.floor(Math.log10(v))); const n = v / s;
+  const step = [1,1.2,1.5,2,2.5,3,4,5,6,8,10].find(m => n <= m + 1e-9); return step * s; };
+const INC_YMAX = niceCeil(Math.max(...lut.inc) * 1.1);
+
+// Smith et al. (2005) annual-EIR vs prevalence (PfPR in children <15) field observations [EIR, prev],
+// overlaid on the PfPR-vs-EIR panel as a check that the Griffin equilibrium tracks the observed cloud.
+const SMITH_PTS = [[4.6,0.53],[0.14,0.22],[0.55,0.17],[0,0.113],[262.8,0.626],[223.8,0.54],[133,0.466],[441.6,0.949],[1.47,0.221],[7.71,0.315],[5.58,0.197],[0,0.029],[113,0.771],[82,0.471],[82,0.569],[17.7,0.615],[511,0.568],[176.1,0.69],[191.05,0.72],[161,0.71],[565.75,0.616],[3,0.473],[22.5,0.66],[397.9,0.888],[246,0.875],[80,0.73],[250.18,0.684],[397.85,0.714],[0.27,0.02],[0.92,0.395],[1.21,0.573],[4.17,0.342],[0.44,0.287],[7.75,0.712],[1.94,0.287],[11.15,0.712],[5,0.342],[3.24,0.395],[0.99,0.573],[418,0.584],[119.72,0.73],[13.51,0.65],[0,0.39],[0.73,0.38],[52.93,0.61],[29.2,0.82],[2.71,0.503],[21.54,0.79],[39.06,0.66],[35.41,0.54],[24.82,0.72],[4.62,0.495],[1.5,0.462],[17.69,0.45],[259.9,0.639],[14.23,0.526],[1.5,0.171],[299.3,0.757],[0,0.7],[21.9,0.69],[63.15,0.64],[35.04,0.75],[40.88,0.58],[39.06,0.66],[14.6,0.48],[1.83,0.59],[10.59,0.63],[0,0.503],[16.79,0.49],[14.97,0.78],[33.22,0.83],[30.95,0.672],[3.68,0.514],[46.7,0.497],[5,0.5],[7.67,0.72],[237.25,0.947],[1.1,0.54],[8,0.446],[0,0.52],[41.61,0.67],[0.66,0.455],[27.35,0.66],[9.13,0.44],[3.65,0.59],[0.66,0.558],[0,0.13],[3.65,0.22],[62.05,0.92],[21.9,0.68],[92,0.658],[0.91,0.334],[52.85,0.436],[0.05,0.051],[0.1,0.024],[0.12,0.042],[186.5,0.825],[12,0.65],[0,0.01],[26.5,0.56],[0,0.01],[8.8,0.56],[1.28,0.1],[21.9,0.569],[21.54,0.624],[26.65,0.568],[36.5,0.663],[0.59,0.016],[1.8,0.53],[0.08,0.26],[217.7,0.859],[34,0.535],[584,0.831],[620.5,0.752],[271.6,0.875],[667.43,0.818],[576.7,0.882],[419.75,0.771],[91,0.815],[1.7,0.66],[405,0.818],[9.7,0.64],[235.6,0.746],[702.6,0.745],[547.5,0.83],[0.03,0.118],[379.6,0.942],[329,0.85],[220.6,0.927],[93.7,0.872]];
 
 // outputs at coverage C
 const eirAt  = C => EIR0 * gNet(C);
 const pfAt   = C => pfprFromEIR(eirAt(C));
 
-// Smith et al. (2005) annual-EIR vs prevalence data [EIR, prev]
-const SMITH_PTS = [[4.6,0.53],[0.14,0.22],[0.55,0.17],[0,0.113],[262.8,0.626],[223.8,0.54],[133,0.466],[441.6,0.949],[1.47,0.221],[7.71,0.315],[5.58,0.197],[0,0.029],[113,0.771],[82,0.471],[82,0.569],[17.7,0.615],[511,0.568],[176.1,0.69],[191.05,0.72],[161,0.71],[565.75,0.616],[3,0.473],[22.5,0.66],[397.9,0.888],[246,0.875],[80,0.73],[250.18,0.684],[397.85,0.714],[0.27,0.02],[0.92,0.395],[1.21,0.573],[4.17,0.342],[0.44,0.287],[7.75,0.712],[1.94,0.287],[11.15,0.712],[5,0.342],[3.24,0.395],[0.99,0.573],[418,0.584],[119.72,0.73],[13.51,0.65],[0,0.39],[0.73,0.38],[52.93,0.61],[29.2,0.82],[2.71,0.503],[21.54,0.79],[39.06,0.66],[35.41,0.54],[24.82,0.72],[4.62,0.495],[1.5,0.462],[17.69,0.45],[259.9,0.639],[14.23,0.526],[1.5,0.171],[299.3,0.757],[0,0.7],[21.9,0.69],[63.15,0.64],[35.04,0.75],[40.88,0.58],[39.06,0.66],[14.6,0.48],[1.83,0.59],[10.59,0.63],[0,0.503],[16.79,0.49],[14.97,0.78],[33.22,0.83],[30.95,0.672],[3.68,0.514],[46.7,0.497],[5,0.5],[7.67,0.72],[237.25,0.947],[1.1,0.54],[8,0.446],[0,0.52],[41.61,0.67],[0.66,0.455],[27.35,0.66],[9.13,0.44],[3.65,0.59],[0.66,0.558],[0,0.13],[3.65,0.22],[62.05,0.92],[21.9,0.68],[92,0.658],[0.91,0.334],[52.85,0.436],[0.05,0.051],[0.1,0.024],[0.12,0.042],[186.5,0.825],[12,0.65],[0,0.01],[26.5,0.56],[0,0.01],[8.8,0.56],[1.28,0.1],[21.9,0.569],[21.54,0.624],[26.65,0.568],[36.5,0.663],[0.59,0.016],[1.8,0.53],[0.08,0.26],[217.7,0.859],[34,0.535],[584,0.831],[620.5,0.752],[271.6,0.875],[667.43,0.818],[576.7,0.882],[419.75,0.771],[91,0.815],[1.7,0.66],[405,0.818],[9.7,0.64],[235.6,0.746],[702.6,0.745],[547.5,0.83],[0.03,0.118],[379.6,0.942],[329,0.85],[220.6,0.927],[93.7,0.872]];
 
 // ---------- canvas helpers ----------
 function setup(canvas){
@@ -367,19 +478,34 @@ function panel(id, o){
   if(o.xLog){
     for(let p=Math.ceil(lo); p<=Math.floor(hi); p++){ const v=Math.pow(10,p);
       ctx.fillText(v<1 ? String(v) : String(Math.round(v)), X(v), H-padB+15); }
+    // label the right edge when the max isn't a power of ten (e.g. the 300 EIR cap)
+    if(Math.abs(hi - Math.round(hi)) > 1e-6){ ctx.textAlign='right';
+      ctx.fillText(String(Math.round(o.xMax)), W-padR, H-padB+15); ctx.textAlign='center'; }
   } else {
     for(const t of [0,0.5,1]) ctx.fillText(o.fmtX(t), X(t*o.xMax), H-padB+15);
   }
   ctx.fillText(o.xlab, (padL+W-padR)/2, H-3);
   ctx.save(); ctx.translate(12,(H-padB+padT)/2); ctx.rotate(-Math.PI/2); ctx.fillText(o.ylab, 0,0); ctx.restore();
 
-  if(o.points){ ctx.fillStyle='rgba(60,70,80,0.30)';
+  // clip the data to the plot rectangle so parametric ribbons/lines can't spill past the axes
+  ctx.save();
+  ctx.beginPath(); ctx.rect(padL, padT, W-padL-padR, H-padT-padB); ctx.clip();
+
+  // optional field-data scatter (o.points = [[x,y]...]), drawn beneath the curve
+  if(o.points){ ctx.fillStyle='rgba(60,70,80,0.28)';
     for(const [px,py] of o.points){ if(o.xLog && px<o.xMin) continue;
-      ctx.beginPath(); ctx.arc(X(px), Y(cy(py)), 2.4, 0, 2*Math.PI); ctx.fill(); }
+      ctx.beginPath(); ctx.arc(X(px), Y(cy(py)), 2.3, 0, 2*Math.PI); ctx.fill(); }
   }
-  if(o.pointSets){ for(const ps of o.pointSets){ ctx.fillStyle=ps.col;
-    for(const [px,py] of ps.pts){ if(o.xLog && px<o.xMin) continue;
-      ctx.beginPath(); ctx.arc(X(px), Y(cy(py)), 2.1, 0, 2*Math.PI); ctx.fill(); } }
+
+  // stacked age-group ribbon (o.bands = {xs, vals:[[u5,mid,ad]...], cols}); areas sum to the overall line
+  if(o.bands){ const B=o.bands, m=B.xs.length, lower=new Array(m).fill(0);
+    for(let b=0;b<B.cols.length;b++){
+      ctx.beginPath();
+      for(let i=0;i<m;i++){ const xx=X(B.xs[i]), yy=Y(cy(lower[i]+B.vals[i][b])); i===0?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy); }
+      for(let i=m-1;i>=0;i--) ctx.lineTo(X(B.xs[i]), Y(cy(lower[i])));
+      ctx.closePath(); ctx.fillStyle=B.cols[b]; ctx.globalAlpha=0.34; ctx.fill(); ctx.globalAlpha=1;
+      for(let i=0;i<m;i++) lower[i]+=B.vals[i][b];
+    }
   }
 
   const M=120;
@@ -390,8 +516,17 @@ function panel(id, o){
     ctx.stroke();
   };
   if(o.ref) drawCurve(o.ref);    // reference curve drawn underneath (dashed)
-  (o.curves || [o.curve]).forEach(drawCurve);
+  if(o.curve || o.curves) (o.curves || [o.curve]).forEach(drawCurve);
   ctx.setLineDash([]);
+
+  // explicit polylines (o.polylines = [{pts:[[x,y]...], col}]) for parametric relationships (e.g. inc vs PfPR)
+  if(o.polylines){ for(const pl of o.polylines){
+    ctx.strokeStyle=pl.col; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath();
+    let st=false;
+    for(const [px,py] of pl.pts){ const xx=X(px), yy=Y(cy(py)); st?ctx.lineTo(xx,yy):(ctx.moveTo(xx,yy),st=true); }
+    ctx.stroke();
+  } }
+  ctx.restore();   // end plot-area clip
 
   const markers = o.markers || (o.marker ? [o.marker] : []);
   for(const m of markers){
@@ -409,10 +544,11 @@ function panel(id, o){
 // ---------- wiring ----------
 const use = document.getElementById('use');
 const eir0In = document.getElementById('eir0');
+eir0In.max = LUT_EMAX;   // single-source the slider ceiling from the LUT bound
 const pct = v => Math.round(v*100)+'%';
 
 function update(){
-  EIR0 = Math.min(200, Math.max(0.1, +eir0In.value || 0.1));
+  EIR0 = Math.min(LUT_EMAX, Math.max(0.1, +eir0In.value || 0.1));
   PFPR0 = pfprFromEIR(EIR0);
   eir0In.style.setProperty('--fill', (eir0In.value/eir0In.max*100)+'%');
   document.getElementById('vEir').textContent = EIR0<10 ? (+EIR0.toFixed(1)).toString() : Math.round(EIR0);
@@ -423,50 +559,68 @@ function update(){
   document.getElementById('vUse').textContent = use.value+'%';
 
   const eirU = eirAt(u), pfU = pfAt(u);
-  const baseYoung = camYoungInc(PFPR0);                          // tallest curve's baseline → plot-5 y-axis
+  const rU = lutAt(eirU), rBase = lutAt(EIR0), incU = rU.inc;     // operating-point equilibrium
   document.getElementById('rEir').textContent   = eirU<1 ? eirU.toFixed(2) : eirU<10 ? eirU.toFixed(1) : Math.round(eirU);
   document.getElementById('rPf').textContent    = pct(pfU);
-  document.getElementById('rPfRed').textContent = pct(1 - pfU/PFPR0);
-  document.getElementById('rClin').textContent  = pct(1 - camYoungInc(pfU)/baseYoung);   // under-5 (0-5y), matching the Cochrane child measure
+  document.getElementById('rPfRed').textContent = PFPR0>0 ? pct(1 - pfU/PFPR0) : '—';
+  document.getElementById('rClin').textContent  = rBase.incU5>0 ? pct(1 - rU.incU5/rBase.incU5) : '—';   // under-5 (0-5y), per-child rate; matches the Cochrane child measure
 
   const ACC=css('--accent'), BLU=css('--blue'), CLN=css('--clin'), WRM=css('--warm'), INK=css('--ink');
+  const AGE_COLS=[CLN,ACC,BLU];                                   // ribbon bands: 0-5y, 5-15y, >15y
+  const incFmt = t => (t*INC_YMAX).toFixed(2);
 
-  // 1) EIR vs coverage
+  // sample the Griffin incidence relationship: overall line + age-group ribbon that stacks to it.
+  // eOf(i)->EIR at sample i; xOf(E,r,i)->the plotted x for that sample (PfPR, EIR or coverage).
+  const NS=120;
+  const sampleInc = (n, eOf, xOf) => {
+    const xs=[], line=[], bands=[];
+    for(let i=0;i<=n;i++){ const E=eOf(i), r=lutAt(E), x=xOf(E,r,i);
+      xs.push(x); line.push([x, r.inc]); bands.push([r.inc*r.su5, r.inc*r.smid, r.inc*r.sad]); }
+    return {xs, line, bands};
+  };
+  const eLog = i => Math.pow(10, LUT_LOGMIN + i/NS*(LUT_LOGMAX-LUT_LOGMIN));   // log-EIR sample grid
+
+  // 1) EIR vs coverage — mechanistic net effect (coverage-specific)
   panel('pEIR', {
     xMax:USE_MAX, yMax:EIR0, xlab:'bed-net coverage', ylab:'EIR',
     fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:t=>Math.round(t*EIR0),
     curve:{fn:x=>eirAt(x), col:ACC},
     marker:{x:u,y:eirU,col:WRM}
   });
-  // 2) PfPR vs EIR — Smith et al. data + fit
+  // 2) PfPR vs EIR — Griffin equilibrium
   panel('pPfpr', {
-    xLog:true, xMin:0.02, xMax:1000, yMax:1, xlab:'EIR (log scale)', ylab:'prevalence (PfPR)',
+    xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:1, xlab:'EIR (log scale)', ylab:'prevalence (PfPR)',
     fmtY:t=>Math.round(t*100)+'%',
     points:SMITH_PTS,
     curve:{fn:e=>pfprFromEIR(e), col:BLU},
     marker:{x:eirU,y:pfU,col:WRM}
   });
-  // 3) clinical incidence vs PfPR — Cameron model curves by age + field data
+  // 3) incidence vs PfPR — Griffin equilibrium, parametric through the LUT (x = PfPR); overall line + ribbon
+  const sPf = sampleInc(LUT_N, k=>Math.pow(10, LUT_LOGMIN + k/LUT_N*(LUT_LOGMAX-LUT_LOGMIN)), (E,r)=>r.pfpr);
   panel('pInc', {
-    xMax:0.8, yMax:3, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
-    fmtX:t=>Math.round(t*80)+'%', fmtY:t=>(t*3).toFixed(1),
-    pointSets:[{pts:DATA_YOUNG,col:'rgba(123,91,214,0.28)'},{pts:DATA_OLD,col:'rgba(47,143,126,0.30)'},{pts:DATA_ADULT,col:'rgba(61,111,180,0.32)'}],
-    curves:[{fn:camYoungInc,col:CLN},{fn:camOldInc,col:ACC},{fn:camAdultInc,col:BLU}],
-    markers:[{x:pfU,y:camYoungInc(pfU),col:CLN},{x:pfU,y:camOldInc(pfU),col:ACC},{x:pfU,y:camAdultInc(pfU),col:BLU}]
+    xMax:0.9, yMax:INC_YMAX, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
+    fmtX:t=>Math.round(t*90)+'%', fmtY:incFmt,
+    bands:{xs:sPf.xs, vals:sPf.bands, cols:AGE_COLS},
+    polylines:[{pts:sPf.line, col:INK}],
+    marker:{x:pfU, y:incU, col:WRM}
   });
-  // 4) clinical incidence vs EIR — composed (EIR -> PfPR -> incidence); log EIR, linear incidence
+  // 4) incidence vs EIR — Griffin equilibrium; log EIR, linear incidence
+  const sEir = sampleInc(NS, eLog, (E,r)=>E);
   panel('pIncEir', {
-    xLog:true, xMin:0.02, xMax:1000, yMax:3, xlab:'EIR (log scale)', ylab:'incidence (/person/yr)',
-    fmtY:t=>(t*3).toFixed(1),
-    curves:[{fn:e=>camYoungInc(pfprFromEIR(e)),col:CLN},{fn:e=>camOldInc(pfprFromEIR(e)),col:ACC},{fn:e=>camAdultInc(pfprFromEIR(e)),col:BLU}],
-    markers:[{x:eirU,y:camYoungInc(pfU),col:CLN},{x:eirU,y:camOldInc(pfU),col:ACC},{x:eirU,y:camAdultInc(pfU),col:BLU}]
+    xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:INC_YMAX, xlab:'EIR (log scale)', ylab:'incidence (/person/yr)',
+    fmtY:incFmt,
+    bands:{xs:sEir.xs, vals:sEir.bands, cols:AGE_COLS},
+    polylines:[{pts:sEir.line, col:INK}],
+    marker:{x:eirU, y:incU, col:WRM}
   });
-  // 5) clinical incidence vs coverage — fixed 0-3 axis to match plots 3 and 4
+  // 5) incidence vs coverage — coverage cascade through the equilibrium (coverage-specific)
+  const sCov = sampleInc(NS, i=>eirAt(i/NS*USE_MAX), (E,r,i)=>i/NS*USE_MAX);
   panel('pComb', {
-    xMax:USE_MAX, yMax:3, xlab:'bed-net coverage', ylab:'incidence (/person/yr)',
-    fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:t=>(t*3).toFixed(1),
-    curves:[{fn:x=>camYoungInc(pfAt(x)),col:CLN},{fn:x=>camOldInc(pfAt(x)),col:ACC},{fn:x=>camAdultInc(pfAt(x)),col:BLU}],
-    markers:[{x:u,y:camYoungInc(pfU),col:CLN},{x:u,y:camOldInc(pfU),col:ACC},{x:u,y:camAdultInc(pfU),col:BLU}]
+    xMax:USE_MAX, yMax:INC_YMAX, xlab:'bed-net coverage', ylab:'incidence (/person/yr)',
+    fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:incFmt,
+    bands:{xs:sCov.xs, vals:sCov.bands, cols:AGE_COLS},
+    polylines:[{pts:sCov.line, col:INK}],
+    marker:{x:u, y:incU, col:WRM}
   });
 
   drawExp();   // static survival chart (redraws on resize via update)
