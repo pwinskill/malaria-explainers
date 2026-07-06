@@ -550,7 +550,7 @@ function panel(id, o){
     ctx.fillRect(ix,iy,iw,ih); ctx.strokeRect(ix,iy,iw,ih);
     const iX = v => ix+ipL + Math.max(0,Math.min(v,o.inset.xMax))/o.inset.xMax*(iw-ipL-ipR);
     const iY = v => iy+ipT + (1 - Math.max(0,Math.min(v,o.inset.yMax))/o.inset.yMax)*(ih-ipT-ipB);
-    ctx.strokeStyle=css('--ink'); ctx.lineWidth=1.6; ctx.lineJoin='round'; ctx.beginPath();
+    ctx.strokeStyle=o.inset.col || css('--ink'); ctx.lineWidth=1.6; ctx.lineJoin='round'; ctx.beginPath();
     const NI=90;
     for(let i=0;i<=NI;i++){ const e=i/NI*o.inset.xMax, xx=iX(e), yy=iY(o.inset.fn(e)); i===0?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy); }
     ctx.stroke();
@@ -613,7 +613,8 @@ function update(){
     fmtY:t=>Math.round(t*100)+'%',
     points:SMITH_PTS,
     curve:{fn:e=>pfprFromEIR(e), col:BLU},
-    marker:{x:eirU,y:pfU,col:WRM}
+    marker:{x:eirU,y:pfU,col:WRM},
+    inset:{fn:e=>pfprFromEIR(e), xMax:LUT_EMAX, yMax:1, label:'EIR (linear)', marker:{x:eirU, y:pfU}, col:BLU}
   });
   // 3) incidence vs PfPR — Griffin equilibrium, parametric through the LUT (x = PfPR); overall line + ribbon
   const sPf = sampleInc(LUT_N, k=>Math.pow(10, LUT_LOGMIN + k/LUT_N*(LUT_LOGMAX-LUT_LOGMIN)), (E,r)=>r.pfpr);
