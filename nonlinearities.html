@@ -539,6 +539,26 @@ function panel(id, o){
     ctx.beginPath(); ctx.arc(X(m.x),Y(m.y),markers.length>1?5:6,0,2*Math.PI);
     ctx.fillStyle=m.col; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
   }
+
+  // optional small inset (o.inset = {fn, xMax, yMax, label, marker}) — a linear-x companion view
+  // tucked into the empty top-left corner, showing the same line without the log-axis compression
+  if(o.inset){
+    const iw = Math.round((W-padL-padR)*0.42), ih = Math.round((H-padT-padB)*0.44);
+    const ix = padL + 10, iy = padT + 6;
+    const ipL=4, ipR=5, ipT=5, ipB=13;
+    ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.strokeStyle=css('--line'); ctx.lineWidth=1;
+    ctx.fillRect(ix,iy,iw,ih); ctx.strokeRect(ix,iy,iw,ih);
+    const iX = v => ix+ipL + Math.max(0,Math.min(v,o.inset.xMax))/o.inset.xMax*(iw-ipL-ipR);
+    const iY = v => iy+ipT + (1 - Math.max(0,Math.min(v,o.inset.yMax))/o.inset.yMax)*(ih-ipT-ipB);
+    ctx.strokeStyle=css('--ink'); ctx.lineWidth=1.6; ctx.lineJoin='round'; ctx.beginPath();
+    const NI=90;
+    for(let i=0;i<=NI;i++){ const e=i/NI*o.inset.xMax, xx=iX(e), yy=iY(o.inset.fn(e)); i===0?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy); }
+    ctx.stroke();
+    if(o.inset.marker){ ctx.beginPath(); ctx.arc(iX(o.inset.marker.x),iY(o.inset.marker.y),2.6,0,2*Math.PI);
+      ctx.fillStyle=css('--warm'); ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke(); }
+    ctx.fillStyle=css('--muted'); ctx.font='10.5px -apple-system,Segoe UI,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(o.inset.label || 'EIR (linear)', ix+iw/2, iy+ih-3);
+  }
 }
 
 // ---------- wiring ----------
@@ -611,7 +631,8 @@ function update(){
     fmtY:incFmt,
     bands:{xs:sEir.xs, vals:sEir.bands, cols:AGE_COLS},
     polylines:[{pts:sEir.line, col:INK}],
-    marker:{x:eirU, y:incU, col:WRM}
+    marker:{x:eirU, y:incU, col:WRM},
+    inset:{fn:e=>lutAt(e).inc, xMax:LUT_EMAX, yMax:INC_YMAX, label:'EIR (linear)', marker:{x:eirU, y:incU}}
   });
   // 5) incidence vs coverage — coverage cascade through the equilibrium (coverage-specific)
   const sCov = sampleInc(NS, i=>eirAt(i/NS*USE_MAX), (E,r,i)=>i/NS*USE_MAX);
