@@ -195,7 +195,10 @@ month_starts <- cumsum(c(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30))
 month_labs   <- c("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
 
 # Panel A: the default year - true, recorded, and the falsely-attributed band
-dfA <- tibble(t = base$t, true = base$M, recorded = base$R)
+# (CASE_SCALE = 100 maps the model's relative rate onto cases /1000 children /month,
+#  matching the web-page axis; a display choice only, it does not affect the readouts)
+CASE_SCALE <- 100
+dfA <- tibble(t = base$t, true = base$M * CASE_SCALE, recorded = base$R * CASE_SCALE)
 pA <- ggplot(dfA, aes(t)) +
   geom_ribbon(aes(ymin = true, ymax = recorded), fill = col_warm, alpha = 0.55) +
   geom_area(aes(y = true), fill = col_clin, alpha = 0.13) +
@@ -204,7 +207,7 @@ pA <- ggplot(dfA, aes(t)) +
   scale_x_continuous(breaks = month_starts, labels = month_labs, expand = c(0, 0)) +
   labs(title = "True vs routine-recorded malaria (default setting)",
        subtitle = "purple = true malaria cases; dark = recorded total; orange = falsely attributed",
-       x = NULL, y = "cases (relative)") +
+       x = NULL, y = "cases per 1000 children / month") +
   theme_minimal(base_size = 11) +
   theme(plot.subtitle = element_text(colour = col_muted, size = 9),
         panel.grid.minor = element_blank())

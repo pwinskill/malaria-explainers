@@ -115,7 +115,7 @@
   </section>
 
   <div class="note">
-    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. Cases are shown in relative units on an arbitrary scale, so only the shape and the relative over-counts are meaningful. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. The vertical axis is shown as an illustrative count of cases per 1000 children per month, but its absolute level is not calibrated to any setting, so only the shape and the relative over-counts are meaningful. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
     <ul>
       <li><strong>Seasonal shape.</strong> A periodic curve <span class="var">g</span>(<span class="var">t</span>) = <span class="var">f</span> + (1 − <span class="var">f</span>)·((1 + cos(2π(<span class="var">t</span> − <span class="var">t</span><sub>peak</sub>)/365))/2)<sup><span class="var">p</span></sup> gives a single yearly peak fixed at 1. The seasonality slider raises the peakiness <span class="var">p</span> = 1 + 8<span class="var">S</span> + 16<span class="var">S</span><sup>4</sup> and lowers the off-season floor <span class="var">f</span> = (1 − <span class="var">S</span>)<sup>1.5</sup> together, from a near-flat perennial year to a sharp two-to-three month peak. This is the same seasonal curve used in the <a href="seasonality.html">seasonality explainer</a>, here with the peak fixed at mid-year.</li>
       <li><strong>Transmission sets the levels.</strong> The transmission-intensity slider (<span class="var">u</span> = <span class="var">T</span>/100) fixes the peak level of clinical incidence, <span class="var">c</span>(<span class="var">u</span>) = <span class="var">u</span>/(<span class="var">u</span> + 0.15), and of prevalence, <span class="var">v</span>(<span class="var">u</span>) = 0.9·<span class="var">u</span>/(<span class="var">u</span> + 0.5). Both rise with transmission, but clinical incidence saturates sooner: the ratio <span class="var">v</span>/<span class="var">c</span> grows with <span class="var">T</span>, a stand-in for immunity limiting disease while infection persists.<sup class="cite"><a href="#ref3">3</a></sup> Clinical incidence through the year is <span class="var">C</span>(<span class="var">t</span>) = <span class="var">c</span>(<span class="var">u</span>)·<span class="var">g</span>(<span class="var">t</span>).</li>
@@ -153,6 +153,7 @@ const PEAK_DAY = 182;   // case peak fixed at mid-year
 const D_INF = 80;       // mean duration of detectable infection (days): sets the reservoir lag/floor
 const NMF_REF = 6;      // reference non-malaria fever rate (episodes/child/yr); slider normalised to it
 const KAPPA = 0.9;      // relative scale converting (fever rate x prevalence) into recorded-case units
+const CASE_SCALE = 100; // display only: maps the model's relative rate onto cases /1000 children /month
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 // seasonal shape; symmetric single peak fixed at mid-year, peakiness/floor from seasonality S
@@ -240,16 +241,17 @@ function drawChart(sim){
   const c = document.getElementById('nmfChart');
   const s = setup(c); if(!s) return;
   const {ctx, W, H} = s;
-  const padL = 44, padR = 14, padT = 16, padB = 30;
+  const padL = 48, padR = 14, padT = 16, padB = 30;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  const YMAX = 1.8;   // fixed axis in absolute case units, so treatment seeking visibly lifts both curves
+  const YMAX = 200;   // fixed axis, cases /1000 children /month, so treatment seeking visibly lifts both curves
   const {pts} = sim;
   const X = t => padL + t / YEAR * plotW;
   const Y = v => padT + (1 - v / YMAX) * plotH;
+  const cases = v => v * CASE_SCALE;   // model relative rate -> cases /1000 children /month
 
-  // gridlines at 0.5 / 1.0 / 1.5
+  // gridlines
   ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
-  for(const gv of [0.5, 1.0, 1.5]){ ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL + plotW, Y(gv)); ctx.stroke(); }
+  for(const gv of [50, 100, 150]){ ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL + plotW, Y(gv)); ctx.stroke(); }
   ctx.globalAlpha = 1;
   // axes
   ctx.strokeStyle = css('--line'); ctx.lineWidth = 1;
@@ -257,40 +259,40 @@ function drawChart(sim){
 
   // y-axis gridline labels
   ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'right';
-  [0.5, 1.0, 1.5].forEach(v => ctx.fillText(v.toFixed(1), padL - 6, Y(v) + 3));
+  [0, 50, 100, 150].forEach(v => ctx.fillText(v, padL - 6, Y(v) + 3));
 
   // y-axis title
   ctx.save();
-  ctx.translate(12, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.translate(13, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = css('--muted'); ctx.textAlign = 'center';
-  ctx.fillText('cases (relative)', 0, 0);
+  ctx.fillText('cases per 1000 children / month', 0, 0);
   ctx.restore();
 
   // true malaria cases: filled area + line
   ctx.fillStyle = css('--clin'); ctx.globalAlpha = 0.13;
   ctx.beginPath(); ctx.moveTo(X(0), Y(0));
-  for(const p of pts) ctx.lineTo(X(p.t), Y(p.M));
+  for(const p of pts) ctx.lineTo(X(p.t), Y(cases(p.M)));
   ctx.lineTo(X(pts[pts.length - 1].t), Y(0)); ctx.closePath(); ctx.fill();
   ctx.globalAlpha = 1;
 
   // falsely-attributed band: between the true line and the recorded line
   ctx.fillStyle = css('--warm'); ctx.globalAlpha = 0.55;
   ctx.beginPath();
-  for(const p of pts) ctx.lineTo(X(p.t), Y(p.R));
-  for(let i = pts.length - 1; i >= 0; i--) ctx.lineTo(X(pts[i].t), Y(pts[i].M));
+  for(const p of pts) ctx.lineTo(X(p.t), Y(cases(p.R)));
+  for(let i = pts.length - 1; i >= 0; i--) ctx.lineTo(X(pts[i].t), Y(cases(pts[i].M)));
   ctx.closePath(); ctx.fill();
   ctx.globalAlpha = 1;
 
   // true malaria line
   ctx.strokeStyle = css('--clin'); ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
   ctx.beginPath();
-  pts.forEach((p, i) => { const xx = X(p.t), yy = Y(p.M); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); });
+  pts.forEach((p, i) => { const xx = X(p.t), yy = Y(cases(p.M)); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); });
   ctx.stroke();
 
   // recorded line (near-black, distinct from the coloured true line)
   ctx.strokeStyle = css('--ink'); ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
   ctx.beginPath();
-  pts.forEach((p, i) => { const xx = X(p.t), yy = Y(p.R); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); });
+  pts.forEach((p, i) => { const xx = X(p.t), yy = Y(cases(p.R)); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); });
   ctx.stroke();
 
   // direct labels at the widest separation between the two lines
@@ -304,8 +306,8 @@ function drawChart(sim){
       ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.strokeText(text, lx, ty);
       ctx.fillStyle = color; ctx.fillText(text, lx, ty);
     };
-    tag('recorded', q.R, css('--ink'), -7);
-    tag('true', q.M, css('--clin'), 14);
+    tag('recorded', cases(q.R), css('--ink'), -7);
+    tag('true', cases(q.M), css('--clin'), 14);
   }
 
   // month labels
