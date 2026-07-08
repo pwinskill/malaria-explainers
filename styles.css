@@ -329,6 +329,17 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .slider-block.intensity .val{color:var(--blue);font-size:16px;white-space:nowrap}
 #intensity{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
 #intensity::-webkit-slider-thumb{border:3px solid var(--blue)} #intensity::-moz-range-thumb{border:3px solid var(--blue)}
+/* ============================================================
+   Non-malaria fevers explainer (nmf.html)
+   ============================================================ */
+/* reuses the .season (blue) and .cover (warm) slider blocks. #seasonality and
+   #peakday are already themed blue in the seasonality block above; add the two
+   new slider ids: transmission intensity (blue) and the fever rate (warm). */
+#endemic{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
+#endemic::-webkit-slider-thumb{border:3px solid var(--blue)} #endemic::-moz-range-thumb{border:3px solid var(--blue)}
+#nmf{background:linear-gradient(90deg,var(--warm) 0%,var(--warm) var(--fill,0%),#f4cdb6 var(--fill,0%),#f4cdb6 100%)}
+#nmf::-webkit-slider-thumb{border:3px solid var(--warm)} #nmf::-moz-range-thumb{border:3px solid var(--warm)}
+
 /* U5 / 5-15 / 15+ case-share bar (second visualisation) */
 .agebar{display:flex;height:46px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:6px 0 0}
 .agebar .seg{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;

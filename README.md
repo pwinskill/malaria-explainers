@@ -53,6 +53,20 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    case distribution, with the under-5 / 5–15 / 15+ shares beside it. Cross-check:
    `validation/validate_age_distribution.R`.
 
+5. **Non-malaria fevers and inflated malaria case counts** ([`nmf.html`](nmf.html)).
+   Routine surveillance records a malaria case whenever someone with a fever tests
+   positive, but where malaria is endemic many infections are asymptomatic, so a
+   non-malaria fever that coincides with one is recorded as malaria all the same.
+   Because non-malaria fevers occur at a roughly constant rate while true malaria is
+   seasonal, this over-counting is differential: it is worst in the low season, when
+   true clinical malaria has collapsed but the asymptomatic reservoir has not. A toy
+   model of true versus routine-recorded childhood cases through the year, with a
+   slider for the non-malaria fever rate alongside the transmission setting. The
+   coincidence structure follows the non-malarial-fever process in
+   [malariasimulation](https://github.com/mrc-ide/malariasimulation/pull/372), and
+   the over-count fractions are anchored to the estimates of Dalrymple et al. (2017).
+   Cross-check: `validation/validate_nmf.R`.
+
 ## R cross-checks
 
 The `validation/validate_*.R` scripts independently reproduce each explainer's model in R/ggplot
