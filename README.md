@@ -11,6 +11,8 @@ The R cross-check scripts live in `validation/`; their input data (`data/`), ref
 
 **Live page:** https://pwinskill.github.io/malaria-explainers/
 
+Visits to the live page are counted anonymously with [GoatCounter](https://www.goatcounter.com/) — a cookieless, privacy-friendly analytics service that collects no personal data.
+
 ## Explainers
 
 1. **Non-linearities in malaria epidemiology and control** ([`nonlinearities.html`](nonlinearities.html)).
