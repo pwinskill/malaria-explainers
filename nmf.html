@@ -46,10 +46,10 @@
 
   <!-- CONCEPT 3 -->
   <section class="card">
-    <h2><span class="num">3</span> Constant non-malaria fevers meet a seasonal reservoir</h2>
+    <h2><span class="num">3</span> Year-round non-malaria fevers meet a seasonal reservoir</h2>
 
     <h3>Evidence</h3>
-    <p>Fevers have many causes other than malaria — respiratory and other infections chief among them — and across a year these are far more common than malaria-caused fevers.<sup class="cite"><a href="#ref1">1</a></sup> Their rate is higher in young children, and it does not track the malaria season closely; to a first approximation it can be treated as roughly constant through the year, and here it is held constant to isolate its effect.</p>
+    <p>Fevers have many causes other than malaria — respiratory and other infections chief among them — and across a year these are far more common than malaria-caused fevers.<sup class="cite"><a href="#ref1">1</a></sup> Their rate is higher in young children. Some of these causes carry their own seasonality: respiratory and diarrhoeal illnesses, for instance, follow their own calendars. But that seasonality generally differs from, and is rarely as sharply peaked as, the malaria transmission season. To isolate the effect, this explainer holds the non-malaria fever rate constant through the year; where it instead peaked in a particular season, it would distort the recorded malaria curve most in that season rather than evenly.</p>
 
     <h3>Mechanism</h3>
     <p>A person with a non-malaria fever who seeks care and is tested returns a positive result whenever they happen to be carrying a detectable infection. The number of such coincidental positives is the non-malaria fever rate times the share who are tested times the prevalence of detectable infection. Holding the fever rate constant, this coincidental count follows the asymptomatic reservoir through the year. Set against a true clinical incidence that collapses in the low season, a component that only follows the slowly-varying reservoir comes to dominate the recorded count there — so the over-counting is largest, in relative terms, exactly where and when true malaria is lowest.</p>
@@ -86,10 +86,11 @@
     </div>
 
     <div class="readouts">
-      <div class="readout"><div class="v" id="rPeak" style="color:var(--warm)">—</div><div class="l">peak-season recorded ÷ true</div></div>
-      <div class="readout"><div class="v" id="rLow" style="color:var(--warm)">—</div><div class="l">low-season recorded ÷ true</div></div>
-      <div class="readout"><div class="v" id="rShare" style="color:var(--warm)">—</div><div class="l">recorded cases not caused by malaria</div></div>
+      <div class="readout" title="Routine-recorded cases as a multiple of true malaria cases, over the peak-season months. 1× means no over-counting."><div class="v" id="rPeak" style="color:var(--warm)">—</div><div class="l">peak-season over-count</div></div>
+      <div class="readout" title="Routine-recorded cases as a multiple of true malaria cases, over the low-season months. 1× means no over-counting."><div class="v" id="rLow" style="color:var(--warm)">—</div><div class="l">low-season over-count</div></div>
+      <div class="readout" title="Share of all routine-recorded cases over the year that were not caused by malaria."><div class="v" id="rShare" style="color:var(--warm)">—</div><div class="l">recorded cases not caused by malaria</div></div>
     </div>
+    <p class="pcap" style="margin-top:8px">The first two boxes are the <em>over-count</em>: the routine-recorded count divided by the true number of malaria cases, in the peak season and in the low season. 1× means the routine count matches the truth; 2× means twice as many cases are recorded as malaria actually caused.</p>
     <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
 
     <p class="chart-label">True versus routine-recorded malaria cases through the year</p>
@@ -108,6 +109,7 @@
     <h2>What to notice</h2>
     <p><strong>The recorded count is always at or above the truth.</strong> Every non-malaria fever that coincides with a detectable infection adds a case that malaria did not cause. There is no setting of the sliders where routine data undercounts in this model; the whole effect is inflation. (A real system also misses true cases that never present or test negative, which this toy leaves aside.)</p>
     <p><strong>The distortion is differential across the season.</strong> Compare the two over-count readouts. In the peak season, recorded cases run only modestly above the truth, because they are measured against a large true signal; in the low season they can be several times the truth, because true clinical malaria has fallen to its floor while the asymptomatic reservoir — and the constant non-malaria fever rate that samples it — has not. The apparent season looks flatter and longer than the real one.</p>
+    <p><strong>The over-count leans to the months after the peak.</strong> The falsely-attributed band is not symmetric around the season; it is heavier on the falling side. Infections take weeks to clear, so the pool of detectable infection lags the transmission that produced it and drains only slowly: it is still large in the months after cases have peaked, when it keeps turning non-malaria fevers into recorded positives. Prevalence therefore peaks later than clinical incidence and trails a long tail into the following dry season, and the coincidental count follows it. (In this toy the peak is placed at mid-year; the lag would carry the tail past it either way.)</p>
     <p><strong>The more concentrated the season, the worse the low-season distortion.</strong> Raise the seasonality slider so the true peak is narrow and its off-season floor is low. The low-season over-count climbs, because the true signal it is measured against has almost vanished while the coincidental component holds up.</p>
     <p><strong>Higher transmission enlarges the reservoir faster than the disease.</strong> Raise the transmission intensity: the prevalence of infection climbs faster than the rate of clinical illness, as immunity limits disease without clearing infection. So a fixed non-malaria fever rate yields more coincidental positives per true case, and the over-count grows. Where infection is common, a positive test carries less information about the cause of a fever.<sup class="cite"><a href="#ref2">2</a></sup></p>
     <p><strong>Better access records more cases but does not fix the bias.</strong> Move treatment seeking: it multiplies both the true malaria cases and the coincidental ones, so the recorded volume rises or falls, but the over-count ratios and the share of recorded cases not caused by malaria do not move. The misattribution is a property of the case definition and the reservoir, not of how many people present for care.<sup class="cite"><a href="#ref3">3</a></sup></p>
@@ -115,7 +117,7 @@
   </section>
 
   <div class="note">
-    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. The vertical axis is shown as an illustrative count of cases per 1000 children per month, but its absolute level is not calibrated to any setting, so only the shape and the relative over-counts are meaningful. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. The vertical axis is shown as an illustrative count of cases per 1000 children per month and rescales to the chosen settings (to the recorded peak that would occur if every fever sought care, so that treatment seeking still visibly moves the curves); its absolute level is not calibrated to any setting, so only the shape and the relative over-counts are meaningful. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
     <ul>
       <li><strong>Seasonal shape.</strong> A periodic curve <span class="var">g</span>(<span class="var">t</span>) = <span class="var">f</span> + (1 − <span class="var">f</span>)·((1 + cos(2π(<span class="var">t</span> − <span class="var">t</span><sub>peak</sub>)/365))/2)<sup><span class="var">p</span></sup> gives a single yearly peak fixed at 1. The seasonality slider raises the peakiness <span class="var">p</span> = 1 + 8<span class="var">S</span> + 16<span class="var">S</span><sup>4</sup> and lowers the off-season floor <span class="var">f</span> = (1 − <span class="var">S</span>)<sup>1.5</sup> together, from a near-flat perennial year to a sharp two-to-three month peak. This is the same seasonal curve used in the <a href="seasonality.html">seasonality explainer</a>, here with the peak fixed at mid-year.</li>
       <li><strong>Transmission sets the levels.</strong> The transmission-intensity slider (<span class="var">u</span> = <span class="var">T</span>/100) fixes the peak level of clinical incidence, <span class="var">c</span>(<span class="var">u</span>) = <span class="var">u</span>/(<span class="var">u</span> + 0.15), and of prevalence, <span class="var">v</span>(<span class="var">u</span>) = 0.9·<span class="var">u</span>/(<span class="var">u</span> + 0.5). Both rise with transmission, but clinical incidence saturates sooner: the ratio <span class="var">v</span>/<span class="var">c</span> grows with <span class="var">T</span>, a stand-in for immunity limiting disease while infection persists.<sup class="cite"><a href="#ref3">3</a></sup> Clinical incidence through the year is <span class="var">C</span>(<span class="var">t</span>) = <span class="var">c</span>(<span class="var">u</span>)·<span class="var">g</span>(<span class="var">t</span>).</li>
@@ -197,7 +199,7 @@ function simulate(T, S, nmfPerYr, treatPct){
   const pts = [];
   let mTot = 0, xTot = 0, rTot = 0;
   let peakM = 0, peakR = 0, lowM = 0, lowR = 0;
-  let cmax = 0;
+  let cmax = 0, refMax = 0;
   for(let i = 0; i < n; i++){ const c = cL * seasonalShape(i * DT, S); if(c > cmax) cmax = c; }
   for(let i = 0; i < n; i++){
     const t = i * DT;
@@ -208,10 +210,12 @@ function simulate(T, S, nmfPerYr, treatPct){
     const R = M + X;
     pts.push({t, M, R});
     mTot += M; xTot += X; rTot += R;
+    const ref = C + KAPPA * nNorm * P;        // recorded rate if every fever sought care (tau = 1)
+    if(ref > refMax) refMax = ref;
     if(C >= 0.5 * cmax){ peakM += M; peakR += R; } else { lowM += M; lowR += R; }
   }
   return {
-    pts, cmax,
+    pts, cmax, refMax,
     peakRatio: peakM > 0 ? peakR / peakM : null,
     lowRatio:  lowM  > 0 ? lowR  / lowM  : null,   // null when there is no low season (perennial)
     falseShare: rTot > 0 ? xTot / rTot : 0
@@ -236,6 +240,16 @@ function setup(canvas){
   return {ctx, W, H};
 }
 
+// choose a nice y-axis: ~3-4 round ticks with a little headroom above the peak
+function axisFor(peak){
+  const target = peak * 1.1;
+  const rough = target / 4;
+  const p = Math.pow(10, Math.floor(Math.log10(rough)));
+  const nn = rough / p;
+  const step = (nn <= 1 ? 1 : nn <= 2 ? 2 : nn <= 5 ? 5 : 10) * p;
+  return {step, max: Math.ceil(target / step) * step};
+}
+
 // ---------- main chart ----------
 function drawChart(sim){
   const c = document.getElementById('nmfChart');
@@ -243,23 +257,27 @@ function drawChart(sim){
   const {ctx, W, H} = s;
   const padL = 48, padR = 14, padT = 16, padB = 30;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  const YMAX = 200;   // fixed axis, cases /1000 children /month, so treatment seeking visibly lifts both curves
+  const cases = v => v * CASE_SCALE;   // model relative rate -> cases /1000 children /month
+  // the axis rescales to the recorded peak that WOULD occur if every fever sought care (tau = 1),
+  // so it adapts to transmission and fever rate while the treatment-seeking slider still visibly
+  // lifts or lowers both curves within the frame (rather than the axis chasing them and cancelling it)
+  const axis = axisFor(Math.max(cases(sim.refMax), 1));
+  const YMAX = axis.max;
   const {pts} = sim;
   const X = t => padL + t / YEAR * plotW;
   const Y = v => padT + (1 - v / YMAX) * plotH;
-  const cases = v => v * CASE_SCALE;   // model relative rate -> cases /1000 children /month
 
-  // gridlines
-  ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
-  for(const gv of [50, 100, 150]){ ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL + plotW, Y(gv)); ctx.stroke(); }
-  ctx.globalAlpha = 1;
+  // gridlines + y-axis labels at nice ticks
+  for(let gv = axis.step; gv <= YMAX + 1e-6; gv += axis.step){
+    ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
+    ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL + plotW, Y(gv)); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(axis.step < 1 ? gv.toFixed(1) : String(Math.round(gv)), padL - 6, Y(gv) + 3);
+  }
   // axes
   ctx.strokeStyle = css('--line'); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH); ctx.stroke();
-
-  // y-axis gridline labels
-  ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'right';
-  [0, 50, 100, 150].forEach(v => ctx.fillText(v, padL - 6, Y(v) + 3));
 
   // y-axis title
   ctx.save();
