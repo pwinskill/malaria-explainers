@@ -89,12 +89,12 @@ prev_shape <- function(S) {
 }
 
 ## ---- simulate one scenario -------------------------------------------------
-## T        transmission intensity (0..100)
+## Tr       transmission intensity (0..100)   [Tr, not T: T is R's alias for TRUE]
 ## S        seasonality (0..1)
 ## nmfPerYr non-malaria fever rate (episodes/child/yr)
 ## treatPct treatment-seeking share (0..100)
-simulate_nmf <- function(T, S, nmfPerYr, treatPct) {
-  u     <- T / 100
+simulate_nmf <- function(Tr, S, nmfPerYr, treatPct) {
+  u     <- Tr / 100
   nNorm <- nmfPerYr / NMF_REF
   tau   <- treatPct / 100
   cL <- clin_level(u); vL <- prev_level(u)
@@ -104,12 +104,11 @@ simulate_nmf <- function(T, S, nmfPerYr, treatPct) {
   C    <- cL * g               # true clinical incidence
   P    <- vL * ghat            # prevalence of detectable infection
   M    <- tau * C              # true malaria cases recorded
-  X    <- tau * KAPPA * nNorm * P   # falsely-attributed (coincident) cases
+  X    <- tau * KAPPA * nNorm * P   # falsely attributed (coincident) cases
   R    <- M + X
-  cmax <- max(C)
-  peak <- C >= 0.5 * cmax      # peak season = clinical incidence >= half its max
+  peak <- C >= 0.5 * max(C)    # peak season = clinical incidence >= half its max
   list(
-    t = idx * DT, M = M, R = R, X = X, cmax = cmax,
+    t = idx * DT, M = M, R = R, X = X,
     peakRatio  = if (sum(M[peak])  > 0) sum(R[peak])  / sum(M[peak])  else NA_real_,
     lowRatio   = if (sum(M[!peak]) > 0) sum(R[!peak]) / sum(M[!peak]) else NA_real_,
     falseShare = sum(X) / sum(R)
@@ -141,9 +140,9 @@ cat("\n")
 # scan transmission intensity
 cat("Transmission-intensity scan (default season, NMF=6/yr, treat=60%):\n")
 cat(sprintf("  %-9s %-9s %-9s %-7s\n", "T", "peak x", "low x", "not-mal"))
-for (T in c(20, 40, 55, 75, 90)) {
-  s <- simulate_nmf(T, 0.75, 6, 60)
-  cat(sprintf("  %-9d %-9.2f %-9.2f %2.0f%%\n", T, s$peakRatio, s$lowRatio, 100 * s$falseShare))
+for (Tr in c(20, 40, 55, 75, 90)) {
+  s <- simulate_nmf(Tr, 0.75, 6, 60)
+  cat(sprintf("  %-9d %-9.2f %-9.2f %2.0f%%\n", Tr, s$peakRatio, s$lowRatio, 100 * s$falseShare))
 }
 cat("\n")
 
@@ -163,7 +162,7 @@ stopifnot(abs(zero$peakRatio - 1) < 1e-9, abs(zero$lowRatio - 1) < 1e-9, zero$fa
 # over-count rises monotonically with the fever rate and with transmission intensity
 share_by_nmf <- sapply(c(0, 2, 4, 6, 8, 12), function(n) simulate_nmf(55, 0.75, n, 60)$falseShare)
 stopifnot(all(diff(share_by_nmf) > 0))
-share_by_T <- sapply(c(20, 40, 55, 75, 90), function(T) simulate_nmf(T, 0.75, 6, 60)$falseShare)
+share_by_T <- sapply(c(20, 40, 55, 75, 90), function(Tr) simulate_nmf(Tr, 0.75, 6, 60)$falseShare)
 stopifnot(all(diff(share_by_T) > 0))
 
 # the differential widens as the season concentrates (low-season over-count grows with S)
@@ -178,8 +177,9 @@ for (ts in c(10, 40, 100)) {
             abs(s$falseShare - base$falseShare) < 1e-9)
 }
 
-# Dalrymple anchor: at high transmission with a moderate fever rate, the majority
-# of recorded cases are not caused by malaria (they estimate ~72% coincident)
+# Dalrymple anchor: at high transmission with a moderate fever rate, the majority of recorded
+# cases are not caused by malaria (their 2014 sub-Saharan average was ~72% coincident, higher
+# still in the highest-transmission settings)
 dal <- simulate_nmf(90, 0.75, 10, 60)
 stopifnot(dal$falseShare > 0.5)
 cat(sprintf("Dalrymple-anchor scenario (T=90, NMF=10/yr): %.0f%% of recorded cases not caused by malaria.\n",

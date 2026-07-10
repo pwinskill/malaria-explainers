@@ -340,6 +340,13 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 #nmf,#treat{background:linear-gradient(90deg,var(--warm) 0%,var(--warm) var(--fill,0%),#f4cdb6 var(--fill,0%),#f4cdb6 100%)}
 #nmf::-webkit-slider-thumb,#treat::-webkit-slider-thumb{border:3px solid var(--warm)}
 #nmf::-moz-range-thumb,#treat::-moz-range-thumb{border:3px solid var(--warm)}
+/* the Seasonality sub-slider carries a word value ("highly seasonal"); keep it at the primary
+   value size (16px) so the sub-control does not visually dominate its parent Transmission value.
+   Scoped to .val-word so seasonality.html's own sub-sliders are untouched. */
+.subslider .slider-top .val.val-word{font-size:16px;white-space:nowrap}
+/* the three readout tiles are full sentences: keep them wide enough that the leading line stays on
+   one row (so the big values share a baseline) until the grid collapses to a single column */
+.readouts.ro-sentences{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
 
 /* U5 / 5-15 / 15+ case-share bar (second visualisation) */
 .agebar{display:flex;height:46px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:6px 0 0}
