@@ -269,29 +269,26 @@ function axisFor(peak){
 }
 
 // ---------- main chart ----------
-function drawChart(sim){
+// renderChart draws one frame at a given axis max + tick step; drawChart (below) eases the axis
+// max toward its target so it glides between "nice" values instead of snapping as sliders move.
+function renderChart(sim, YMAX, step){
   const c = document.getElementById('nmfChart');
   const s = setup(c); if(!s) return;
   const {ctx, W, H} = s;
   const padL = 48, padR = 14, padT = 16, padB = 30;
   const plotW = W - padL - padR, plotH = H - padT - padB;
   const cases = v => v * CASE_SCALE;   // model relative rate -> cases /1000 children /month
-  // the axis rescales to the recorded peak that WOULD occur if every fever sought care (tau = 1),
-  // so it adapts to transmission and fever rate while the treatment-seeking slider still visibly
-  // lifts or lowers both curves within the frame (rather than the axis chasing them and cancelling it)
-  const axis = axisFor(Math.max(cases(sim.refMax), 1));
-  const YMAX = axis.max;
   const {pts} = sim;
   const X = t => padL + t / YEAR * plotW;
   const Y = v => padT + (1 - v / YMAX) * plotH;
 
-  // gridlines + y-axis labels at nice ticks
-  for(let gv = axis.step; gv <= YMAX + 1e-6; gv += axis.step){
+  // gridlines + y-axis labels at the target's round ticks, drawn up to the current animated max
+  for(let gv = step; gv <= YMAX + 1e-6; gv += step){
     ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.55;
     ctx.beginPath(); ctx.moveTo(padL, Y(gv)); ctx.lineTo(padL + plotW, Y(gv)); ctx.stroke();
     ctx.globalAlpha = 1;
     ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText(axis.step < 1 ? gv.toFixed(1) : String(Math.round(gv)), padL - 6, Y(gv) + 3);
+    ctx.fillText(step < 1 ? gv.toFixed(1) : String(Math.round(gv)), padL - 6, Y(gv) + 3);
   }
   // axes
   ctx.strokeStyle = css('--line'); ctx.lineWidth = 1;
@@ -349,6 +346,31 @@ function drawChart(sim){
   // month labels
   ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
   for(let m = 0; m < 12; m++){ const day = (m + 0.5) * YEAR / 12; ctx.fillText(MONTHS[m][0], X(day), padT + plotH + 20); }
+}
+
+// ease the displayed axis max toward its target so the rescaling glides rather than snaps between
+// "nice" values as the sliders move; labels stay on the target's round ticks throughout.
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let _axMax = null, _axTarget = null, _lastSim = null, _axRAF = 0;
+function drawChart(sim){
+  _lastSim = sim;
+  _axTarget = axisFor(Math.max(sim.refMax * CASE_SCALE, 1));
+  if(_axMax === null || REDUCED_MOTION){          // first paint, or reduced motion: snap to target
+    _axMax = _axTarget.max;
+    renderChart(_lastSim, _axMax, _axTarget.step);
+    return;
+  }
+  if(!_axRAF) _axRAF = requestAnimationFrame(stepAxis);
+}
+function stepAxis(){
+  const diff = _axTarget.max - _axMax;
+  if(Math.abs(diff) < Math.max(_axTarget.max * 0.004, 0.5)){   // close enough: settle on the target
+    _axMax = _axTarget.max; _axRAF = 0;
+  } else {
+    _axMax += diff * 0.18;                                     // exponential ease toward the target
+    _axRAF = requestAnimationFrame(stepAxis);
+  }
+  renderChart(_lastSim, _axMax, _axTarget.step);               // labels on the target's round ticks
 }
 
 // ---------- wiring ----------
