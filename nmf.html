@@ -86,11 +86,23 @@
     </div>
 
     <div class="readouts">
-      <div class="readout" title="Routine-recorded cases as a multiple of true malaria cases, over the peak-season months. 1× means no over-counting."><div class="v" id="rPeak" style="color:var(--warm)">—</div><div class="l">peak-season over-count</div></div>
-      <div class="readout" title="Routine-recorded cases as a multiple of true malaria cases, over the low-season months. 1× means no over-counting."><div class="v" id="rLow" style="color:var(--warm)">—</div><div class="l">low-season over-count</div></div>
-      <div class="readout" title="Share of all routine-recorded cases over the year that were not caused by malaria."><div class="v" id="rShare" style="color:var(--warm)">—</div><div class="l">recorded cases not caused by malaria</div></div>
+      <div class="readout">
+        <div class="l">Routine-recorded total is</div>
+        <div class="v" id="rPeak" style="color:var(--warm)">—</div>
+        <div class="l">the true malaria cases, in the peak season</div>
+      </div>
+      <div class="readout">
+        <div class="l">Routine-recorded total is</div>
+        <div class="v" id="rLow" style="color:var(--warm)">—</div>
+        <div class="l">the true malaria cases, in the low season</div>
+      </div>
+      <div class="readout">
+        <div class="l">Over the year,</div>
+        <div class="v" id="rShare" style="color:var(--warm)">—</div>
+        <div class="l">of recorded cases were not caused by malaria</div>
+      </div>
     </div>
-    <p class="pcap" style="margin-top:8px">The first two boxes are the <em>over-count</em>: the routine-recorded count divided by the true number of malaria cases, in the peak season and in the low season. 1× means the routine count matches the truth; 2× means twice as many cases are recorded as malaria actually caused.</p>
+    <p class="pcap" style="margin-top:8px">1× would mean the routine count exactly matches true malaria cases; the further above 1×, the more the routine data over-states malaria — most of all in the low season.</p>
     <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
 
     <p class="chart-label">True versus routine-recorded malaria cases through the year</p>
@@ -108,7 +120,7 @@
   <section class="card">
     <h2>What to notice</h2>
     <p><strong>The recorded count is always at or above the truth.</strong> Every non-malaria fever that coincides with a detectable infection adds a case that malaria did not cause. There is no setting of the sliders where routine data undercounts in this model; the whole effect is inflation. (A real system also misses true cases that never present or test negative, which this toy leaves aside.)</p>
-    <p><strong>The distortion is differential across the season.</strong> Compare the two over-count readouts. In the peak season, recorded cases run only modestly above the truth, because they are measured against a large true signal; in the low season they can be several times the truth, because true clinical malaria has fallen to its floor while the asymptomatic reservoir — and the constant non-malaria fever rate that samples it — has not. The apparent season looks flatter and longer than the real one.</p>
+    <p><strong>The distortion is differential across the season.</strong> Compare the first two readouts. In the peak season, recorded cases run only modestly above the truth, because they are measured against a large true signal; in the low season they can be several times the truth, because true clinical malaria has fallen to its floor while the asymptomatic reservoir — and the constant non-malaria fever rate that samples it — has not. The apparent season looks flatter and longer than the real one.</p>
     <p><strong>The over-count leans to the months after the peak.</strong> The falsely-attributed band is not symmetric around the season; it is heavier on the falling side. Infections take weeks to clear, so the pool of detectable infection lags the transmission that produced it and drains only slowly: it is still large in the months after cases have peaked, when it keeps turning non-malaria fevers into recorded positives. Prevalence therefore peaks later than clinical incidence and trails a long tail into the following dry season, and the coincidental count follows it. (In this toy the peak is placed at mid-year; the lag would carry the tail past it either way.)</p>
     <p><strong>The more concentrated the season, the worse the low-season distortion.</strong> Raise the seasonality slider so the true peak is narrow and its off-season floor is low. The low-season over-count climbs, because the true signal it is measured against has almost vanished while the coincidental component holds up.</p>
     <p><strong>Higher transmission enlarges the reservoir faster than the disease.</strong> Raise the transmission intensity: the prevalence of infection climbs faster than the rate of clinical illness, as immunity limits disease without clearing infection. So a fixed non-malaria fever rate yields more coincidental positives per true case, and the over-count grows. Where infection is common, a positive test carries less information about the cause of a fever.<sup class="cite"><a href="#ref2">2</a></sup></p>
