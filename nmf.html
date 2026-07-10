@@ -38,7 +38,7 @@
     <h2><span class="num">2</span> Where malaria is endemic, much infection is asymptomatic</h2>
 
     <h3>Evidence</h3>
-    <p>In endemic settings a large share of the population carries a bloodstream infection at any given time without being ill from it.<sup class="cite"><a href="#ref2">2</a></sup> Acquired immunity allows people to tolerate parasites, and untreated infections can persist for weeks to months, so this asymptomatic reservoir is both substantial and slow to turn over. As transmission intensity rises, clinical illness begins to level off while the prevalence of detectable infection keeps climbing, so the infection reservoir grows relative to disease — immunity increasingly limits illness without clearing infection.</p>
+    <p>In endemic settings a large share of the population carries a bloodstream infection at any given time without being ill from it.<sup class="cite"><a href="#ref2">2</a></sup> Acquired immunity allows people to tolerate parasites, and untreated infections can persist for weeks to months, so this asymptomatic reservoir is both substantial and slow to turn over. As transmission intensity rises, clinical illness begins to level off while the prevalence of detectable infection keeps climbing, so the infection reservoir grows relative to disease: immunity increasingly limits illness without clearing infection.</p>
 
     <h3>Mechanism</h3>
     <p>Because carriage builds up over the preceding weeks of transmission and clears only slowly, the prevalence of detectable infection is a broadened, lagged and floored version of the transmission signal: it rises after the season is under way, falls gradually once transmission recedes, and does not collapse in the low season the way new clinical illness does. Anyone tested during the low season still has an appreciable chance of a positive result, whether or not malaria is making them ill.</p>
@@ -52,18 +52,18 @@
     <p>Fevers have many causes other than malaria (respiratory and other infections chief among them) and across a year these are far more common than malaria-caused fevers.<sup class="cite"><a href="#ref1">1</a></sup> Their rate is higher in young children. Some of these causes carry their own seasonality, for example respiratory and diarrhoeal illnesses. But that seasonality generally differs in timing and duration from the malaria transmission season. We assume here that the non-malaria fever rate is constant through the year.</p>
 
     <h3>Mechanism</h3>
-    <p>A non-malaria fever that is tested returns a positive result whenever the person also carries a detectable infection. The coincidental positives are therefore the non-malaria fever rate times the share tested times the prevalence of infection — a count that, with the fever rate steady, follows the asymptomatic reservoir rather than the seasonal course of disease.</p>
+    <p>A non-malaria fever that is tested returns a positive result whenever the person also carries a detectable infection. The coincidental positives are therefore the non-malaria fever rate times the share tested times the prevalence of infection. With the fever rate steady, that count follows the asymptomatic reservoir rather than the seasonal course of disease.</p>
   </section>
 </div>
 
 <!-- INTERACTIVE TOY MODEL -->
 <div class="wrapwide">
   <section class="card toy">
-    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative — not for decision making</span>
+    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative, not for decision making</span>
     <h2><span class="num">▶</span> Watch the recorded count separate from the truth</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> model of true versus routine-recorded malaria cases through a season</p>
-    <p>Set the transmission intensity — which fixes both the level of clinical malaria and the prevalence of infection — and how seasonal transmission is, then set the non-malaria fever rate and the share of fevers that seek care and are tested. The chart shows true malaria cases recorded from those who seek care (purple) and the total routine-recorded count (dark line); the shaded band is the falsely attributed cases — non-malaria fevers that coincided with a detectable infection.</p>
-    <p class="muted" style="font-size:14px;margin-top:-4px">Two things to try: raise the non-malaria fever rate and watch the recorded curve lift and its seasonality flatten; and move treatment seeking and notice the vertical scale shifts while the peak- and low-season figures do not — better access records more cases but does not fix the misattribution.</p>
+    <p>Set the transmission intensity (which fixes both the level of clinical malaria and the prevalence of infection) and how seasonal transmission is, then set the non-malaria fever rate and the share of fevers that seek care and are tested. The chart shows true malaria cases recorded from those who seek care (purple) and the total routine-recorded count (dark line); the shaded band is the falsely attributed cases: non-malaria fevers that coincided with a detectable infection.</p>
+    <p class="muted" style="font-size:14px;margin-top:-4px">Two things to try: raise the non-malaria fever rate and watch the recorded curve lift and its seasonality flatten; and move treatment seeking and notice the vertical scale shifts while the peak- and low-season figures do not. Better access records more cases but does not fix the misattribution.</p>
 
     <div class="controls">
       <div class="slider-block season">
@@ -88,17 +88,17 @@
     <div class="readouts ro-sentences">
       <div class="readout">
         <div class="l">Routine-recorded total is</div>
-        <div class="v" id="rPeak" style="color:var(--warm)">—</div>
+        <div class="v" id="rPeak" style="color:var(--warm)">–</div>
         <div class="l">the true malaria cases, in the peak season</div>
       </div>
       <div class="readout">
         <div class="l">Routine-recorded total is</div>
-        <div class="v" id="rLow" style="color:var(--warm)">—</div>
+        <div class="v" id="rLow" style="color:var(--warm)">–</div>
         <div class="l">the true malaria cases, in the low season</div>
       </div>
       <div class="readout">
         <div class="l">Over the year,</div>
-        <div class="v" id="rShare" style="color:var(--warm)">—</div>
+        <div class="v" id="rShare" style="color:var(--warm)">–</div>
         <div class="l">of recorded cases are not caused by malaria</div>
       </div>
     </div>
@@ -119,12 +119,12 @@
   <section class="card">
     <h2>What to notice</h2>
     <p><strong>The recorded count is always at or above the truth.</strong> Every non-malaria fever that coincides with a detectable infection adds a case that malaria did not cause.</p>
-    <p><strong>The impact of non-malaria fevers is differential across the season.</strong> Compare the first two readouts. Because the recorded count is set against true malaria, the over-count tends to be smaller in the peak season, when the true signal is large, and larger in the low season, when true clinical malaria has fallen towards its floor while the asymptomatic reservoir — and the steady non-malaria fever rate that samples it — has not. In a seasonal setting this can make the recorded season look flatter and longer than the real one.</p>
+    <p><strong>The impact of non-malaria fevers is differential across the season.</strong> Compare the first two readouts. Because the recorded count is set against true malaria, the over-count tends to be smaller in the peak season, when the true signal is large, and larger in the low season, when true clinical malaria has fallen towards its floor while the asymptomatic reservoir, and the steady non-malaria fever rate that samples it, has not. In a seasonal setting this can make the recorded season look flatter and longer than the real one.</p>
     <p><strong>The over-count leans to the months after the peak.</strong> The falsely attributed band is not symmetric around the season; it is heavier on the falling side. Infections take weeks to clear, so the pool of detectable infection lags the transmission that produced it and wanes only slowly: it is still large in the months after cases have peaked, when it keeps turning non-malaria fevers into recorded positives. Prevalence therefore peaks later than clinical incidence and trails a long tail into the following dry season, and the coincidental count follows it.</p>
     <p><strong>The more concentrated the season, the larger the low-season over-count.</strong> Raise the seasonality slider so the true peak is narrow and its off-season floor is low. The low-season over-count climbs, because the true signal it is measured against has almost vanished while the coincidental component holds up.</p>
     <p><strong>Higher transmission enlarges the reservoir faster than the disease.</strong> Raise the transmission intensity: clinical illness levels off while the prevalence of infection keeps climbing, as immunity limits disease without clearing infection. So a fixed non-malaria fever rate yields more coincidental positives per true case, and the over-count grows. Where infection is common, a positive test carries less information about the cause of a fever.<sup class="cite"><a href="#ref2">2</a></sup></p>
-    <p><strong>Better access records more cases but does not fix the bias.</strong> Move treatment seeking: it multiplies both the true malaria cases and the coincidental ones, so the recorded volume rises or falls — the vertical scale moves with it — but the over-count ratios and the share of recorded cases not caused by malaria do not move. The misattribution is a property of the case definition and the reservoir, not of how many people present for care.<sup class="cite"><a href="#ref3">3</a></sup></p>
-    <p><strong>Reading routine data as clinical burden may overstate malaria.</strong> The share of recorded cases not caused by malaria is substantial at plausible fever rates: largest in the low season, and — as a share of positive tests — greater the higher the transmission intensity, because a common infection reservoir turns more non-malaria fevers into coincidental positives.<sup class="cite"><a href="#ref3">3</a></sup> Trends and seasonal profiles built from confirmed-case counts inherit this bias, most heavily off-peak.</p>
+    <p><strong>Better access records more cases but does not fix the bias.</strong> Move treatment seeking: it multiplies both the true malaria cases and the coincidental ones, so the recorded volume rises or falls (the vertical scale moves with it), but the over-count ratios and the share of recorded cases not caused by malaria do not move. The misattribution is a property of the case definition and the reservoir, not of how many people present for care.<sup class="cite"><a href="#ref3">3</a></sup></p>
+    <p><strong>Reading routine data as clinical burden may overstate malaria.</strong> The share of recorded cases not caused by malaria is substantial at plausible fever rates: largest in the low season, and, as a share of positive tests, greater the higher the transmission intensity, because a common infection reservoir turns more non-malaria fevers into coincidental positives.<sup class="cite"><a href="#ref3">3</a></sup> Trends and seasonal profiles built from confirmed-case counts inherit this bias, most heavily off-peak.</p>
   </section>
 
   <div class="note">
@@ -134,7 +134,7 @@
       <li><strong>Transmission sets the levels.</strong> The transmission-intensity slider (<span class="var">u</span> = <span class="var">T</span>/100) fixes the peak level of clinical incidence, <span class="var">c</span>(<span class="var">u</span>) = <span class="var">u</span>/(<span class="var">u</span> + 0.15), and of prevalence, <span class="var">v</span>(<span class="var">u</span>) = 0.9·<span class="var">u</span>/(<span class="var">u</span> + 0.5). Both rise with transmission, but clinical incidence saturates sooner: the ratio <span class="var">v</span>/<span class="var">c</span> grows with <span class="var">T</span>, a stand-in for immunity limiting disease while infection persists.<sup class="cite"><a href="#ref3">3</a></sup> Clinical incidence through the year is <span class="var">C</span>(<span class="var">t</span>) = <span class="var">c</span>(<span class="var">u</span>)·<span class="var">g</span>(<span class="var">t</span>).</li>
       <li><strong>Prevalence.</strong> The prevalence of detectable infection is <span class="var">P</span>(<span class="var">t</span>) = <span class="var">v</span>(<span class="var">u</span>)·<span class="var">ĝ</span>(<span class="var">t</span>), where <span class="var">ĝ</span> is a broadened, lagged, floored version of the seasonal shape, obtained by relaxing towards <span class="var">g</span> with a timescale <span class="var">D</span> = 80 days (d<span class="var">ĝ</span>/d<span class="var">t</span> = (<span class="var">g</span> − <span class="var">ĝ</span>)/<span class="var">D</span>, integrated around the year and normalised to a peak of 1). The finite duration sustains prevalence in the low season after clinical incidence has collapsed.</li>
       <li><strong>Recorded cases.</strong> Writing the treatment-seeking share <span class="var">τ</span> and the non-malaria fever rate as <span class="var">N</span> episodes per child per year with a normalised value <span class="var">n</span> = <span class="var">N</span>/6, the true malaria cases recorded are <span class="var">M</span>(<span class="var">t</span>) = <span class="var">τ</span>·<span class="var">C</span>(<span class="var">t</span>) and the falsely attributed cases are <span class="var">X</span>(<span class="var">t</span>) = <span class="var">τ</span>·<span class="var">κ</span>·<span class="var">n</span>·<span class="var">P</span>(<span class="var">t</span>) with <span class="var">κ</span> = 0.9 a fixed relative scale. The routine-recorded count is <span class="var">R</span>(<span class="var">t</span>) = <span class="var">M</span>(<span class="var">t</span>) + <span class="var">X</span>(<span class="var">t</span>); the shaded band is <span class="var">X</span>. Because <span class="var">τ</span> multiplies both terms, it scales the recorded volume but cancels from every over-count.</li>
-      <li><strong>Readouts.</strong> The year is split at half the peak clinical incidence: peak-season days have <span class="var">C</span> ≥ ½·max <span class="var">C</span>, low-season days below it. The peak- and low-season over-counts are the recorded total divided by the true malaria total over those days, ∫<span class="var">R</span> / ∫<span class="var">M</span> (the low-season figure is shown as "—" for a perennial setting with no distinct low season). The share of recorded cases not caused by malaria is ∫<span class="var">X</span> / ∫<span class="var">R</span> over the whole year. All three are independent of the treatment-seeking share.</li>
+      <li><strong>Readouts.</strong> The year is split at half the peak clinical incidence: peak-season days have <span class="var">C</span> ≥ ½·max <span class="var">C</span>, low-season days below it. The peak- and low-season over-counts are the recorded total divided by the true malaria total over those days, ∫<span class="var">R</span> / ∫<span class="var">M</span> (the low-season figure is shown as "–" for a perennial setting with no distinct low season). The share of recorded cases not caused by malaria is ∫<span class="var">X</span> / ∫<span class="var">R</span> over the whole year. All three are independent of the treatment-seeking share.</li>
       <li><strong>What is left out.</strong> The toy omits imperfect and age-varying treatment-seeking (here a single share), test sensitivity and specificity, the under-counting of true cases that never present, and any seasonality or age-dependence in the non-malaria fever rate. Two further simplifications work in the same direction as the effect shown: it ignores the persistence of RDT antigen (HRP2) for weeks after parasites clear, which would enlarge and further lag the test-positive reservoir beyond true infection prevalence; and it lets clinical incidence per child only saturate with transmission, omitting the eventual fall at the highest transmission that acquired immunity produces, which would widen the over-count further. It captures only the coincidence mechanism that inflates confirmed-case counts.</li>
       <li><strong>Relation to published estimates.</strong> The scale <span class="var">κ</span> and the level mappings are chosen so that at plausible settings the share of recorded cases not caused by malaria falls in the broad range reported by Dalrymple <em>et al</em>, who estimate that in 2014 only about 28% of malaria-positive fevers in under-fives were causally attributable to malaria (about 10% of all fevers), implying routine positive counts can overstate clinical malaria by a large margin that grows as transmission rises.<sup class="cite"><a href="#ref3">3</a></sup> The non-malaria fever process mirrors the structure being added to <a href="https://github.com/mrc-ide/malariasimulation/pull/372" target="_blank" rel="noopener">malariasimulation</a>,<sup class="cite"><a href="#ref4">4</a></sup> where an age-specific non-malaria fever rate drives treatment-seeking and a positive test in someone with a detectable infection is recorded as a case. The cross-check in <span class="var">validation/validate_nmf.R</span> reproduces these curves and readouts in R.</li>
     </ul>
@@ -403,7 +403,7 @@ function update(){
 
   const sim = simulate(T, S, nmfPerYr, treatPct);
 
-  const fmt = r => r == null ? '—' : r.toFixed(1) + '×';
+  const fmt = r => r == null ? '–' : r.toFixed(1) + '×';
   document.getElementById('rPeak').textContent = fmt(sim.peakRatio);
   document.getElementById('rLow').textContent = fmt(sim.lowRatio);
   document.getElementById('rShare').textContent = Math.round(sim.falseShare * 100) + '%';
@@ -418,7 +418,7 @@ function announce(sim){
   clearTimeout(announceTimer);
   announceTimer = setTimeout(() => {
     const low = sim.lowRatio == null ? 'no distinct low season' : sim.lowRatio.toFixed(1) + ' times in the low season';
-    const peak = sim.peakRatio == null ? '—' : sim.peakRatio.toFixed(1);
+    const peak = sim.peakRatio == null ? '–' : sim.peakRatio.toFixed(1);
     document.getElementById('srLive').textContent =
       'Recorded cases ' + peak + ' times the truth in the peak season, ' + low + '; ' +
       Math.round(sim.falseShare * 100) + '% of recorded cases not caused by malaria';

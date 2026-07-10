@@ -108,7 +108,7 @@
 <!-- INTERACTIVE -->
 <div class="wrapwide">
   <section class="card toy">
-    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative — not for decision making</span>
+    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative, not for decision making</span>
     <h2><span class="num">▶</span> Trace a bed-net effect through the cascade</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> model to trace the impact of non-linearities</p>
     <p>Set the no-net baseline transmission, then adjust coverage. The top row is the general relationship between transmission, prevalence and clinical incidence; the bottom row is the specific bed-net cascade, where higher coverage lowers EIR and moves the operating point along those relationships.</p>
@@ -117,7 +117,7 @@
       <div class="slider-block eir">
         <div class="slider-top"><span class="label">Baseline EIR (no nets)</span><span class="val" id="vEir">20</span></div>
         <input type="range" id="eir0" min="0.1" max="300" value="20" step="0.1" aria-label="Baseline EIR with no nets, infectious bites per person per year">
-        <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence <strong id="basePf" style="color:var(--blue)">—</strong></div>
+        <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence <strong id="basePf" style="color:var(--blue)">–</strong></div>
       </div>
       <div class="slider-block cov">
         <div class="slider-top"><span class="label">Bed-net coverage</span><span class="val" id="vUse">50%</span></div>
@@ -127,13 +127,13 @@
     </div>
 
     <div class="readouts">
-      <div class="readout"><div class="v" id="rEir" style="color:var(--blue)">—</div><div class="l">EIR with nets</div></div>
-      <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">—</div><div class="l">prevalence with nets</div></div>
-      <div class="readout"><div class="v" id="rPfRed" style="color:var(--accent)">—</div><div class="l">prevalence reduction</div></div>
-      <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">—</div><div class="l">clinical reduction (under-5)</div></div>
+      <div class="readout"><div class="v" id="rEir" style="color:var(--blue)">–</div><div class="l">EIR with nets</div></div>
+      <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">–</div><div class="l">prevalence with nets</div></div>
+      <div class="readout"><div class="v" id="rPfRed" style="color:var(--accent)">–</div><div class="l">prevalence reduction</div></div>
+      <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">–</div><div class="l">clinical reduction (under-5)</div></div>
     </div>
 
-    <p class="panel-group-h">General relationships <span class="muted">— how transmission intensity maps to prevalence and to clinical disease (independent of the intervention)</span></p>
+    <p class="panel-group-h">General relationships <span class="muted">: how transmission intensity maps to prevalence and to clinical disease (independent of the intervention)</span></p>
     <div class="plots">
       <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--blue)">1</span> PfPR vs EIR</p>
@@ -144,16 +144,16 @@
         <p class="panel-h"><span class="step" style="background:var(--clin)">2</span> Incidence vs EIR</p>
         <canvas id="pIncEir" height="190" aria-label="All-age clinical incidence versus EIR"></canvas>
         <p class="pcap">All-age clinical incidence against EIR. It rises then plateaus as prevalence saturates. Log EIR axis.<br>
-          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
       </div>
       <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
         <canvas id="pInc" height="190" aria-label="All-age clinical incidence versus prevalence"></canvas>
         <p class="pcap">The same incidence plotted against prevalence rather than EIR. The shaded bands split the total by age group.<br>
-          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
       </div>
     </div>
-    <p class="panel-group-h">Bed-net cascade <span class="muted">— the specific intervention: coverage lowers EIR, which moves prevalence and incidence along the curves above</span></p>
+    <p class="panel-group-h">Bed-net cascade <span class="muted">(the specific intervention: coverage lowers EIR, which moves prevalence and incidence along the curves above)</span></p>
     <div class="plots plots2">
       <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--accent)">4</span> EIR vs coverage</p>
@@ -164,7 +164,7 @@
         <p class="panel-h"><span class="step" style="background:var(--warm)">5</span> Incidence vs coverage</p>
         <canvas id="pComb" height="190" aria-label="All-age clinical incidence versus coverage"></canvas>
         <p class="pcap">All-age clinical incidence against bed-net coverage (the full cascade). The shaded bands show the age split shifting as transmission falls.<br>
-          <span style="color:var(--ink);font-weight:750">— all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
         <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> the Cochrane ITN review found roughly 50% fewer uncomplicated episodes in children versus no nets<sup class="cite"><a href="#ref10">10</a></sup>. The model's under-5 readout runs higher than this across the plotted range (about 80–95% at 80% coverage), because it assumes an idealised net (full potency, no resistance, decay or residual transmission) and reports a per-child incidence-rate reduction rather than a measured trial-arm effect. The two are not directly comparable.</p>
       </div>
     </div>
@@ -213,7 +213,7 @@
 // ---------- fixed model constants (illustrative) ----------
 const P0 = 0.90;      // baseline daily mosquito survival
 const N  = 10;        // extrinsic incubation period (days)
-let   EIR0 = 20;      // baseline EIR (no nets) — set by the slider
+let   EIR0 = 20;      // baseline EIR (no nets), set by the slider
 const USE_MAX = 0.80; // coverage capped at 80%
 // Net effect on the vector, from experimental-hut quantities (generic new pyrethroid net, no resistance):
 const BETA = 0.70;    // blood-feeding inhibition: fraction of bites prevented on a net user (EHT)
@@ -227,8 +227,8 @@ const F0 = f(P0);
 // below (pfprFromEIR / the LUT), so there is no separate fitted prevalence curve here.
 
 // combined bed-net effect on transmission, from EHT-derived changes to a and p:
-//   biting:   a -> a0(1 - BETA*C)            — feeding inhibition on the covered fraction; enters squared
-//   survival: p -> p0(1 - MU*C)^(1/GONO)     — per-cycle killing MU*C spread over the gonotrophic cycle
+//   biting:   a -> a0(1 - BETA*C)            : feeding inhibition on the covered fraction; enters squared
+//   survival: p -> p0(1 - MU*C)^(1/GONO)     : per-cycle killing MU*C spread over the gonotrophic cycle
 const gNet = C => {
   const a = 1 - BETA * C;
   const p = P0 * Math.pow(1 - MU * C, 1 / GONO);
@@ -257,7 +257,7 @@ const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423
 const FT = 0;                                   // treatment coverage (off, for a simple toy)
 const AGE = [];                                 // age grid in years, uniform 0.1y from 0 to 80
 // fine grid so the sharp young-age peak at high intensity is captured. NB: it must stay in step with
-// validation/validate_cascade.R (seq(0,80,0.1)) — the equilibrium is grid-dependent, so the R
+// validation/validate_cascade.R (seq(0,80,0.1)): the equilibrium is grid-dependent, so the R
 // cross-check only matches on the same grid.
 for(let a = 0; a <= 80.0001; a += 0.1) AGE.push(+a.toFixed(2));
 const NAGE = AGE.length, AW = 0.1;              // number of ages, band width (years)
@@ -543,7 +543,7 @@ function panel(id, o){
     ctx.fillStyle=m.col; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
   }
 
-  // optional small inset (o.inset = {fn, xMax, yMax, label, marker}) — a linear-x companion view
+  // optional small inset (o.inset = {fn, xMax, yMax, label, marker}): a linear-x companion view
   // tucked into the empty top-left corner, showing the same line without the log-axis compression
   if(o.inset){
     const iw = Math.round((W-padL-padR)*0.42), ih = Math.round((H-padT-padB)*0.44);
@@ -585,8 +585,8 @@ function update(){
   const rU = lutAt(eirU), rBase = lutAt(EIR0), incU = rU.inc;     // operating-point equilibrium
   document.getElementById('rEir').textContent   = eirU<1 ? eirU.toFixed(2) : eirU<10 ? eirU.toFixed(1) : Math.round(eirU);
   document.getElementById('rPf').textContent    = pct(pfU);
-  document.getElementById('rPfRed').textContent = PFPR0>0 ? pct(1 - pfU/PFPR0) : '—';
-  document.getElementById('rClin').textContent  = rBase.incU5>0 ? pct(1 - rU.incU5/rBase.incU5) : '—';   // under-5 (0-5y), per-child rate; matches the Cochrane child measure
+  document.getElementById('rPfRed').textContent = PFPR0>0 ? pct(1 - pfU/PFPR0) : '–';
+  document.getElementById('rClin').textContent  = rBase.incU5>0 ? pct(1 - rU.incU5/rBase.incU5) : '–';   // under-5 (0-5y), per-child rate; matches the Cochrane child measure
 
   const ACC=css('--accent'), BLU=css('--blue'), CLN=css('--clin'), WRM=css('--warm'), INK=css('--ink');
   const AGE_COLS=[CLN,ACC,BLU];                                   // ribbon bands: 0-5y, 5-15y, >15y
@@ -603,14 +603,14 @@ function update(){
   };
   const eLog = i => Math.pow(10, LUT_LOGMIN + i/NS*(LUT_LOGMAX-LUT_LOGMIN));   // log-EIR sample grid
 
-  // 1) EIR vs coverage — mechanistic net effect (coverage-specific)
+  // 1) EIR vs coverage: mechanistic net effect (coverage-specific)
   panel('pEIR', {
     xMax:USE_MAX, yMax:EIR0, xlab:'bed-net coverage', ylab:'EIR',
     fmtX:t=>Math.round(t*USE_MAX*100)+'%', fmtY:t=>Math.round(t*EIR0),
     curve:{fn:x=>eirAt(x), col:ACC},
     marker:{x:u,y:eirU,col:WRM}
   });
-  // 2) PfPR vs EIR — Griffin equilibrium
+  // 2) PfPR vs EIR: Griffin equilibrium
   panel('pPfpr', {
     xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:1, xlab:'EIR (log scale)', ylab:'prevalence (PfPR)',
     fmtY:t=>Math.round(t*100)+'%',
@@ -619,7 +619,7 @@ function update(){
     marker:{x:eirU,y:pfU,col:WRM},
     inset:{fn:e=>pfprFromEIR(e), xMax:LUT_EMAX, yMax:1, label:'EIR (linear)', marker:{x:eirU, y:pfU}, col:BLU}
   });
-  // 3) incidence vs PfPR — Griffin equilibrium, parametric through the LUT (x = PfPR); overall line + ribbon
+  // 3) incidence vs PfPR: Griffin equilibrium, parametric through the LUT (x = PfPR); overall line + ribbon
   const sPf = sampleInc(LUT_N, k=>Math.pow(10, LUT_LOGMIN + k/LUT_N*(LUT_LOGMAX-LUT_LOGMIN)), (E,r)=>r.pfpr);
   panel('pInc', {
     xMax:0.9, yMax:INC_YMAX, xlab:'PfPR (2–10)', ylab:'incidence (/person/yr)',
@@ -628,7 +628,7 @@ function update(){
     polylines:[{pts:sPf.line, col:INK}],
     marker:{x:pfU, y:incU, col:WRM}
   });
-  // 4) incidence vs EIR — Griffin equilibrium; log EIR, linear incidence
+  // 4) incidence vs EIR: Griffin equilibrium; log EIR, linear incidence
   const sEir = sampleInc(NS, eLog, (E,r)=>E);
   panel('pIncEir', {
     xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:INC_YMAX, xlab:'EIR (log scale)', ylab:'incidence (/person/yr)',
@@ -638,7 +638,7 @@ function update(){
     marker:{x:eirU, y:incU, col:WRM},
     inset:{fn:e=>lutAt(e).inc, xMax:LUT_EMAX, yMax:INC_YMAX, label:'EIR (linear)', marker:{x:eirU, y:incU}}
   });
-  // 5) incidence vs coverage — coverage cascade through the equilibrium (coverage-specific)
+  // 5) incidence vs coverage: coverage cascade through the equilibrium (coverage-specific)
   const sCov = sampleInc(NS, i=>eirAt(i/NS*USE_MAX), (E,r,i)=>i/NS*USE_MAX);
   panel('pComb', {
     xMax:USE_MAX, yMax:INC_YMAX, xlab:'bed-net coverage', ylab:'incidence (/person/yr)',

@@ -20,6 +20,9 @@ This file only notes things specific to working on the repo with Claude.
   say "lead to" not "buy", "are infected" not "meet the parasite", "determined
   by" not "a readout of". Short interactive prompts ("Move the slider…") are
   fine; the explanatory prose should read like a careful technical note.
+- **No em dashes.** Do not use em dashes (—) anywhere in the project (prose,
+  labels, comments). Use commas, colons, parentheses, or separate sentences
+  instead; for numeric ranges use "to" or an en dash (–).
 
 ## Verifying changes
 
@@ -27,7 +30,7 @@ This file only notes things specific to working on the repo with Claude.
   browser.
 - Every explainer is mirrored by an R cross-check in `validation/validate_*.R`.
   **When you change a model in an explainer, keep its `validate_*.R` in sync (and
-  vice versa)** — the two are meant to reproduce the same numbers.
+  vice versa)**: the two are meant to reproduce the same numbers.
 - Run the R scripts from the repository root (they read `data/`), e.g.
   `Rscript validation/validate_rebounds.R`. R toolchain paths (Windows arm64) are
   in the user's global `~/.claude/CLAUDE.md`.

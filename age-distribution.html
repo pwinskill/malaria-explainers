@@ -59,7 +59,7 @@
 <!-- INTERACTIVE TOY MODEL -->
 <div class="wrapwide">
   <section class="card toy">
-    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative — not for decision making</span>
+    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative, not for decision making</span>
     <h2><span class="num" aria-hidden="true">▶</span> Turn transmission up and down</h2>
     <p class="sub">A <strong style="color:var(--warm)">toy</strong> implementation of the Griffin transmission model at equilibrium</p>
     <p>Move the slider from low to intense transmission. The top chart shows the distribution of clinical cases across age; the bar below divides those cases into under-5, 5–15 and 15+. As transmission intensity rises, cases become concentrated in the youngest ages and parasite prevalence (a common, more familiar index of transmission) increases.</p>
@@ -72,12 +72,12 @@
       </div>
     </div>
     <div class="readouts">
-      <div class="readout"><div class="v" id="rPfPR" style="color:var(--accent)">—</div><div class="l">parasite prevalence (2–10y)</div></div>
-      <div class="readout"><div class="v" id="rIncU5" style="color:#c45a25">—</div><div class="l">episodes per year (under-5 child)</div></div>
-      <div class="readout"><div class="v" id="rInc" style="color:var(--clin)">—</div><div class="l">episodes per year (all ages)</div></div>
+      <div class="readout"><div class="v" id="rPfPR" style="color:var(--accent)">–</div><div class="l">parasite prevalence (2–10y)</div></div>
+      <div class="readout"><div class="v" id="rIncU5" style="color:#c45a25">–</div><div class="l">episodes per year (under-5 child)</div></div>
+      <div class="readout"><div class="v" id="rInc" style="color:var(--clin)">–</div><div class="l">episodes per year (all ages)</div></div>
     </div>
 
-    <p class="chart-label">Clinical malaria by age <span class="muted">— per-person risk, and where the cases fall; each curve scaled to its own peak</span></p>
+    <p class="chart-label">Clinical malaria by age <span class="muted">(per-person risk, and where the cases fall; each curve scaled to its own peak)</span></p>
     <canvas id="ageChart" height="280" aria-label="Clinical malaria by age: the per-person incidence rate and the distribution of cases, as transmission intensity changes"></canvas>
     <div class="rb-legend">
       <span><i style="background:var(--clin);height:3px;align-self:center"></i> incidence per person (risk at each age)</span>
@@ -156,7 +156,7 @@ const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423
 const FT = 0;                                   // treatment coverage (off, for a simple toy)
 const AGE = [];                                 // age grid in years, uniform 0.1y from 0 to 80
 // fine grid so the sharp young-age peak at high intensity draws smoothly. NB: it must stay in
-// step with validation/validate_age_distribution.R (seq(0,80,0.1)) — the equilibrium is
+// step with validation/validate_age_distribution.R (seq(0,80,0.1)): the equilibrium is
 // grid-dependent, so the R cross-check only matches on the same grid.
 for(let a = 0; a <= 80.0001; a += 0.1) AGE.push(+a.toFixed(2));
 const NAGE = AGE.length, AW = 0.1;              // number of ages, band width (years)

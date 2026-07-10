@@ -114,7 +114,7 @@ scenarios <- list(
   "very low transm.   (Tr=10, S=0.90, D=10, abrupt)"   = c(10, 0.90, 10, 95)
 )
 
-cat("\n=== Rebound toy model — numeric cross-check ===\n")
+cat("\n=== Rebound toy model: numeric cross-check ===\n")
 cat(sprintf("%-52s %8s %8s %8s\n", "scenario", "baseB", "depth", "rel.dep"))
 sim_list <- lapply(scenarios, function(p) simulate(p[1], p[2], p[3], p[4]))
 for (nm in names(sim_list)) {
@@ -184,15 +184,15 @@ plot_scenario <- function(s, title) {
           panel.grid.minor = element_blank())
 }
 
-p_main    <- plot_scenario(sim_list[[2]], "Strong, long, abrupt withdrawal — deep rebound")
-p_gradual <- plot_scenario(sim_list[[3]], "Same programme, gradual loss — rebound softened")
+p_main    <- plot_scenario(sim_list[[2]], "Strong, long, abrupt withdrawal: deep rebound")
+p_gradual <- plot_scenario(sim_list[[3]], "Same programme, gradual loss: rebound softened")
 
 ## --- (b) rebound dip vs baseline transmission -------------------------------
 dip_df <- data.frame(Tr = trange, dip = dip_curve)
 p_hump <- ggplot(dip_df, aes(Tr, dip)) +
   geom_line(colour = col_danger, linewidth = 1) +
   labs(title = "Rebound deepens with baseline transmission (toy model)",
-       subtitle = "strong, long, abruptly-withdrawn programme — dip of total protection below baseline",
+       subtitle = "strong, long, abruptly-withdrawn programme: dip of total protection below baseline",
        x = "baseline transmission", y = "rebound dip (protection units)") +
   theme_minimal(base_size = 11) +
   theme(plot.title = element_text(face = "bold"),
@@ -201,7 +201,7 @@ p_hump <- ggplot(dip_df, aes(Tr, dip)) +
 ## --- combine & save ---------------------------------------------------------
 combined <- (p_main | p_gradual) / p_hump +
   plot_annotation(
-    title = "Rebound toy model — R cross-check of rebounds.html",
+    title = "Rebound toy model: R cross-check of rebounds.html",
     caption = "Illustrative toy model. Not for decision making."
   )
 
