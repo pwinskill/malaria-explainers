@@ -111,7 +111,7 @@ simulate_nmf <- function(Tr, S, nmfPerYr, treatPct) {
     t = idx * DT, M = M, R = R, X = X,
     peakRatio  = if (sum(M[peak])  > 0) sum(R[peak])  / sum(M[peak])  else NA_real_,
     lowRatio   = if (sum(M[!peak]) > 0) sum(R[!peak]) / sum(M[!peak]) else NA_real_,
-    falseShare = sum(X) / sum(R)
+    falseShare = if (sum(R) > 0) sum(X) / sum(R) else 0   # guard the tau=0 / T=0 zero-signal corner (matches the JS)
   )
 }
 
@@ -155,6 +155,18 @@ stopifnot(round(base$falseShare * 100) == 51)
 # the over-count is DIFFERENTIAL: worse in the low season than the peak season
 stopifnot(base$lowRatio > base$peakRatio)
 
+# recorded is always at or above the truth (X >= 0 everywhere)
+stopifnot(all(base$R >= base$M))
+
+# the reservoir LAGS clinical incidence: prevalence (ghat) peaks after the mid-year case peak,
+# and the falsely-attributed band is heavier on the falling side (the "leans after the peak" claim)
+gh <- prev_shape(0.75)
+stopifnot(which.max(gh) - 1 > PEAK_DAY)   # ghat is 1-indexed; day index = which.max - 1
+stopifnot(sum(base$X[base$t > PEAK_DAY]) > sum(base$X[base$t < PEAK_DAY]))
+
+# a flat / perennial year (S = 0) has no distinct low season -> lowRatio is NA (shown as "-")
+stopifnot(is.na(simulate_nmf(55, 0, 6, 60)$lowRatio))
+
 # no non-malaria fevers -> no inflation at all (recorded == true everywhere)
 zero <- simulate_nmf(55, 0.75, 0, 60)
 stopifnot(abs(zero$peakRatio - 1) < 1e-9, abs(zero$lowRatio - 1) < 1e-9, zero$falseShare < 1e-9)
@@ -181,7 +193,7 @@ for (ts in c(10, 40, 100)) {
 # cases are not caused by malaria (their 2014 sub-Saharan average was ~72% coincident, higher
 # still in the highest-transmission settings)
 dal <- simulate_nmf(90, 0.75, 10, 60)
-stopifnot(dal$falseShare > 0.5)
+stopifnot(dal$falseShare > 0.6)
 cat(sprintf("Dalrymple-anchor scenario (T=90, NMF=10/yr): %.0f%% of recorded cases not caused by malaria.\n",
             100 * dal$falseShare))
 cat("Treatment-seeking invariance confirmed: over-counts identical at 10%%, 40%%, 100%%.\n")
