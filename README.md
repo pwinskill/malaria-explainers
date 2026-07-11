@@ -60,9 +60,10 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    Because non-malaria fevers occur at a roughly constant rate while true malaria is
    seasonal, this over-counting is differential: it is worst in the low season, when
    true clinical malaria has collapsed but the asymptomatic reservoir has not. A toy
-   model of true versus routine-recorded childhood cases through the year, with a
-   slider for the non-malaria fever rate alongside the transmission setting. The
-   coincidence structure follows the non-malarial-fever process in
+   model of true versus routine-recorded childhood cases through the year, with
+   sliders for transmission intensity, seasonality, the non-malaria fever rate and
+   the share of fevers that seek care. The
+   coincidence structure follows the non-malaria fever process in
    [malariasimulation](https://github.com/mrc-ide/malariasimulation/pull/372), and
    the over-count fractions are anchored to the estimates of Dalrymple et al. (2017).
    Cross-check: `validation/validate_nmf.R`.
