@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attributing impact of malaria interventions</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<!-- GoatCounter: privacy-friendly, cookieless visitor counts -->
+<script data-goatcounter="https://pwinskill.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">← All explainers</a></nav>
+
+<header class="hero">
+  <p class="kicker">An interactive explainer</p>
+  <h1>Attributing impact of malaria interventions</h1>
+  <p class="lede">Malaria interventions are rarely deployed on their own. A new tool is usually added to a setting that already has others in place. Because the interventions act on a shared and non-linear pathway to clinical cases, their effects do not simply add up. The impact credited to any one intervention, and so its apparent cost-effectiveness, then depends on the order in which the interventions' impacts are considered.</p>
+</header>
+
+<div class="wrapwide">
+
+  <!-- CONCEPT 1 (merged: interventions do not add up + the incremental / backdrop point) -->
+  <section class="card">
+    <h2><span class="num">1</span> Combined intervention impact does not add up</h2>
+
+    <h3>Evidence</h3>
+    <p>When two or more malaria interventions are used together, the reduction in cases they achieve jointly is smaller than the sum of the reductions each achieves on its own. A case prevented by one tool cannot be prevented again by another, and each tool acts on the cases that remain after the others. Modelled evaluations of intervention combinations show this diminishing return: adding a further tool to an already well-controlled setting averts fewer cases than the same tool would avert on its own.<sup class="cite"><a href="#ref2">2</a></sup></p>
+    <p>Cost-effectiveness is usually assessed at the margin: an intervention is credited with the cases it averts over and above what is already in place. This incremental approach is standard and, for the decision it is built for, appropriate.<sup class="cite"><a href="#ref3">3</a></sup> But because combined impact saturates, the incremental impact of a given intervention is not a fixed property of that intervention. It depends on the backdrop it is measured against.</p>
+
+    <h3>Mechanism</h3>
+    <p>Impact is not linear with effort. If each unit of control averted the same number of cases, the order of counting would not matter. But because the interventions overlap, impact saturates: an intervention assessed first acts against the full burden and is credited with greater impact than if it were assessed later, acting against a shrinking remainder of the burden. The interventions together avert the same total whichever way they are counted; what changes is how much of that total is assigned to each.</p>
+  </section>
+</div>
+
+<!-- INTERACTIVE TOY MODEL -->
+<div class="wrapwide">
+  <section class="card toy">
+    <span class="toy-tag" title="This is an illustrative teaching model, not calibrated to any setting. Not for real-world decisions.">Illustrative, not for decision making</span>
+    <h2><span class="num" aria-hidden="true">▶</span> Three interventions, in any order</h2>
+    <p class="sub">A <strong style="color:var(--warm)">toy</strong> model of cases averted by three combined controls</p>
+    <p>Three interventions, <b style="color:var(--accent)">A</b>, <b style="color:#b0501f">B</b> and <b style="color:var(--clin)">C</b>, act together. Their effect sizes are fixed and their costs are equal here; the only thing to change is the order in which they are introduced. Set the transmission level, then reorder the interventions. The staircase shows the cases averted credited to each control as it is added, and the combined total at the top does not move when only the order changes.</p>
+    <p class="muted" style="font-size:14px;margin-top:-4px"><b style="color:var(--accent)">A</b> reduces transmission and also gives some direct protection; <b style="color:#b0501f">B</b> and <b style="color:var(--clin)">C</b> give direct protection only. Their effect sizes are fixed; all three cost the same, so the cost per case averted depends only on how many cases each is credited with.</p>
+
+    <div class="toy-grid">
+      <div class="toy-controls">
+        <div class="slider-block a-base">
+          <div class="slider-top"><span class="label">Transmission level</span><span class="val" id="vBase">intense, 61%</span></div>
+          <input type="range" id="base" min="0" max="100" value="60" step="1" aria-label="Transmission level, from moderate to intense">
+          <p class="slider-sub muted">Sets how many infectious bites people receive; parasite prevalence is shown as a more familiar index.</p>
+        </div>
+        <div class="order-panel">
+          <div class="seg-label" id="orderLabel">Drag to set the introduction order (first to last)</div>
+          <div class="order-chips" id="orderChips" role="group" aria-labelledby="orderLabel"></div>
+        </div>
+      </div>
+      <div class="toy-info">
+        <div class="itable-wrap">
+          <table class="itable" aria-label="What each intervention does">
+            <thead><tr><th scope="col">Intervention</th><th scope="col">Reduces transmission</th><th scope="col">Direct protection</th><th scope="col">Cost</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><span style="color:#217a68">A</span></th>
+                  <td><span class="tick" aria-hidden="true">✓</span><span class="sr-only">yes</span></td>
+                  <td><span class="tick" aria-hidden="true">✓</span><span class="sr-only">yes</span></td>
+                  <td>$1</td></tr>
+              <tr><th scope="row"><span style="color:#b0501f">B</span></th>
+                  <td><span class="cross" aria-hidden="true">✗</span><span class="sr-only">no</span></td>
+                  <td><span class="tick" aria-hidden="true">✓</span><span class="sr-only">yes</span></td>
+                  <td>$1</td></tr>
+              <tr><th scope="row"><span style="color:var(--clin)">C</span></th>
+                  <td><span class="cross" aria-hidden="true">✗</span><span class="sr-only">no</span></td>
+                  <td><span class="tick" aria-hidden="true">✓</span><span class="sr-only">yes</span></td>
+                  <td>$1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">B and C are both direct protection but differ in strength; the effect sizes shown are illustrative.</p>
+      </div>
+    </div>
+
+    <div class="readouts">
+      <div class="readout"><div class="v" id="rTotal" style="color:var(--ink)">–</div><div class="l">combined cases averted per 100,000 a year (fixed, whatever the order)</div></div>
+      <div class="readout"><div class="v" id="rA" style="color:var(--accent)">–</div><div class="l">credited to A (this order)</div></div>
+      <div class="readout"><div class="v" id="rB" style="color:#b0501f">–</div><div class="l">credited to B (this order)</div></div>
+      <div class="readout"><div class="v" id="rC" style="color:var(--clin)">–</div><div class="l">credited to C (this order)</div></div>
+    </div>
+    <div class="sr-only" id="srLive" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="chart-grid" style="margin-top:8px">
+      <div class="panel">
+        <p class="panel-h">Cases averted, credited as each control is added</p>
+        <canvas id="stairChart" height="300" aria-label="A staircase of cumulative cases averted as the three controls are added in the chosen order; each step is the impact credited to one control"></canvas>
+        <p class="pcap">Each coloured step is the impact credited to that control when it is added on top of the ones before it. The top of the staircase is the combined total, which does not change when the controls are reordered.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-h">Cost per case averted, in this order (fixed scale)</p>
+        <canvas id="ceChart" height="300" aria-label="Bars of cost per case averted for each of the three controls, given the chosen order"></canvas>
+        <p class="pcap" id="ceCap">Every intervention costs the same, so the one credited with fewer cases has the higher cost per case averted.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="wrapwide">
+  <!-- CONCEPT 2 -->
+  <section class="card">
+    <h2><span class="num">2</span> Why this matters for comparing cost-effectiveness</h2>
+
+    <h3>Evidence</h3>
+    <p>A new intervention is almost always evaluated as an addition to the existing package, so it is credited with only the cases it averts on top of that package. Where control is already good, that residual is small, and the cost per case averted of a genuinely effective new tool can look high. The same tool assessed against an untreated setting, as a first intervention, would look far more cost-effective. Neither figure is wrong; they answer different questions.</p>
+
+    <h3>Mechanism</h3>
+    <p>Two consequences follow. First, a newer intervention is systematically credited against a fuller backdrop than an older one, so a like-for-like ranking of their cost per case averted can favour whichever was assessed first. In the toy, the same control is credited with far fewer cases when introduced last than when assessed on its own, so at equal cost it looks much less cost-effective on top of the others. Second, cost-effectiveness estimates carried across settings or studies are only comparable when the backdrop is the same. The backdrop is part of the estimate, not a detail outside it.</p>
+  </section>
+
+  <!-- APPROACHES -->
+  <section class="card">
+    <h2>Ways this is handled</h2>
+    <p>There is no single correct way to divide credit between combined interventions; the appropriate choice depends on the question being asked. Some of the approaches in use:</p>
+    <ul class="facts">
+      <li><b>Incremental against current practice.</b> Credit an intervention with what it averts on top of the tools already in place. This answers the operational question "should this be added here, now?" directly, and is the basis of standard cost-effectiveness analysis.<sup class="cite"><a href="#ref3">3</a></sup> Its estimates are specific to that backdrop and are not a fixed property of the intervention.</li>
+      <li><b>Against a common baseline.</b> Assess each candidate intervention against the same defined starting point (for example, no intervention, or a fixed core package). This makes cost per case averted comparable across candidates, at the cost of not describing the actual decision, which is usually about adding to whatever is already there.</li>
+      <li><b>Reporting the backdrop.</b> Keep the incremental estimate but state the assumed package explicitly, so figures are not compared across mismatched backdrops. This adds no method, only the discipline of not stripping the estimate of its context.</li>
+      <li><b>Averaging over orders.</b> Credit each intervention with its added impact averaged over every order in which the tools could be introduced. This splits the fixed combined total symmetrically and does not privilege whichever tool was counted first; in cooperative game theory the same average is the Shapley value.<sup class="cite"><a href="#ref4">4</a></sup> It suits dividing credit across a portfolio rather than deciding a single addition, and the number of orders grows quickly with the number of interventions.</li>
+      <li><b>Evaluating the package.</b> Compare whole packages of interventions against each other, rather than crediting individual components, when the decision is about which combination to fund rather than which single tool to add.<sup class="cite"><a href="#ref2">2</a></sup></li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>What to notice</h2>
+    <p><strong>The total is fixed; only the split moves.</strong> Change the order control and the combined cases averted at the top of the staircase does not change. What changes is how that fixed total is divided between the three controls. Crediting one more always credits the others less.</p>
+    <p><strong>Going first is worth more than going last.</strong> Each control is credited with more the earlier it is introduced, because it is then measured against a fuller burden; introduced later, it is measured only against what the others have already removed. The same control can be credited several times more when it goes first than when it goes last. Which control has the largest step also depends on how strong each is, not on position alone: push the transmission slider to its highest, where reducing transmission averts little, and a direct-protection control added later can be credited more than A added first.</p>
+    <p><strong>Equal cost, unequal cost-effectiveness.</strong> All three interventions cost the same, so their cost per case averted is set entirely by the cases they are credited with. The same control assessed later is credited with fewer cases, so its cost per case averted rises, though nothing about it has changed.</p>
+    <p><strong>Cost-effectiveness comparisons need a shared backdrop.</strong> Because the backdrop sets the incremental impact, cost per case averted is only comparable between interventions measured against the same starting point. A ranking that mixes backdrops can mislead.</p>
+  </section>
+
+  <div class="note">
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how attributed impact and cost-effectiveness depend on the order in which combined interventions are counted; not a specific setting, and not to be used for decision making. The intervention effects and costs are fixed, arbitrary, illustrative choices.</p>
+    <ul>
+      <li><strong>Burden curve.</strong> Clinical cases per person-year are a function <span class="var">f</span>(EIR) of transmission intensity, taken from the equilibrium solution of the Griffin model<sup class="cite"><a href="#ref1">1</a></sup> as ported in the <a href="age-distribution.html">age-distribution explainer</a>. Over the range used here <span class="var">f</span> rises and saturates monotonically with EIR (all-age clinical incidence), so it provides a clean, non-linear map from transmission to cases. The transmission slider sets EIR on a log scale; parasite prevalence is shown as a more familiar index.</li>
+      <li><strong>The three interventions.</strong> <b>A</b> reduces transmission by a fixed fraction (so with A in place the setting sits lower on the curve above) and also gives direct protection (a fixed multiplicative reduction of the remaining clinical cases). <b>B</b> and <b>C</b> give direct protection only. The fixed illustrative values are: A reduces transmission by 50% and clinical cases by a further 30%; B reduces clinical cases by 50% and C by 40%. Each tool is taken to cover the whole population, with its direct effect reducing all-age clinical incidence uniformly: a deliberate simplification, since real child-targeted tools (such as chemoprevention or a vaccine) would differ. A's transmission and direct effects are an arbitrary split of a single underlying mechanism.</li>
+      <li><strong>Cases and the set function.</strong> For a set <span class="var">S</span> of deployed controls, cases = <span class="var">N</span>·<span class="var">f</span>(EIR<sub><span class="var">S</span></sub>)·∏(1 − <span class="var">d<sub>j</sub></span>), where EIR<sub><span class="var">S</span></sub> is the reduced EIR if A is in <span class="var">S</span> and the baseline EIR otherwise, and the product runs over the direct-protection effects of the tools in <span class="var">S</span> (A's own direct effect included when A is present). Cases averted is baseline cases minus this. <span class="var">N</span> = 100,000 people. Because every control multiplies the shared pool of cases, the combination is sub-additive.</li>
+      <li><strong>Attribution.</strong> For a chosen order, each control is credited with the cases averted when it is added to the ones before it (the staircase steps). These increments sum to the same combined total for every order. The <em>fair share</em> credits each control with its added impact averaged over all six orders; it also sums to the combined total, and equals the Shapley value<sup class="cite"><a href="#ref4">4</a></sup> of the cases-averted set function.</li>
+      <li><strong>Cost-effectiveness.</strong> The three interventions are given the same cost (an illustrative $1 per person per year). Cost per case averted for a control is that cost divided by the cases credited to it in the chosen order. Because the costs are equal, the comparison depends only on the credited impact, and does not depend on the population size.</li>
+      <li><strong>Alignment with the R cross-check.</strong> The cross-check in <a href="validation/validate_attribution.R" target="_blank" rel="noopener"><span class="var">validation/validate_attribution.R</span></a> computes <span class="var">f</span>(EIR) from <a href="https://github.com/mrc-ide/malariaEquilibrium" target="_blank" rel="noopener">malariaEquilibrium</a> on the same grid and confirms that the combined total is identical for all six orders, that each order's increments sum to that total, and that the fair-share values sum to it as well.</li>
+    </ul>
+    <p><strong>References.</strong></p>
+    <ol class="refs">
+      <li id="ref1">Griffin <em>et al</em>, 2014. Estimates of the changing age-burden of <em>Plasmodium falciparum</em> malaria disease in sub-Saharan Africa. <em>Nature Communications</em> 5:3136. <a href="https://doi.org/10.1038/ncomms4136" target="_blank" rel="noopener">doi.org/10.1038/ncomms4136</a></li>
+      <li id="ref2">Griffin <em>et al</em>, 2010. Reducing <em>Plasmodium falciparum</em> malaria transmission in Africa: a model-based evaluation of intervention strategies. <em>PLoS Medicine</em> 7:e1000324. <a href="https://doi.org/10.1371/journal.pmed.1000324" target="_blank" rel="noopener">doi.org/10.1371/journal.pmed.1000324</a></li>
+      <li id="ref3">Drummond <em>et al</em>, 2015. <em>Methods for the Economic Evaluation of Health Care Programmes</em>, 4th edition. Oxford University Press.</li>
+      <li id="ref4">Shapley, 1953. A value for n-person games. In: <em>Contributions to the Theory of Games II</em>. Princeton University Press, pages 307 to 317.</li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>Numbers here are illustrative: they show the shape of how attributed impact and cost-effectiveness depend on the order in which combined interventions are counted, not real-world impact, which depends on local transmission, coverage, delivery and care-seeking. Not to be used for decision making.</p>
+  </footer>
+</div>
+
+<script>
+// ---------- Griffin model, human equilibrium (illustrative port of mrc-ide/malariaEquilibrium) ----------
+// Reused verbatim from age-distribution.html. For a given EIR it solves, by age, the equilibrium of
+// acquired immunity and infection states; we read off all-age clinical incidence per person-year
+// (incPerYear) as the burden map f(EIR), and microscopy prevalence (pfpr) as a familiar index.
+// NB: the age grid must stay in step with validation/validate_attribution.R (seq(0,80,0.1)).
+const P = {
+  eta:1.304631e-04, rho:0.85, a0:2920, s2:1.67,
+  rA:0.005, rD:0.2, rU:0.00909091, rP:0.04, rT:0.2,
+  d1:0.161, dd:3650, ID0:1.58, kd:0.477, ud:9.45, ad0:7993.5, fd0:0.0071, gd:4.81,
+  b0:0.59, b1:0.5, db:3650, IB0:43.9, kb:2.16, ub:7.2,
+  phi0:0.792, phi1:0.00074, dc:10950, IC0:18, kc:2.37, uc:6.06,
+  PM:0.774, dm:67.7
+};
+const GH_NODES = [-4.8594628,-3.5818235,-2.4843258,-1.4659891,-0.4849357,0.4849357,1.4659891,2.4843258,3.5818235,4.8594628];
+const GH_WEIGHTS = [4.310653e-06,7.580709e-04,1.911158e-02,1.354837e-01,3.446423e-01,3.446423e-01,1.354837e-01,1.911158e-02,7.580709e-04,4.310653e-06];
+
+const FT = 0;                                   // treatment coverage (off, for a simple toy)
+const AGE = [];
+for(let a = 0; a <= 80.0001; a += 0.1) AGE.push(+a.toFixed(2));
+const NAGE = AGE.length;
+
+const AGE_D = AGE.map(a => a * 365);
+const rAge = new Array(NAGE), prop = new Array(NAGE), midD = new Array(NAGE), psi = new Array(NAGE);
+for(let i = 0; i < NAGE; i++){
+  rAge[i] = (i === NAGE - 1) ? 0 : 1 / (AGE_D[i + 1] - AGE_D[i]);
+  prop[i] = (i === 0) ? P.eta / (rAge[0] + P.eta) : prop[i - 1] * rAge[i - 1] / (rAge[i] + P.eta);
+  midD[i] = (i === NAGE - 1) ? AGE_D[i] : (AGE_D[i] + AGE_D[i + 1]) / 2;
+  psi[i]  = 1 - P.rho * Math.exp(-midD[i] / P.a0);
+}
+let age20 = 0, best20 = Infinity;
+for(let i = 0; i < NAGE; i++){ const d = Math.abs(midD[i] - 20 * 365); if(d < best20){ best20 = d; age20 = i; } }
+
+function noHet(EIRyr){
+  const eir = EIRyr / 365;
+  const ICA = new Array(NAGE), FOI = new Array(NAGE), q = new Array(NAGE), phi = new Array(NAGE);
+  let IB = 0, IC = 0, ID = 0;
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const eps = eir * psi[i];
+    IB = (eps / (eps * P.ub + 1) + re * IB) / (1 / P.db + re);
+    const b = P.b0 * (P.b1 + (1 - P.b1) / (1 + Math.pow(IB / P.IB0, P.kb)));
+    FOI[i] = b * eps;
+    IC = (FOI[i] / (FOI[i] * P.uc + 1) + re * IC) / (1 / P.dc + re);
+    ICA[i] = IC;
+    ID = (FOI[i] / (FOI[i] * P.ud + 1) + re * ID) / (1 / P.dd + re);
+    const fd = 1 - (1 - P.fd0) / (1 + Math.pow(midD[i] / P.ad0, P.gd));
+    q[i] = P.d1 + (1 - P.d1) / (1 + Math.pow(ID / P.ID0, P.kd) * fd);
+  }
+  const IM0 = ICA[age20] * P.PM;
+  for(let i = 0; i < NAGE; i++){
+    const ICM = (i === NAGE - 1) ? 0
+      : IM0 * P.dm / (AGE_D[i + 1] - AGE_D[i]) * (Math.exp(-AGE_D[i] / P.dm) - Math.exp(-AGE_D[i + 1] / P.dm));
+    phi[i] = P.phi0 * (P.phi1 + (1 - P.phi1) / (1 + Math.pow((ICA[i] + ICM) / P.IC0, P.kc)));
+  }
+  const inc = new Array(NAGE), posM = new Array(NAGE);
+  const T = new Array(NAGE), D = new Array(NAGE), A = new Array(NAGE), U = new Array(NAGE), Pc = new Array(NAGE);
+  for(let i = 0; i < NAGE; i++){
+    const re = rAge[i] + P.eta;
+    const betaT = P.rT + re, betaD = P.rD + re, betaA = FOI[i] * phi[i] + P.rA + re,
+          betaU = FOI[i] + P.rU + re, betaP = P.rP + re;
+    const aT = FT * phi[i] * FOI[i] / betaT;
+    const aP = P.rT * aT / betaP;
+    const aD = (1 - FT) * phi[i] * FOI[i] / betaD;
+    const bT = i ? rAge[i - 1] * T[i - 1] / betaT : 0;
+    const bD = i ? rAge[i - 1] * D[i - 1] / betaD : 0;
+    const bP = i ? P.rT * bT + rAge[i - 1] * Pc[i - 1] / betaP : 0;
+    const Y = (prop[i] - (bT + bD + bP)) / (1 + aT + aD + aP);
+    T[i] = aT * Y + bT; D[i] = aD * Y + bD; Pc[i] = aP * Y + bP;
+    const agedA = i ? rAge[i - 1] * A[i - 1] : 0;
+    const agedU = i ? rAge[i - 1] * U[i - 1] : 0;
+    A[i] = (agedA + (1 - phi[i]) * Y * FOI[i] + P.rD * D[i]) / (betaA + (1 - phi[i]) * FOI[i]);
+    U[i] = (agedU + P.rA * A[i]) / betaU;
+    posM[i] = D[i] + T[i] + A[i] * q[i];
+    inc[i]  = Y * FOI[i] * phi[i];
+  }
+  return {inc, posM};
+}
+
+function equilibrium(EIRyr){
+  const inc = new Array(NAGE).fill(0), posM = new Array(NAGE).fill(0);
+  for(let j = 0; j < GH_NODES.length; j++){
+    const zeta = Math.exp(-P.s2 * 0.5 + Math.sqrt(P.s2) * GH_NODES[j]);
+    const e = noHet(EIRyr * zeta), w = GH_WEIGHTS[j];
+    for(let i = 0; i < NAGE; i++){ inc[i] += e.inc[i] * w; posM[i] += e.posM[i] * w; }
+  }
+  let total = 0, pfNum = 0, pfDen = 0;
+  for(let i = 0; i < NAGE; i++){
+    total += inc[i];
+    const a = AGE[i];
+    if(a >= 2 && a < 10){ pfNum += posM[i]; pfDen += prop[i]; }
+  }
+  return {
+    pfpr: pfDen > 0 ? pfNum / pfDen : 0,
+    incPerYear: total * 365                       // all-age clinical episodes per person per year = f(EIR)
+  };
+}
+
+// transmission slider (0..100) -> EIR on a log scale
+const EIR_MIN = 1, EIR_MAX = 256;
+const eirFromSlider = v => EIR_MIN * Math.pow(EIR_MAX / EIR_MIN, v / 100);
+const intensityLabel = pfpr => pfpr < 0.10 ? 'low' : pfpr < 0.35 ? 'moderate' : pfpr < 0.60 ? 'high' : 'intense';
+
+// ---------- attribution model (fixed, illustrative intervention effects) ----------
+const N = 100000;                                 // illustrative population
+const INTS = ['A', 'B', 'C'];
+const VAR  = {A: '--accent', B: '--warm', C: '--clin'};       // bright fills (match the readout swatches)
+const LBL  = {A: '#217a68', B: '#b0501f', C: '--clin'};       // darker hues for SMALL text labels: pass WCAG AA (>=4.5:1) on white
+// fixed illustrative effects: A acts on transmission AND directly; B and C are direct only, with
+// somewhat different strength (B stronger than C)
+const T_A  = 0.50;                                // A: reduction in transmission
+const D    = {A: 0.30, B: 0.50, C: 0.40};         // direct protective effect (multiplicative on residual cases)
+const COST_PP = 1;                                // equal cost per person for every intervention ($)
+
+// cases remaining for a deployed subset (object of booleans), given the model m
+function casesOf(sub, m){
+  const E  = sub.A ? m.fA : m.f0;                                  // only A changes transmission
+  const df = (sub.A ? 1 - D.A : 1) * (sub.B ? 1 - D.B : 1) * (sub.C ? 1 - D.C : 1);   // direct effects
+  return N * E * df;
+}
+// cases averted credited to each control as it is added along one order
+function incrementsFor(order, m){
+  let sub = {A:false, B:false, C:false};
+  let before = casesOf(sub, m);
+  const out = {};
+  for(const i of order){
+    const sub2 = Object.assign({}, sub, {[i]: true});
+    const after = casesOf(sub2, m);
+    out[i] = before - after;
+    before = after; sub = sub2;
+  }
+  return out;
+}
+// cost per case averted, guarding a zero (or negative) attributed impact
+function perCase(averted){ return averted > 1e-6 ? (COST_PP * N) / averted : Infinity; }
+// round parts so they sum EXACTLY to the rounded whole (largest-remainder apportionment): keeps the
+// three displayed credits adding up to the displayed combined total, which is the page's core claim.
+function roundToSum(vals){
+  const target = Math.round(vals.reduce((a, b) => a + b, 0));
+  const fl = vals.map(v => Math.floor(v));
+  const short = target - fl.reduce((a, b) => a + b, 0);
+  const byFrac = vals.map((v, i) => ({i, frac: v - Math.floor(v)})).sort((a, b) => b.frac - a.frac);
+  const out = fl.slice();
+  for(let k = 0; k < short && k < out.length; k++) out[byFrac[k].i]++;
+  return out;
+}
+
+// ---------- canvas helpers (match the other explainers) ----------
+function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function col(v){ return v && v[0] === '#' ? v : css(v); }     // accept a raw hex or a CSS var name
+function setup(canvas){
+  if(!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  if(!canvas.dataset.h) canvas.dataset.h = canvas.getAttribute('height') || 280;
+  const H = +canvas.dataset.h;
+  const W = canvas.getBoundingClientRect().width;
+  if(!W) return null;
+  canvas.style.height = H + 'px';
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  return {ctx, W, H};
+}
+
+// ---------- staircase of credited cases averted (floating-bar waterfall) ----------
+// Each control is one floating bar rising from where the previous one ended (cum[k] to cum[k+1]),
+// so the bars climb like a staircase to the fixed combined total. No overlaid line or vertex dot.
+function drawStair(order, inc, disp){
+  const c = document.getElementById('stairChart');
+  const s = setup(c); if(!s) return;
+  const {ctx, W, H} = s;
+  const padL = 56, padR = 18, padT = 22, padB = 44;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const cum = [0]; for(const i of order) cum.push(cum[cum.length - 1] + inc[i]);
+  const total = cum[cum.length - 1];
+  const ymax = (total > 0 ? total : 1) * 1.16;
+  const Y = v => padT + (1 - v / ymax) * plotH;
+  const slot = plotW / order.length, bw = Math.min(72, slot * 0.46);
+
+  // gridlines + y labels (rounded thousands)
+  ctx.font = '10px -apple-system,Segoe UI,sans-serif';
+  for(let g = 0; g <= 4; g++){
+    const v = ymax * g / 4;
+    ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.6;
+    ctx.beginPath(); ctx.moveTo(padL, Y(v)); ctx.lineTo(padL + plotW, Y(v)); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText(Math.round(v / 1000) + 'k', padL - 8, Y(v) + 3);
+  }
+  // axes + y title
+  ctx.strokeStyle = css('--ink'); ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH); ctx.stroke();
+  ctx.save(); ctx.translate(14, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = css('--muted'); ctx.textAlign = 'center'; ctx.fillText('cases averted / 100,000 a year', 0, 0); ctx.restore();
+
+  // combined-total guide line (label left-aligned at the y-axis, above the line)
+  ctx.strokeStyle = css('--ink'); ctx.globalAlpha = 0.5; ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL, Y(total)); ctx.lineTo(padL + plotW, Y(total)); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+  ctx.fillStyle = css('--muted'); ctx.font = '600 10px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('combined total (fixed)', padL + 4, Y(total) - 6);
+
+  for(let k = 0; k < order.length; k++){
+    const i = order[k], fill = col(VAR[i]), t1 = col(LBL[i]);
+    const cx = padL + (k + 0.5) * slot, yTop = Y(cum[k + 1]), yBot = Y(cum[k]);
+    // faint dashed connector from the previous bar's top across to this bar (shows the cumulation)
+    if(k > 0){
+      ctx.strokeStyle = css('--muted'); ctx.globalAlpha = 0.55; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padL + (k - 0.5) * slot, Y(cum[k])); ctx.lineTo(cx, Y(cum[k])); ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+    }
+    // the floating bar
+    ctx.fillStyle = fill; ctx.fillRect(cx - bw / 2, yTop, bw, yBot - yTop);
+    // credited-cases label, above the bar in the dark label hue (dark-on-white stays legible).
+    // Uses the apportioned integer so the three labels sum exactly to the "combined total" label.
+    const val = disp[i].toLocaleString();
+    ctx.fillStyle = t1; ctx.font = '700 11px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(val, cx, Math.max(padT + 10, yTop - 6));
+    // x-axis labels: control letter (dark label hue) and order position
+    ctx.font = '700 13px -apple-system,Segoe UI,sans-serif'; ctx.fillStyle = t1;
+    ctx.fillText(i, cx, padT + plotH + 18);
+    ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText(['1st', '2nd', '3rd'][k], cx, padT + plotH + 32);
+  }
+}
+
+// ---------- cost-per-case-averted bars (in the chosen deployment order) ----------
+function drawCE(order, inc){
+  const c = document.getElementById('ceChart');
+  const s = setup(c); if(!s) return;
+  const {ctx, W, H} = s;
+  const padL = 48, padR = 16, padT = 22, padB = 44;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const ce = {}; for(const i of INTS) ce[i] = perCase(inc[i]);
+
+  // FIXED y-axis, so bar heights stay comparable as the order and transmission change. $25 covers
+  // about 96% of reachable values; higher ones (at low transmission, roughly the lower part of the
+  // slider) are clamped to the top and flagged with an up-arrow, the true value still in the label.
+  const YMAX = 25, STEP = 5, LGAP = 18;   // fixed axis; LGAP reserves a white strip at the top for clamped-bar labels
+  const Y = v => padT + LGAP + (1 - Math.min(v, YMAX) / YMAX) * (plotH - LGAP);
+
+  // gridlines + y labels
+  ctx.font = '10px -apple-system,Segoe UI,sans-serif';
+  for(let g = 0; g * STEP <= YMAX; g++){
+    const v = g * STEP;
+    ctx.strokeStyle = css('--line'); ctx.lineWidth = 1; ctx.globalAlpha = 0.6;
+    ctx.beginPath(); ctx.moveTo(padL, Y(v)); ctx.lineTo(padL + plotW, Y(v)); ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = css('--muted'); ctx.textAlign = 'right'; ctx.fillText('$' + v, padL - 7, Y(v) + 3);
+  }
+  ctx.strokeStyle = css('--ink'); ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH); ctx.stroke();
+  ctx.save(); ctx.translate(13, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = css('--muted'); ctx.textAlign = 'center'; ctx.fillText('cost per case averted ($)', 0, 0); ctx.restore();
+
+  // one bar per intervention at FIXED A / B / C x-positions: reordering changes each bar's HEIGHT in
+  // place rather than shuffling the columns. The current deployment position (1st/2nd/3rd) is shown
+  // beneath each so the order is still legible.
+  const slot = plotW / INTS.length, bw = Math.min(64, slot * 0.5);
+  INTS.forEach((i, gi) => {
+    const cx = padL + (gi + 0.5) * slot, v = ce[i], fill = col(VAR[i]), t1 = col(LBL[i]);
+    if(isFinite(v)){
+      const top = Y(v), clamped = v > YMAX;                 // clamped bars top at the $25 line; the LGAP strip is above
+      ctx.fillStyle = fill; ctx.fillRect(cx - bw / 2, top, bw, padT + plotH - top);
+      // label sits ABOVE the bar top, on white. Every bar top is at or below the $25 line, so the
+      // label never lands on the fill (where the dark hue would be low-contrast, and C's would match
+      // its own fill and vanish) and never in the very-top margin.
+      ctx.fillStyle = t1; ctx.font = '700 12px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText((clamped ? '↑$' : '$') + v.toFixed(1), cx, top - 6);
+    } else {
+      ctx.fillStyle = css('--muted'); ctx.font = '11px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('n/a', cx, padT + plotH - 6);
+    }
+    // x labels: fixed A / B / C letter, and this control's current deployment position
+    ctx.fillStyle = t1; ctx.font = '700 13px -apple-system,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(i, cx, padT + plotH + 18);
+    ctx.fillStyle = css('--muted'); ctx.font = '10px -apple-system,Segoe UI,sans-serif';
+    ctx.fillText(['1st', '2nd', '3rd'][order.indexOf(i)], cx, padT + plotH + 32);
+  });
+}
+
+// ---------- wiring ----------
+const base = document.getElementById('base');
+let order = ['A', 'B', 'C'];
+
+function fillPct(el){ el.style.setProperty('--fill', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
+
+// draggable order chips: reorder A / B / C. Pointer events cover mouse and touch; arrow keys
+// give a keyboard equivalent. The pointer is captured on the CONTAINER (not a chip) so the drag
+// survives the re-render that happens each time the order changes.
+const orderChips = document.getElementById('orderChips');
+let dragging = null, dragPointer = null;
+
+function moveInt(intv, toIdx){
+  const from = order.indexOf(intv);
+  toIdx = Math.max(0, Math.min(order.length - 1, toIdx));
+  if(from === toIdx) return false;
+  order.splice(from, 1); order.splice(toIdx, 0, intv);
+  return true;
+}
+function renderChips(focusInt){
+  orderChips.innerHTML = '';
+  order.forEach((i, pos) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (i === dragging ? ' dragging' : '');
+    chip.dataset.int = i; chip.tabIndex = 0; chip.setAttribute('role', 'button');
+    chip.setAttribute('aria-label', 'Intervention ' + i + ', position ' + (pos + 1) + ' of ' + order.length +
+      '. Drag, or press the Left and Right arrow keys, to change the order.');
+    chip.innerHTML = '<span class="chip-grip" aria-hidden="true">⠿</span>' +
+      '<span class="chip-letter" style="color:' + col(LBL[i]) + '">' + i + '</span>';
+    chip.addEventListener('pointerdown', onChipDown);
+    chip.addEventListener('keydown', onChipKey);
+    orderChips.appendChild(chip);
+  });
+  if(focusInt){ const el = [...orderChips.children].find(c => c.dataset.int === focusInt); if(el) el.focus(); }
+}
+// target index = the chip whose centre is nearest the pointer (robust to chip widths and to the
+// chips wrapping onto two rows on a very narrow screen, where an x-only split would misfire)
+function slotFromPoint(clientX, clientY){
+  const chips = [...orderChips.children];
+  let best = order.indexOf(dragging), bestD = Infinity;
+  chips.forEach((c, idx) => {
+    const r = c.getBoundingClientRect();
+    const dx = clientX - (r.left + r.width / 2), dy = clientY - (r.top + r.height / 2), d = dx * dx + dy * dy;
+    if(d < bestD){ bestD = d; best = idx; }
+  });
+  return best;
+}
+function onChipDown(e){
+  if(e.button != null && e.button > 0) return;          // primary button / touch only
+  if(dragging != null) return;                          // ignore a second finger while a drag is active
+  dragging = e.currentTarget.dataset.int; dragPointer = e.pointerId;
+  e.currentTarget.focus();
+  try{ orderChips.setPointerCapture(e.pointerId); }catch(_){ }
+  e.currentTarget.classList.add('dragging');
+  e.preventDefault();
+}
+function onChipMove(e){
+  if(dragging == null || e.pointerId !== dragPointer) return;
+  if(moveInt(dragging, slotFromPoint(e.clientX, e.clientY))){ renderChips(); update(); }
+}
+function onChipUp(e){
+  if(dragging == null || e.pointerId !== dragPointer) return;
+  const dropped = dragging; dragging = null; dragPointer = null;
+  try{ orderChips.releasePointerCapture(e.pointerId); }catch(_){ }
+  renderChips(dropped); update();                       // keep focus on the dropped chip (no :focus-visible ring for pointer)
+}
+orderChips.addEventListener('pointermove', onChipMove);
+orderChips.addEventListener('pointerup', onChipUp);
+orderChips.addEventListener('pointercancel', onChipUp);
+function onChipKey(e){
+  const i = e.currentTarget.dataset.int, idx = order.indexOf(i);
+  const back = e.key === 'ArrowLeft' || e.key === 'ArrowUp';    // Up/Down alias Left/Right (chips can wrap to 2 rows)
+  const fwd  = e.key === 'ArrowRight' || e.key === 'ArrowDown';
+  if(back){ if(moveInt(i, idx - 1)){ renderChips(i); update(); } e.preventDefault(); }
+  else if(fwd){ if(moveInt(i, idx + 1)){ renderChips(i); update(); } e.preventDefault(); }
+}
+
+let announceTimer = null;
+function announce(total, disp){
+  clearTimeout(announceTimer);
+  announceTimer = setTimeout(() => {
+    document.getElementById('srLive').textContent =
+      total.toLocaleString() + ' combined cases averted per 100,000; credited this order: ' +
+      order.map(i => i + ' ' + disp[i].toLocaleString()).join(', ');
+  }, 450);
+}
+
+// f0/fA depend only on the slider, so memoise on its value: reordering the controls (which does
+// not change transmission) then reuses the solve instead of running the equilibrium again.
+let _mCache = {v: null, m: null};
+function readModel(){
+  if(_mCache.v === base.value) return _mCache.m;
+  const eir = eirFromSlider(+base.value);
+  const eqB = equilibrium(eir);
+  const m = { eir, pfpr: eqB.pfpr, f0: eqB.incPerYear, fA: equilibrium(eir * (1 - T_A)).incPerYear };
+  _mCache = {v: base.value, m};
+  return m;
+}
+
+function update(){
+  fillPct(base);
+  const m = readModel();
+  const lab = intensityLabel(m.pfpr), pct = Math.round(m.pfpr * 100);
+  document.getElementById('vBase').textContent = lab + ', ' + pct + '%';
+  base.setAttribute('aria-valuetext', lab + ' transmission, ' + pct + ' percent parasite prevalence');
+
+  const inc = incrementsFor(order, m);                    // raw credited cases (chart geometry + cost per case)
+  // round the three parts so they sum EXACTLY to the (order-invariant) rounded total, so the displayed
+  // A + B + C always equals the displayed "combined total (fixed)".
+  const rr = roundToSum([inc.A, inc.B, inc.C]);
+  const disp = {A: rr[0], B: rr[1], C: rr[2]};
+  const total = disp.A + disp.B + disp.C;
+  document.getElementById('rTotal').textContent = total.toLocaleString();
+  document.getElementById('rA').textContent = disp.A.toLocaleString();
+  document.getElementById('rB').textContent = disp.B.toLocaleString();
+  document.getElementById('rC').textContent = disp.C.toLocaleString();
+
+  // caption: the SAME control credited far less (so dearer per case) when added last, on top of the
+  // others, than assessed on its own. Always true (submodular): soloLast >= inc[last], so ceSolo <= ceOnTop.
+  const empty = {A: false, B: false, C: false};
+  const baseCases = casesOf(empty, m);
+  const last = order[order.length - 1];
+  const soloLast = baseCases - casesOf(Object.assign({}, empty, {[last]: true}), m);   // assessed on its own
+  const money = v => isFinite(v) ? '$' + v.toFixed(1) : 'undefined';
+  document.getElementById('ceCap').innerHTML =
+    'Introduced last, on top of the other two, <strong>' + last + '</strong> is credited with ' + disp[last].toLocaleString() +
+    ' cases at <strong>' + money(perCase(inc[last])) + '</strong> per case averted. Assessed on its own it would avert ' +
+    Math.round(soloLast).toLocaleString() + ' cases at <strong>' + money(perCase(soloLast)) + '</strong>. Same intervention, same cost; only the backdrop differs.';
+
+  drawStair(order, inc, disp);
+  drawCE(order, inc);
+  announce(total, disp);
+}
+
+base.addEventListener('input', update);
+window.addEventListener('resize', update);
+window.addEventListener('load', update);
+renderChips();
+update();
+</script>
+
+</body>
+</html>

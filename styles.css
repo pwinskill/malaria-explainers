@@ -357,3 +357,45 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .agebar .seg.u5{background:#c45a25}                /* darker warm: clears white-text contrast, matches the U5 readout */
 .agebar .seg.mid{background:var(--accent)}
 .agebar .seg.ad{background:var(--blue)}
+
+/* ============================================================
+   Attribution lesson (attribution.html)
+   ============================================================ */
+/* one themed control block: transmission (blue). The value is a word ("moderate"),
+   so keep it at label size like the age-distribution slider. */
+.slider-block.a-base{background:var(--blue-soft)}
+.slider-block.a-base .val{color:var(--blue);font-size:16px;white-space:nowrap}
+#base{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
+#base::-webkit-slider-thumb{border:3px solid var(--blue)} #base::-moz-range-thumb{border:3px solid var(--blue)}
+
+/* control panel: interactive controls (slider + drag chips) on the left, the intervention-info
+   table on the right, so both halves of the width are used and the table no longer hugs the left */
+.toy-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-bottom:8px}
+.toy-grid > *{min-width:0}                       /* let the table wrapper scroll rather than force overflow */
+.toy-controls{display:flex;flex-direction:column;gap:14px}
+.order-panel{padding:0 20px}                      /* align the order label/chips with the slider block's inset */
+.order-panel .seg-label{margin-top:0}
+.toy-info .caption{margin-top:10px}
+/* stacked (narrow): single column, and drop the order-panel inset so the three chips stay on one row.
+   Placed after the base rules so this override wins (media queries add no specificity). */
+@media(max-width:760px){.toy-grid{grid-template-columns:1fr} .order-panel{padding:0}}
+
+/* intervention-info table: what each control does (ticks / crosses) and its cost; fills its column */
+.itable-wrap{overflow-x:auto}
+.itable{border-collapse:collapse;font-size:14px;width:100%}
+.itable th,.itable td{border:1px solid var(--line);padding:7px 12px;text-align:center}
+.itable thead th{font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--muted);background:var(--bg)}
+.itable tbody th{font-weight:800;font-size:15px}
+.itable .tick{color:var(--accent);font-weight:800}
+.itable .cross{color:var(--muted);font-weight:700}
+
+/* draggable order chips: reorder A / B / C to change the deployment order (pointer + keyboard) */
+.order-chips{display:flex;gap:8px;flex-wrap:wrap;user-select:none;margin-bottom:4px}
+.chip{display:flex;align-items:center;gap:7px;min-width:76px;justify-content:center;
+  padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);
+  box-shadow:0 1px 2px rgba(20,30,40,.06);cursor:grab;touch-action:none;
+  transition:box-shadow .12s ease,transform .12s ease}
+.chip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.chip.dragging{cursor:grabbing;box-shadow:0 8px 22px rgba(20,30,40,.20);transform:scale(1.04)}
+.chip-grip{color:var(--muted);font-size:13px;letter-spacing:-2px}
+.chip-letter{font-size:20px;font-weight:800}
