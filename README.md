@@ -68,6 +68,20 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    the over-count fractions are anchored to the estimates of Dalrymple et al. (2017).
    Cross-check: `validation/validate_nmf.R`.
 
+6. **Attributing impact of malaria interventions** ([`attribution.html`](attribution.html)).
+   Interventions are rarely used alone, and because they act on a shared, non-linear pathway to
+   clinical cases their effects do not simply add up. The impact credited to any one intervention,
+   and so its apparent cost-effectiveness, then depends on the order in which the tools are counted
+   and on what is already in place. A toy model of three unnamed controls (A, B and C) with fixed,
+   equal, illustrative costs and fixed effects: A reduces transmission (moving the setting along the
+   Griffin-model clinical-incidence curve, [malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium),
+   the same solver as the age-distribution explainer) and also gives direct protection, while B and C
+   give direct protection only, of somewhat different strength (B stronger than C). The only inputs are
+   the transmission level and the order of introduction. Shows that the combined total is fixed while the
+   credit (and the cost per case averted, at equal cost) shifts with order, with even the two direct-only
+   controls credited very differently by position; closes with a neutral survey of how this is handled.
+   Cross-check: `validation/validate_attribution.R`.
+
 ## R cross-checks
 
 The `validation/validate_*.R` scripts independently reproduce each explainer's model in R/ggplot
