@@ -30,6 +30,12 @@
 #      alone and by fair share).
 #   6. At equal cost, a control is dearer per case averted added last than assessed
 #      alone (the per-control backdrop effect).
+#   7. The first/last ratio does not depend on transmission. Only A acts on the EIR
+#      curve, so f(EIR) enters cases(S) as a single factor and cancels from the ratio;
+#      the ordering effect comes entirely from the multiplicative overlap of the direct
+#      effects. (With two or more transmission-reducing controls this would not hold:
+#      successive reductions move along f in stages, and on its plateau a later
+#      reduction can avert more than an earlier one.)
 #
 # Run (from the repository root, so figures/ resolves):
 #   & 'C:/Program Files/R-aarch64/R-4.5.2/bin/Rscript' validation/validate_attribution.R
@@ -76,8 +82,10 @@ fA <- f_eir(EIR0 * (1 - t_A))         # A deployed (transmission reduced)
 ints <- c("A", "B", "C")
 
 # cases remaining for a deployed subset (named logical over A/B/C)
-cases_of <- function(S) {
-  E  <- if (S["A"]) fA else f0                                 # only A changes transmission
+# F0 / FA default to the slider's EIR but can be passed in, so the same logic can be
+# evaluated at other transmission levels (used by the first/last ratio check below)
+cases_of <- function(S, F0 = f0, FA = fA) {
+  E  <- if (S["A"]) FA else F0                                 # only A changes transmission
   df <- prod(ifelse(S[ints], 1 - d[ints], 1))                 # direct effects (A's own included when present)
   N * E * df
 }
@@ -85,11 +93,11 @@ empty      <- c(A = FALSE, B = FALSE, C = FALSE)
 base_cases <- cases_of(empty)
 
 # cases averted credited to each control as it is added along one order
-increments_for <- function(order) {
-  S <- empty; out <- setNames(numeric(3), ints); before <- cases_of(S)
+increments_for <- function(order, F0 = f0, FA = fA) {
+  S <- empty; out <- setNames(numeric(3), ints); before <- cases_of(S, F0, FA)
   for (i in order) {
     S[i]  <- TRUE
-    after <- cases_of(S)
+    after <- cases_of(S, F0, FA)
     out[i] <- before - after
     before <- after
   }
@@ -134,6 +142,25 @@ cat(sprintf("Assessed alone:       A %.0f, B %.0f, C %.0f\n", alone["A"], alone[
 cat(sprintf("\nCost per case averted, order A>B>C ($, equal cost): A $%.1f (web $3.6), B $%.1f (web $4.5), C $%.1f (web $11.2)\n",
             ce(inc_default["A"]), ce(inc_default["B"]), ce(inc_default["C"])))
 
+## ---- the ordering effect is independent of where the setting sits on f(EIR) ----
+# A's first-position credit divided by its last-position credit is exactly
+# 1 / ((1 - d_B)(1 - d_C)) at every transmission level: f(EIR) sets how strong A is but
+# contributes nothing to the ordering, because only A acts on transmission.
+ratio_A <- function(EIRb) {
+  F0 <- f_eir(EIRb); FA <- f_eir(EIRb * (1 - t_A))
+  increments_for(c("A", "B", "C"), F0, FA)["A"] / increments_for(c("B", "C", "A"), F0, FA)["A"]
+}
+slider_grid    <- c(0, 20, 40, 60, 80, 100)                      # the page's transmission slider
+eir_grid       <- 1 * (256 / 1) ^ (slider_grid / 100)
+ratios_A       <- sapply(eir_grid, ratio_A)
+expected_ratio <- 1 / ((1 - d["B"]) * (1 - d["C"]))
+cat(sprintf("
+A first / A last, at EIR %s:
+  %s   (expected 1/((1-d_B)(1-d_C)) = %.3f)
+",
+            paste(sprintf("%.1f", eir_grid), collapse = ", "),
+            paste(sprintf("%.3f", ratios_A), collapse = ", "), expected_ratio))
+
 ## ---- assertions ------------------------------------------------------------
 totals  <- sapply(perms, function(o) sum(increments_for(o)))
 sums_ok <- sapply(perms, function(o) abs(sum(increments_for(o)) - total_all) < 1e-6)
@@ -156,6 +183,9 @@ stopifnot(
   shapley["B"] > shapley["C"],
   # 6. at equal cost, a control is dearer per case averted added last (min credit) than first (max credit)
   ce(last_of("C")) > ce(first_of("C")),
+  # 7. the first/last ratio is the same at every transmission level, and equals
+  #    1 / ((1 - d_B)(1 - d_C)): the saturating burden curve does not enter the ordering
+  all(abs(ratios_A - expected_ratio) < 1e-6),
   # cross-implementation: combined total matches the web readout to ~1%
   abs(total_all - 58884) < 0.01 * 58884,
   # per-control web values (guard JS<->R per-control drift, not just the total)
