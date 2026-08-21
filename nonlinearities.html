@@ -96,7 +96,7 @@
 
     <h3>Evidence</h3>
     <p>The interactive model below reads clinical incidence from the same Griffin-model equilibrium<sup class="cite"><a href="#ref8">8</a>,<a href="#ref9">9</a></sup> that produces prevalence, so the two curves are internally consistent. The PfPR–incidence relationship has been characterised in detail from field data and models.<sup class="cite"><a href="#ref7">7</a></sup> Incidence data are sparser and less standardised than prevalence surveys, and the relationship depends on age and immunity rather than being a single universal curve.</p>
-    <p>At low transmission, incidence scales roughly linearly with prevalence. As transmission rises, prevalence saturates while clinical episodes continue through repeated infection and superinfection, producing convexity, most strongly in young children. Older children and adults, with years of cumulative exposure, acquire immunity to clinical disease, so their incidence plateaus at a low level as transmission rises, while young children (not yet protected) keep accumulating episodes. The age pattern shifts with it: below about 10% PfPR much of the burden falls on adults; at higher transmission it concentrates in children. After a recent decline in transmission, young children carry a larger share, because older groups retain immunity acquired under previously higher transmission.</p>
+    <p>At low transmission, incidence scales roughly linearly with prevalence. As transmission rises, prevalence saturates while clinical episodes continue through repeated infection and superinfection, producing convexity, most strongly in young children. Older children and adults, with years of cumulative exposure, acquire immunity to clinical disease, so their incidence peaks at moderate transmission and then declines, while young children (not yet protected) keep accumulating episodes. The age pattern shifts with it: below about 10% PfPR much of the burden falls on adults; at higher transmission it concentrates in children. After a recent decline in transmission, young children carry a larger share, because older groups retain immunity acquired under previously higher transmission.</p>
 
     <h3>Mechanism</h3>
     <p>The driver is exposure-acquired immunity. Clinical incidence decomposes as:</p>
@@ -117,7 +117,7 @@
       <div class="slider-block eir">
         <div class="slider-top"><span class="label">Baseline EIR (no nets)</span><span class="val" id="vEir">20</span></div>
         <input type="range" id="eir0" min="0.1" max="300" value="20" step="0.1" aria-label="Baseline EIR with no nets, infectious bites per person per year">
-        <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence <strong id="basePf" style="color:var(--blue)">–</strong></div>
+        <div class="slider-sub muted">infectious bites · person⁻¹ · yr⁻¹ &nbsp;→&nbsp; baseline prevalence (2–10y) <strong id="basePf" style="color:var(--blue)">–</strong></div>
       </div>
       <div class="slider-block cov">
         <div class="slider-top"><span class="label">Bed-net coverage</span><span class="val" id="vUse">50%</span></div>
@@ -128,7 +128,7 @@
 
     <div class="readouts">
       <div class="readout"><div class="v" id="rEir" style="color:var(--blue)">–</div><div class="l">EIR with nets</div></div>
-      <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">–</div><div class="l">prevalence with nets</div></div>
+      <div class="readout"><div class="v" id="rPf" style="color:var(--blue)">–</div><div class="l">prevalence with nets (2–10y)</div></div>
       <div class="readout"><div class="v" id="rPfRed" style="color:var(--accent)">–</div><div class="l">prevalence reduction</div></div>
       <div class="readout"><div class="v" id="rClin" style="color:var(--clin)">–</div><div class="l">clinical reduction (under-5)</div></div>
     </div>
@@ -144,13 +144,13 @@
         <p class="panel-h"><span class="step" style="background:var(--clin)">2</span> Incidence vs EIR</p>
         <canvas id="pIncEir" height="190" aria-label="All-age clinical incidence versus EIR"></canvas>
         <p class="pcap">All-age clinical incidence against EIR. It rises then plateaus as prevalence saturates. Log EIR axis.<br>
-          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15</span> <span style="color:var(--blue);font-weight:750">▮ 15+</span></p>
       </div>
       <div class="panel">
         <p class="panel-h"><span class="step" style="background:var(--clin)">3</span> Incidence vs PfPR</p>
         <canvas id="pInc" height="190" aria-label="All-age clinical incidence versus prevalence"></canvas>
         <p class="pcap">The same incidence plotted against prevalence rather than EIR. The shaded bands split the total by age group.<br>
-          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15</span> <span style="color:var(--blue);font-weight:750">▮ 15+</span></p>
       </div>
     </div>
     <p class="panel-group-h">Bed-net cascade <span class="muted">(the specific intervention: coverage lowers EIR, which moves prevalence and incidence along the curves above)</span></p>
@@ -164,8 +164,8 @@
         <p class="panel-h"><span class="step" style="background:var(--warm)">5</span> Incidence vs coverage</p>
         <canvas id="pComb" height="190" aria-label="All-age clinical incidence versus coverage"></canvas>
         <p class="pcap">All-age clinical incidence against bed-net coverage (the full cascade). The shaded bands show the age split shifting as transmission falls.<br>
-          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15y</span> <span style="color:var(--blue);font-weight:750">▮ &gt;15y</span></p>
-        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> the Cochrane ITN review found roughly 50% fewer uncomplicated episodes in children versus no nets<sup class="cite"><a href="#ref10">10</a></sup>. The model's under-5 readout runs higher than this across the plotted range (about 80–95% at 80% coverage), because it assumes an idealised net (full potency, no resistance, decay or residual transmission) and reports a per-child incidence-rate reduction rather than a measured trial-arm effect. The two are not directly comparable.</p>
+          <span style="color:var(--ink);font-weight:750">– all ages</span> &nbsp;<span style="color:var(--clin);font-weight:750">▮ under-5</span> <span style="color:#1f7061;font-weight:750">▮ 5–15</span> <span style="color:var(--blue);font-weight:750">▮ 15+</span></p>
+        <p class="pcap" style="margin-top:6px;border-top:1px solid var(--line);padding-top:6px"><strong>Trial benchmark:</strong> the Cochrane ITN review found roughly 50% fewer uncomplicated episodes in children versus no nets<sup class="cite"><a href="#ref10">10</a></sup>. The model's under-5 readout runs higher than this across the plotted range (about 78 to 98% at 80% coverage, and 96% at the default baseline EIR of 20; the page opens at 50% coverage, where the same readout reads 81% at that baseline), because it assumes an idealised net (full potency, no resistance, decay or residual transmission) and reports a per-child incidence-rate reduction rather than a measured trial-arm effect. The two are not directly comparable.</p>
       </div>
     </div>
     <p class="muted" style="font-size:14px;margin-top:18px">The cascade composes <strong style="color:var(--warm)">equilibrium</strong> relationships: it shows roughly where a setting would settle at each coverage level, not the dynamic trajectory after nets are deployed. The PfPR → incidence step in particular reflects long-run immunity and exposure history, so "moving along the curve" with coverage is a simplification, not a post-intervention prediction.</p>
@@ -176,18 +176,18 @@
   <section class="card">
     <h2>What to notice</h2>
     <p><strong>Each step is non-linear in a different way, and they compound.</strong> The EIR–coverage curve falls steeply then flattens (biting enters squared, survival exponentially). The PfPR–EIR curve saturates, so the same EIR reduction produces less prevalence change when baseline transmission is high. Clinical incidence carries that saturation through: it rises with EIR then plateaus, and its age composition (the shaded bands) shifts from adults towards young children as transmission rises.</p>
-    <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction changes prevalence only slightly. Clinical incidence is also less responsive at high transmission, but not to the same degree: young-child incidence can still fall appreciably even when prevalence barely shifts, because episodes accumulate through repeated infection. At low baseline EIR the same coverage produces a much larger prevalence and case response. The proportional effect of a given coverage therefore increases as transmission falls.</p>
-    <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be obscured by a saturated prevalence figure while still lowering clinical disease. The conclusion depends on which outcome is measured.</p>
+    <p><strong>Baseline transmission sets the response.</strong> At high baseline EIR the operating point sits on the PfPR plateau, so a large transmission reduction changes prevalence only slightly. Clinical incidence is also less responsive at high transmission, but not to the same degree: young-child incidence can still fall appreciably even when prevalence barely shifts, because episodes accumulate through repeated infection. At low baseline EIR the same coverage produces a much larger prevalence and case response. The proportional effect of a given coverage therefore increases as transmission falls. The impact credited to any one tool likewise depends on what else is already in place, which is the subject of the <a href="attribution.html">attribution explainer</a>.</p>
+    <p><strong>A small prevalence change is not the same as no effect.</strong> At high transmission a real reduction in biting can be obscured by a saturated prevalence figure while still lowering clinical disease in young children, whose per-child episode rate responds more than prevalence does. Of the three outcomes (prevalence, the per-child under-5 rate, and the all-age case total in panel 5) the all-age total is the least responsive: the fall in young-child episodes is partly offset because older children and adults, sitting at a lower transmission level, hold less acquired immunity, so a larger share of their infections becomes clinical disease. The conclusion depends on which outcome is measured.</p>
   </section>
 
   <div class="note">
     <p><strong>Methods.</strong> An illustrative model showing the <em>shape</em> of these relationships, not a specific setting. Not to be used for decision making. The no-net baseline EIR is set by the slider and coverage is capped at 80%.</p>
     <ul>
       <li><strong>Coverage → EIR.</strong> The net's effect on the vector is taken from experimental-hut quantities for a generic new pyrethroid net with no insecticide resistance: a blood-feeding inhibition <span class="var">β</span> = 0.70 reduces biting to <span class="var">a</span><sub>0</sub>(1−<span class="var">β</span>C), and a per-encounter mortality <span class="var">μ</span> = 0.45 reduces daily survival to <span class="var">p</span><sub>0</sub>(1−<span class="var">μ</span>C)<sup>1/g</sup> via the gonotrophic cycle (<span class="var">g</span> = 3 days)<sup class="cite"><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>. These feed the Ross–Macdonald <span class="var">a</span><sup>2</sup>·<span class="var">p</span><sup>n</sup> term. The resulting EIR reduction (~98% at 80% coverage) is an output, not an input, and should be read as an <em>idealised ceiling</em>: it assumes a brand-new net, full insecticidal potency, every relevant bite interceptable, and no behavioural avoidance or net decay. Because biting enters squared and survival exponentially, these assumptions compound, so the figure sits at the optimistic end. Real-world reductions are smaller, eroded by pyrethroid resistance, outdoor and early biting (residual transmission), imperfect and partial use, and ageing nets, closer to the ~87% operational estimate of Unwin et al.<sup class="cite"><a href="#ref4">4</a></sup> and lower again where residual transmission is high. This step is more mechanistic than the equilibrium relationships below.</li>
-      <li><strong>EIR → PfPR and PfPR → incidence.</strong> Both come from the Griffin transmission model at equilibrium<sup class="cite"><a href="#ref8">8</a></sup>, run through the canonical <em>malariaEquilibrium</em> solver<sup class="cite"><a href="#ref9">9</a></sup> ported to the browser (treatment coverage <span class="var">f<sub>T</sub></span> = 0, a 0.1-year age grid to age 80, biting heterogeneity integrated out). For each EIR it returns parasite prevalence (PfPR<sub>2–10</sub>) and all-age clinical incidence, so the two curves share one internally-consistent model. This is the same equilibrium used by the age-distribution explainer, and it is cross-checked in <a href="validation/validate_cascade.R" target="_blank" rel="noopener"><code>validation/validate_cascade.R</code></a>.</li>
+      <li><strong>EIR → PfPR and PfPR → incidence.</strong> Both come from the Griffin transmission model at equilibrium<sup class="cite"><a href="#ref8">8</a></sup>, run through the canonical <em>malariaEquilibrium</em> solver<sup class="cite"><a href="#ref9">9</a></sup> ported to the browser (treatment coverage <span class="var">f<sub>T</sub></span> = 0, a 0.1-year age grid to age 80, biting heterogeneity integrated out). For each EIR it returns parasite prevalence (PfPR<sub>2–10</sub>) and all-age clinical incidence, so the two curves share one internally-consistent model. This is the same equilibrium used by the <a href="age-distribution.html">age-distribution explainer</a>, and it is cross-checked in <a href="validation/validate_cascade.R" target="_blank" rel="noopener"><code>validation/validate_cascade.R</code></a>.</li>
       <li><strong>PfPR–EIR field data.</strong> The grey points on the PfPR-vs-EIR panel are cross-site observations of <em>P. falciparum</em> prevalence in children &lt;15 against annual EIR<sup class="cite"><a href="#ref6">6</a></sup>, shown as a check that the equilibrium curve tracks the observed relationship. They are PfPR in under-15s whereas the curve is PfPR<sub>2–10</sub> (which sits slightly higher), and the wide scatter is dominated by site and survey design; a few high-transmission sites lie beyond the EIR 300 axis and are not shown.</li>
-      <li><strong>Age bands.</strong> The shaded ribbon splits all-age clinical incidence into under-5, 5–15 and 15+ contributions using the model's case shares by age; the three bands sum to the overall line. The shift towards young children as transmission rises is the age-distribution effect explored in more detail in that explainer.</li>
-      <li><strong>Summary readout.</strong> The reduction in incidence per under-5 child (episodes per under-5 per year, distinct from the under-5 contribution shown in the ribbon), matching the age range of the Cochrane trial measure.</li>
+      <li><strong>Age bands.</strong> The shaded ribbon splits all-age clinical incidence into under-5, 5–15 and 15+ contributions using the model's case shares by age; the three bands sum to the overall line. The shift towards young children as transmission rises is explored in more detail in the <a href="age-distribution.html">age-distribution explainer</a>.</li>
+      <li><strong>Summary readout.</strong> The reduction in incidence per under-5 child (episodes per under-5 child per year, distinct from the under-5 contribution shown in the ribbon), matching the age range of the Cochrane trial measure.</li>
     </ul>
     <p><strong>References.</strong></p>
     <ol class="refs">
@@ -355,7 +355,14 @@ function equilibrium(EIRyr){
 // LUT_EMAX is the single upper EIR bound used everywhere (lookup table, plot x-axes and the
 // baseline slider). It is capped just past the incidence plateau, before the Griffin equilibrium's
 // extreme-EIR upturn (a faithful but distracting model feature above ~EIR 300).
-const LUT_N = 160, LUT_EMIN = 0.01, LUT_EMAX = 300;
+// LUT_EMIN must sit at or below the lowest reachable operating point, which is the slider
+// minimum (0.1) times gNet(USE_MAX) = 0.0181, i.e. 0.0018. At the old 0.01 the clamp below
+// bound at the bottom of the slider and made the under-5 reduction readout both wrong and
+// non-monotone in baseline transmission (90% at baseline EIR 0.1, where the model gives 98%).
+// The bound is tied to USE_MAX: raising coverage above about 0.888 would push the lowest
+// reachable point back below LUT_EMIN. LUT_N is set so the node spacing per decade matches
+// what it was over the narrower range.
+const LUT_N = 200, LUT_EMIN = 0.001, LUT_EMAX = 300;
 const LUT_LOGMIN = Math.log10(LUT_EMIN), LUT_LOGMAX = Math.log10(LUT_EMAX);
 const lut = {pfpr:[], inc:[], incU5:[], su5:[], smid:[], sad:[]};
 for(let k = 0; k <= LUT_N; k++){
@@ -363,8 +370,9 @@ for(let k = 0; k <= LUT_N; k++){
   lut.pfpr.push(r.pfpr); lut.inc.push(r.incPerYear); lut.incU5.push(r.incU5PerYear);
   lut.su5.push(r.shares.u5); lut.smid.push(r.shares.mid); lut.sad.push(r.shares.ad);
 }
-// linear interpolation in log-EIR; EIR is clamped into the tabulated range (below LUT_EMIN incidence
-// is negligible), and the three age shares are renormalised so the stacked ribbon sums to the line.
+// linear interpolation in log-EIR; EIR is clamped into the tabulated range, which LUT_EMIN is set
+// wide enough to cover for every reachable coverage, and the three age shares are renormalised so
+// the stacked ribbon sums to the line.
 function lutAt(E){
   const le = Math.min(LUT_LOGMAX, Math.max(LUT_LOGMIN, Math.log10(Math.max(E, 1e-9))));
   const t = (le - LUT_LOGMIN) / (LUT_LOGMAX - LUT_LOGMIN) * LUT_N;
@@ -612,7 +620,7 @@ function update(){
   });
   // 2) PfPR vs EIR: Griffin equilibrium
   panel('pPfpr', {
-    xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:1, xlab:'EIR (log scale)', ylab:'prevalence (PfPR)',
+    xLog:true, xMin:0.02, xMax:LUT_EMAX, yMax:1, xlab:'EIR (log scale)', ylab:'PfPR (2–10)',
     fmtY:t=>Math.round(t*100)+'%',
     points:SMITH_PTS,
     curve:{fn:e=>pfprFromEIR(e), col:BLU},

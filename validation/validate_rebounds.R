@@ -107,7 +107,9 @@ simulate <- function(Tr, S, D, lossV) {
 ## 3. NUMERIC CROSS-CHECK  (compare these against the web-page readouts)
 ## ===========================================================================
 scenarios <- list(
-  "default            (Tr=40, S=0.70, D=6,  abrupt)"   = c(40, 0.70, 6,  75),
+  # the page's own defaults: trans=45, strength=70, duration=6, loss=75 (which displays as a
+  # month count, not "abrupt": the page only labels the loss slider abrupt from 80 up)
+  "page default       (Tr=45, S=0.70, D=6,  loss 75)"  = c(45, 0.70, 6,  75),
   "strong+long+abrupt (Tr=40, S=0.90, D=10, abrupt)"   = c(40, 0.90, 10, 95),
   "gradual loss       (Tr=40, S=0.90, D=10, gradual)"  = c(40, 0.90, 10, 10),
   "very high transm.  (Tr=95, S=0.90, D=10, abrupt)"   = c(95, 0.90, 10, 95),

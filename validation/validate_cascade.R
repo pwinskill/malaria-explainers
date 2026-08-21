@@ -145,6 +145,29 @@ cat(sprintf(
 ))
 cat("  These should match the explainer's readouts (same solver, grid, ft = 0).\n")
 
+## ---- the under-5 reduction across the baseline slider, at 80% coverage ------
+## The page quotes a range for this in its Cochrane-benchmark note, and the low-EIR end is
+## where a lookup-table clamp used to distort the readout, so pin the endpoints here. The
+## page interpolates a lookup table; this solves exactly, so the two agreeing is the check.
+red_u5 <- function(eir0, cov) {
+  a <- as.data.frame(summarise_eq(eir0))
+  b <- as.data.frame(summarise_eq(eir_at(cov, eir0)))
+  100 * (1 - b$incU5_py / a$incU5_py)
+}
+cat("\nUnder-5 clinical reduction at 80% coverage, across the baseline-EIR slider:\n")
+for (e0 in c(0.1, 20, 300)) {
+  cat(sprintf("  baseline EIR %-5.1f -> %.1f%%\n", e0, red_u5(e0, 0.80)))
+}
+cat("  Expect about 98% at the slider floor, 96% at the default 20, and 78% at the 300 cap,\n")
+cat("  monotone decreasing in baseline EIR (nonlinearities.html quotes 78 to 98%).\n")
+stopifnot(
+  abs(red_u5(0.1, 0.80) - 98.2) < 0.5,
+  abs(red_u5(20,  0.80) - 96.1) < 0.5,
+  abs(red_u5(300, 0.80) - 78.0) < 0.5,
+  red_u5(0.1, 0.80) > red_u5(20, 0.80),
+  red_u5(20,  0.80) > red_u5(300, 0.80)
+)
+
 ## ===========================================================================
 ## 4. THE FIVE PLOTS
 ## ===========================================================================

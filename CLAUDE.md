@@ -5,11 +5,13 @@ This file only notes things specific to working on the repo with Claude.
 
 ## Conventions
 
-- **No build step, no dependencies.** Plain HTML, CSS and vanilla JavaScript
-  (canvas + SVG). Don't add a bundler, framework or npm packages.
+- **No build step, no package dependencies.** Plain HTML, CSS and vanilla
+  JavaScript (canvas + SVG). Don't add a bundler, framework or npm packages. The
+  only external asset is the GoatCounter visitor-count script, loaded on every
+  page.
 - **Each explainer is one self-contained `.html` file** with its model logic in
-  an inline `<script>`. The only shared asset is `styles.css`. `index.html` is
-  the hub and carries no script.
+  an inline `<script>`. The shared assets are `styles.css` and `favicon.svg`.
+  `index.html` is the hub and carries no model script.
 - **Numbers are illustrative.** They show the shape of relationships, not
   real-world impact. Never frame them as fit for decision-making.
 - **Prose is precise and neutral, not conversational.** Write plain, factual
@@ -31,6 +33,6 @@ This file only notes things specific to working on the repo with Claude.
 - Every explainer is mirrored by an R cross-check in `validation/validate_*.R`.
   **When you change a model in an explainer, keep its `validate_*.R` in sync (and
   vice versa)**: the two are meant to reproduce the same numbers.
-- Run the R scripts from the repository root (they read `data/`), e.g.
+- Run the R scripts from the repository root (they read `data/` and write `figures/`), e.g.
   `Rscript validation/validate_rebounds.R`. R toolchain paths (Windows arm64) are
   in the user's global `~/.claude/CLAUDE.md`.
