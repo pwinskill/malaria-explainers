@@ -67,8 +67,9 @@
 
     <div class="controls">
       <div class="slider-block season">
-        <div class="slider-top"><span class="label">Transmission intensity</span><span class="val" id="vTrans">moderate</span></div>
+        <div class="slider-top"><span class="label">Transmission intensity</span><span class="val" id="vTrans">high, 47%</span></div>
         <input type="range" id="transmission" min="0" max="100" value="55" step="1" aria-label="Transmission intensity, setting the level of clinical malaria and the prevalence of infection">
+        <p class="slider-sub muted">The percentage is the illustrative peak-season prevalence of detectable infection in the focal child group. It is not the parasite prevalence in 2 to 10 year-olds reported by the equilibrium explainers, and the two should not be compared.</p>
         <div class="subslider">
           <div class="slider-top"><span class="label">Seasonality</span><span class="val val-word" id="vSeason">highly seasonal</span></div>
           <input type="range" id="seasonality" min="0" max="100" value="75" step="1" aria-label="Seasonality, from perennial to highly seasonal">
@@ -128,14 +129,14 @@
   </section>
 
   <div class="note">
-    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. The vertical axis is shown as an illustrative count of cases per 1000 children per month and rescales to fill the frame at whatever the sliders are set to, so it is the vertical scale, rather than the height of the curve, that changes as transmission, the fever rate and treatment-seeking change; its absolute level is not calibrated to any setting, so only the shape and the relative over-counts are meaningful. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
+    <p><strong>Methods.</strong> A deliberately simple, illustrative toy model showing the <em>shape</em> of how non-malaria fevers inflate routine malaria counts, not a specific setting; not to be used for decision making. The vertical axis is a relative case scale, not a count in real units. It rescales to fill the frame at every slider setting, so as transmission, the fever rate and treatment-seeking move it is the scale that shifts, not the height of the curve. Its absolute level is not calibrated to any setting, so only the shape and the relative over-counts are meaningful; the readouts, which are ratios and shares, are unaffected by the scale. It models a single focal group (young children), with the case peak fixed at mid-year and a symmetric rise and fall.</p>
     <ul>
       <li><strong>Seasonal shape.</strong> A periodic curve <span class="var">g</span>(<span class="var">t</span>) = <span class="var">f</span> + (1 − <span class="var">f</span>)·((1 + cos(2π(<span class="var">t</span> − <span class="var">t</span><sub>peak</sub>)/365))/2)<sup><span class="var">p</span></sup> gives a single yearly peak fixed at 1. The seasonality slider raises the peakiness <span class="var">p</span> = 1 + 8<span class="var">S</span> + 16<span class="var">S</span><sup>4</sup> and lowers the off-season floor <span class="var">f</span> = (1 − <span class="var">S</span>)<sup>1.5</sup> together, from a near-flat perennial year to a sharp two-to-three-month peak. This is the same seasonal curve used in the <a href="seasonality.html">seasonality explainer</a>, here with the peak fixed at mid-year.</li>
       <li><strong>Transmission sets the levels.</strong> The transmission-intensity slider (<span class="var">u</span> = <span class="var">T</span>/100) fixes the peak level of clinical incidence, <span class="var">c</span>(<span class="var">u</span>) = <span class="var">u</span>/(<span class="var">u</span> + 0.15), and of prevalence, <span class="var">v</span>(<span class="var">u</span>) = 0.9·<span class="var">u</span>/(<span class="var">u</span> + 0.5). Both rise with transmission, but clinical incidence saturates sooner: the ratio <span class="var">v</span>/<span class="var">c</span> grows with <span class="var">T</span>, a stand-in for immunity limiting disease while infection persists.<sup class="cite"><a href="#ref3">3</a></sup> Clinical incidence through the year is <span class="var">C</span>(<span class="var">t</span>) = <span class="var">c</span>(<span class="var">u</span>)·<span class="var">g</span>(<span class="var">t</span>).</li>
       <li><strong>Prevalence.</strong> The prevalence of detectable infection is <span class="var">P</span>(<span class="var">t</span>) = <span class="var">v</span>(<span class="var">u</span>)·<span class="var">ĝ</span>(<span class="var">t</span>), where <span class="var">ĝ</span> is a broadened, lagged, floored version of the seasonal shape, obtained by relaxing towards <span class="var">g</span> with a timescale <span class="var">D</span> = 80 days (d<span class="var">ĝ</span>/d<span class="var">t</span> = (<span class="var">g</span> − <span class="var">ĝ</span>)/<span class="var">D</span>, integrated around the year and normalised to a peak of 1). The finite duration sustains prevalence in the low season after clinical incidence has collapsed.</li>
       <li><strong>Recorded cases.</strong> Writing the treatment-seeking share <span class="var">τ</span> and the non-malaria fever rate as <span class="var">N</span> episodes per child per year with a normalised value <span class="var">n</span> = <span class="var">N</span>/6, the true malaria cases recorded are <span class="var">M</span>(<span class="var">t</span>) = <span class="var">τ</span>·<span class="var">C</span>(<span class="var">t</span>) and the falsely attributed cases are <span class="var">X</span>(<span class="var">t</span>) = <span class="var">τ</span>·<span class="var">κ</span>·<span class="var">n</span>·<span class="var">P</span>(<span class="var">t</span>) with <span class="var">κ</span> = 0.9 a fixed relative scale. The routine-recorded count is <span class="var">R</span>(<span class="var">t</span>) = <span class="var">M</span>(<span class="var">t</span>) + <span class="var">X</span>(<span class="var">t</span>); the shaded band is <span class="var">X</span>. Because <span class="var">τ</span> multiplies both terms, it scales the recorded volume but cancels from every over-count.</li>
       <li><strong>Readouts.</strong> The year is split at half the peak clinical incidence: peak-season days have <span class="var">C</span> ≥ ½·max <span class="var">C</span>, low-season days below it. The peak- and low-season over-counts are the recorded total divided by the true malaria total over those days, ∫<span class="var">R</span> / ∫<span class="var">M</span> (the low-season figure is shown as "–" when the year has no distinct low season, that is a flat or only weakly seasonal setting). The share of recorded cases not caused by malaria is ∫<span class="var">X</span> / ∫<span class="var">R</span> over the whole year. All three are independent of the treatment-seeking share.</li>
-      <li><strong>What is left out.</strong> The toy omits imperfect and age-varying treatment-seeking (here a single share applied equally to malaria and non-malaria fevers, so differential care-seeking by cause would shift the over-count, not merely scale it), test sensitivity and specificity, the coincidence pool's use of total infection prevalence (which includes the carriage of those already ill with malaria, slightly overstating the peak-season overlap), the under-counting of true cases that never present, and any seasonality or age-dependence in the non-malaria fever rate. Two further simplifications work in the same direction as the effect shown: it ignores the persistence of RDT antigen (HRP2) for weeks after parasites clear, which would enlarge and further lag the test-positive reservoir beyond true infection prevalence; and it lets clinical incidence per child only saturate with transmission, omitting the eventual fall at the highest transmission that acquired immunity produces, which would widen the over-count further. It captures only the coincidence mechanism that inflates confirmed-case counts.</li>
+      <li><strong>What is left out.</strong> The toy omits imperfect and age-varying treatment-seeking (here a single share applied equally to malaria and non-malaria fevers, so differential care-seeking by cause would shift the over-count, not merely scale it), test sensitivity and specificity, the coincidence pool's use of total infection prevalence (which includes the carriage of those already ill with malaria, slightly overstating the peak-season overlap), the under-counting of true cases that never present, and any seasonality or age-dependence in the non-malaria fever rate. A further simplification works in the same direction as the effect shown: it ignores the persistence of RDT antigen (HRP2) for weeks after parasites clear, which would enlarge and further lag the test-positive reservoir beyond true infection prevalence. It captures only the coincidence mechanism that inflates confirmed-case counts.</li>
       <li><strong>Relation to published estimates.</strong> The scale <span class="var">κ</span> and the level mappings are chosen so that at plausible settings the share of recorded cases not caused by malaria falls in the broad range reported by Dalrymple <em>et al</em>, who estimate that in 2014 only about 28% of malaria-positive fevers in under-fives were causally attributable to malaria (about 10% of all fevers), implying routine positive counts can overstate clinical malaria by a large margin that grows as transmission rises.<sup class="cite"><a href="#ref3">3</a></sup> That 28% is a continent-wide 2014 average and the attributable fraction varies widely between settings, so the toy is meant to sit in the same broad range rather than to reproduce that figure. The non-malaria fever process mirrors the structure being added to <a href="https://github.com/mrc-ide/malariasimulation/pull/372" target="_blank" rel="noopener">malariasimulation</a>,<sup class="cite"><a href="#ref4">4</a></sup> where an age-specific non-malaria fever rate drives treatment-seeking and a positive test in someone with a detectable infection is recorded as a case. The cross-check in <a href="validation/validate_nmf.R" target="_blank" rel="noopener"><span class="var">validation/validate_nmf.R</span></a> reproduces these curves and readouts in R.</li>
     </ul>
     <p><strong>References.</strong></p>
@@ -166,7 +167,7 @@ const PEAK_DAY = 182;   // case peak fixed at mid-year
 const D_INF = 80;       // mean duration of detectable infection (days): sets the reservoir lag/floor
 const NMF_REF = 6;      // reference non-malaria fever rate (episodes/child/yr); slider normalised to it
 const KAPPA = 0.9;      // relative scale converting (fever rate x prevalence) into recorded-case units
-const CASE_SCALE = 100; // display only: maps the model's relative rate onto cases /1000 children /month
+const CASE_SCALE = 100; // display only: scales the model's relative rate onto the illustrative relative-case axis
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 // seasonal shape; symmetric single peak fixed at mid-year, peakiness/floor from seasonality S
@@ -275,7 +276,7 @@ function renderChart(sim, YMAX, step){
   const {ctx, W, H} = s;
   const padL = 48, padR = 14, padT = 16, padB = 30;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  const cases = v => v * CASE_SCALE;   // model relative rate -> cases /1000 children /month
+  const cases = v => v * CASE_SCALE;   // model relative rate -> illustrative relative-case axis
   const {pts} = sim;
   const X = t => padL + t / YEAR * plotW;
   const Y = v => padT + (1 - v / YMAX) * plotH;
@@ -296,7 +297,7 @@ function renderChart(sim, YMAX, step){
   ctx.save();
   ctx.translate(13, padT + plotH / 2); ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = css('--muted'); ctx.textAlign = 'center';
-  ctx.fillText('cases per 1000 children / month', 0, 0);
+  ctx.fillText('relative cases', 0, 0);
   ctx.restore();
 
   // true malaria cases: filled area + line
@@ -383,7 +384,19 @@ function fillPct(el){ el.style.setProperty('--fill', ((el.value - el.min) / (el.
 // (1-S)^1.5 < 0.5, i.e. S > ~0.37, so "seasonal" starts there and the low-season readout is
 // non-empty whenever the label says seasonal or highly seasonal.
 function seasonLabel(S){ return S < 0.15 ? 'perennial' : S < 0.4 ? 'weakly seasonal' : S < 0.7 ? 'seasonal' : 'highly seasonal'; }
-function transLabel(T){ return T < 25 ? 'low' : T < 65 ? 'moderate' : 'high'; }
+// Verbal bands take the two lower cut-points used by the other explainers (10 and 35 per cent),
+// applied to this page's own peak infection prevalence prevLevel(). There is no 'intense' band:
+// prevLevel saturates at exactly 0.60, which is where the equilibrium pages' top band begins, so
+// an 'intense' tier here would cover the last slider step alone.
+// The word is derived from the SAME rounded integer that is displayed, so the two can never
+// disagree at a band edge. Note this prevalence is an illustrative, child-focal, peak-season
+// figure, not the Griffin PfPR 2-10 the equilibrium pages report.
+function transPct(T){ return Math.round(prevLevel(T / 100) * 100); }
+function transWord(T){
+  const pc = transPct(T);
+  return pc < 10 ? 'low' : pc < 35 ? 'moderate' : 'high';
+}
+function transLabel(T){ return transWord(T) + ', ' + transPct(T) + '%'; }
 
 function update(){
   allSliders.forEach(fillPct);
@@ -398,7 +411,7 @@ function update(){
   document.getElementById('vTreat').textContent = treatPct + '%';
 
   // human-readable values for assistive tech (sliders carry raw numbers)
-  transmission.setAttribute('aria-valuetext', transLabel(T) + ' transmission');
+  transmission.setAttribute('aria-valuetext', transWord(T) + ' transmission, ' + transPct(T) + ' percent peak infection prevalence');
   seasonality.setAttribute('aria-valuetext', seasonLabel(S));
   nmf.setAttribute('aria-valuetext', nmfPerYr + ' non-malaria fevers per child per year');
   treat.setAttribute('aria-valuetext', treatPct + ' percent seeking care');
@@ -408,7 +421,7 @@ function update(){
   const fmt = r => r == null ? '–' : r.toFixed(1) + '×';
   document.getElementById('rPeak').textContent = fmt(sim.peakRatio);
   document.getElementById('rLow').textContent = fmt(sim.lowRatio);
-  document.getElementById('rShare').textContent = Math.round(sim.falseShare * 100) + '%';
+  document.getElementById('rShare').textContent = sim.peakRatio == null ? '–' : Math.round(sim.falseShare * 100) + '%';
   announce(sim);
 
   drawChart(sim);

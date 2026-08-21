@@ -70,7 +70,7 @@ cat("\nExpect: PfPR and the under-5 share RISE with EIR; the 15+ share FALLS.\n"
 # ----------------------------------------------------------------------------
 # Figure: (A) age-group shares vs EIR, (B) case-by-age density at low/mid/high.
 # ----------------------------------------------------------------------------
-grid_EIR <- exp(seq(log(0.5), log(512), length.out = 60))
+grid_EIR <- exp(seq(log(0.1), log(512), length.out = 60))   # matches EIR_MIN = 0.1 in the page slider
 shares   <- lapply(grid_EIR, summarise_eq)
 df_share <- rbind(
   data.frame(EIR = grid_EIR, share = sapply(shares, `[[`, "u5"),  band = "under 5"),
@@ -97,9 +97,11 @@ rate_at <- function(EIR, lab) {
   a <- m[, "age"]; r <- m[, "inc"] / m[, "prop"]; r <- r / max(r[a <= 60])
   data.frame(age = a, rate = r, level = lab)
 }
-df_age <- rbind(rate_at(0.2, "low (EIR 0.2)"), rate_at(10, "moderate (EIR 10)"),
-                rate_at(200, "high (EIR 200)"))
-df_age$level <- factor(df_age$level, levels = c("low (EIR 0.2)", "moderate (EIR 10)", "high (EIR 200)"))
+# NB: the adjectives follow the page's intensityLabel() scale, which bands PfPR 2-10 at
+# 10 / 35 / 60 per cent: EIR 0.2 is about 3% (low), EIR 10 about 43% (high), EIR 200 about 83% (intense).
+df_age <- rbind(rate_at(0.2, "low (EIR 0.2)"), rate_at(10, "high (EIR 10)"),
+                rate_at(200, "intense (EIR 200)"))
+df_age$level <- factor(df_age$level, levels = c("low (EIR 0.2)", "high (EIR 10)", "intense (EIR 200)"))
 
 cat("\n================ PER-PERSON INCIDENCE-RATE PEAK AGE (rise-to-20 check) ================\n")
 for (E in c(0.2, 1, 10, 100)) {
@@ -111,8 +113,8 @@ cat("Expect: at low EIR the per-person rate peaks at/after ~20y; at high EIR it 
 gB <- ggplot(subset(df_age, age <= 60), aes(age, rate, colour = level)) +
   geom_line(linewidth = 1) +
   scale_colour_manual(values = c("low (EIR 0.2)" = "#9ec2e8",
-                                 "moderate (EIR 10)" = "#7b5bd6",
-                                 "high (EIR 200)" = "#3b1f7a"), name = NULL) +
+                                 "high (EIR 10)" = "#7b5bd6",
+                                 "intense (EIR 200)" = "#3b1f7a"), name = NULL) +
   labs(title = "Clinical incidence per person, by age",
        subtitle = "Each curve scaled to its own peak (the explainer's bold line)",
        x = "age (years)", y = "relative incidence per person") +

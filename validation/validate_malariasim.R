@@ -11,7 +11,7 @@
 #           it overshoot the pre-IRS baseline? How does rebound depend on EIR?
 #
 # Run:
-#   & 'C:/Program Files/R-aarch64/R-4.5.2/bin/Rscript' validate_malariasim.R
+#   & 'C:/Program Files/R-aarch64/R-4.5.2/bin/Rscript' validation/validate_malariasim.R
 # =============================================================================
 
 .libPaths('C:/Users/pwinskil/Documents/r_packages_arm64')
@@ -38,7 +38,9 @@ irs_stop_yr   <- warmup_yr + irs_years
 spray_timesteps <- (warmup_yr + 0:(irs_years - 1)) * year + 1
 
 human_population <- 10000
-baseline_EIRs    <- c(5, 30, 100)   # low / moderate / high
+baseline_EIRs    <- c(5, 30, 100)   # spans the explainers' transmission range. On the pages'
+                                    # PfPR 2-10 scale (banded at 10 / 35 / 60 per cent) these are
+                                    # about 32%, 62% and 77%: moderate, intense and intense.
 
 # ----------------------------------------------------------------------------
 # Realistic IRS product efficacy (pirimiphos-methyl / Actellic-300CS-like),

@@ -283,8 +283,11 @@ a.lesson-card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(20,30,4
 .slider-block.season .val{color:var(--blue)}
 .slider-block.smc .val{color:var(--accent)}
 .slider-block.cover .val{color:#c45a25}
-/* the seasonality value is a word ("highly seasonal"), not a number: keep it on one
-   line at a size that sits with the label rather than dwarfing it */
+/* this value is a word rather than a number ("highly seasonal" on seasonality.html, and
+   "high, 47%" on nmf.html): keep it at a size that sits with the label rather than dwarfing
+   it. The row is allowed to wrap so a longer value cannot force horizontal page scroll on a
+   narrow viewport; the value itself still never breaks mid-phrase. */
+.slider-block.season > .slider-top{flex-wrap:wrap}
 .slider-block.season > .slider-top .val{font-size:16px;white-space:nowrap}
 #seasonality,#peakday{background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,0%),#c7d6ec var(--fill,0%),#c7d6ec 100%)}
 #seasonality::-webkit-slider-thumb,#peakday::-webkit-slider-thumb{border:3px solid var(--blue)}

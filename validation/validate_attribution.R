@@ -36,6 +36,8 @@
 #      effects. (With two or more transmission-reducing controls this would not hold:
 #      successive reductions move along f in stages, and on its plateau a later
 #      reduction can avert more than an earlier one.)
+#   8. The three DISPLAYED credits are apportioned by largest remainder (the page roundToSum),
+#      so they sum exactly to the displayed combined total. The script mirrors that rule.
 #
 # Run (from the repository root, so figures/ resolves):
 #   & 'C:/Program Files/R-aarch64/R-4.5.2/bin/Rscript' validation/validate_attribution.R
@@ -76,7 +78,7 @@ f_eir <- function(EIR) {
   m <- human_equilibrium(EIR = EIR, ft = ft, p = p, age = age)$states
   sum(m[, "inc"]) * 365
 }
-f0 <- f_eir(EIR0)                     # A not deployed (baseline transmission)
+f_base <- f_eir(EIR0)                     # A not deployed (baseline transmission)
 fA <- f_eir(EIR0 * (1 - t_A))         # A deployed (transmission reduced)
 
 ints <- c("A", "B", "C")
@@ -84,7 +86,7 @@ ints <- c("A", "B", "C")
 # cases remaining for a deployed subset (named logical over A/B/C)
 # F0 / FA default to the slider's EIR but can be passed in, so the same logic can be
 # evaluated at other transmission levels (used by the first/last ratio check below)
-cases_of <- function(S, F0 = f0, FA = fA) {
+cases_of <- function(S, F0 = f_base, FA = fA) {
   E  <- if (S["A"]) FA else F0                                 # only A changes transmission
   df <- prod(ifelse(S[ints], 1 - d[ints], 1))                 # direct effects (A's own included when present)
   N * E * df
@@ -93,7 +95,7 @@ empty      <- c(A = FALSE, B = FALSE, C = FALSE)
 base_cases <- cases_of(empty)
 
 # cases averted credited to each control as it is added along one order
-increments_for <- function(order, F0 = f0, FA = fA) {
+increments_for <- function(order, F0 = f_base, FA = fA) {
   S <- empty; out <- setNames(numeric(3), ints); before <- cases_of(S, F0, FA)
   for (i in order) {
     S[i]  <- TRUE
@@ -116,11 +118,28 @@ alone   <- setNames(sapply(ints, function(i) { S <- empty; S[i] <- TRUE; base_ca
 # cost per case averted (equal cost per person for all three)
 ce <- function(averted) ifelse(averted > 1e-6, (cost_pp * N) / averted, Inf)   # guard zero, mirroring the JS perCase()
 
+# The page does NOT round the three credits independently: roundToSum() in attribution.html
+# apportions by largest remainder so the three displayed integers sum exactly to the displayed
+# combined total. Rounding each raw value on its own can therefore differ by one case from what
+# the page shows (at the default it gives C = 8,930 where the page displays 8,929), so the
+# assertions below compare against this, not against round(increments).
+round_to_sum <- function(vals) {
+  target <- floor(sum(vals) + 0.5)   # matches JS Math.round (half-up); R round() is half-to-even
+  fl     <- floor(vals)
+  short  <- target - sum(fl)
+  out    <- fl
+  if (isTRUE(short > 0)) {
+    take <- order(vals - fl, decreasing = TRUE)[seq_len(min(short, length(vals)))]
+    out[take] <- out[take] + 1
+  }
+  out
+}
+
 ## ===========================================================================
 ## 3. NUMERIC CROSS-CHECK  (compare against the web-page readouts)
 ## ===========================================================================
 cat(sprintf("\nEIR0 = %.3f   f(EIR0) = %.4f   f(EIR0*(1-t_A)) = %.4f   baseline cases = %.0f\n",
-            EIR0, f0, fA, base_cases))
+            EIR0, f_base, fA, base_cases))
 
 total_all <- base_cases - cases_of(c(A = TRUE, B = TRUE, C = TRUE))
 cat(sprintf("Combined cases averted (all three) = %.0f   (web: 58,884)\n\n", total_all))
@@ -132,8 +151,11 @@ for (o in perms) {
   cat(sprintf("  %-14s %8.0f %8.0f %8.0f %9.0f\n", paste(o, collapse = ">"), v["A"], v["B"], v["C"], sum(v)))
 }
 inc_default <- increments_for(c("A", "B", "C"))
-cat(sprintf("\nDefault order A>B>C credits  A %.0f (web 27,631), B %.0f (web 22,324), C %.0f (web 8,930)\n",
+disp_default <- round_to_sum(inc_default[ints])            # what the page actually displays
+cat(sprintf("\nDefault order A>B>C credits  A %.1f, B %.1f, C %.1f  (raw)\n",
             inc_default["A"], inc_default["B"], inc_default["C"]))
+cat(sprintf("As displayed (largest remainder) A %d (web 27,631), B %d (web 22,324), C %d (web 8,929)  sum %d (web 58,884)\n",
+            disp_default["A"], disp_default["B"], disp_default["C"], sum(disp_default)))
 
 cat(sprintf("\nFair share (Shapley): A %.0f, B %.0f, C %.0f   (sum %.0f)\n",
             shapley["A"], shapley["B"], shapley["C"], sum(shapley)))
@@ -188,8 +210,16 @@ stopifnot(
   all(abs(ratios_A - expected_ratio) < 1e-6),
   # cross-implementation: combined total matches the web readout to ~1%
   abs(total_all - 58884) < 0.01 * 58884,
-  # per-control web values (guard JS<->R per-control drift, not just the total)
-  round(inc_default["A"]) == 27631, round(inc_default["B"]) == 22324, round(inc_default["C"]) == 8930,
+  # per-control web values (guard JS<->R per-control drift, not just the total). Compared to
+  # within one case: the raw credits sum to 58884.489, only 0.011 below the .5 boundary, so a
+  # tiny change in the solver can legitimately move the apportioned C and the total up by one.
+  abs(inc_default["A"] - 27631) < 1, abs(inc_default["B"] - 22324) < 1, abs(inc_default["C"] - 8930) < 1,
+  abs(disp_default["C"] - 8929) <= 1, abs(sum(disp_default) - 58884) <= 1,
+  # the apportionment RULE itself, pinned exactly: this is what guards against the page and the
+  # script drifting apart on rounding mode or tie-break, which the value checks above cannot see.
+  identical(as.numeric(round_to_sum(c(1.5, 1.5, 1.5))), c(2, 2, 1)),
+  identical(as.numeric(round_to_sum(c(0.9, 0.9, 0.9))), c(1, 1, 1)),
+  sum(disp_default) == sum(round_to_sum(inc_default[ints])),
   abs(ce(inc_default["A"]) - 3.6) < 0.05, abs(ce(inc_default["B"]) - 4.5) < 0.05, abs(ce(inc_default["C"]) - 11.2) < 0.05
 )
 cat("\nAll assertions passed.\n\n")

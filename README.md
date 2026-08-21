@@ -4,7 +4,7 @@ A small, self-contained collection of interactive explainers on how malaria tran
 and how control interventions reshape it. Each explainer pairs a plain-language walkthrough with a
 "toy" model you can play with, and is cross-checked in R against published model structures.
 
-Everything is plain HTML, CSS and vanilla JavaScript (canvas + SVG), with no build step or
+Everything is plain HTML, CSS and vanilla JavaScript (canvas + SVG), with no build step or package
 dependencies. `index.html` is a hub linking to the explainers; shared styling lives in `styles.css`.
 The R cross-check scripts live in `validation/`; their input data (`data/`), reference papers
 (`references/`), and generated figures (`figures/`) are kept out of version control.
@@ -16,8 +16,9 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
 ## Explainers
 
 1. **Non-linearities in malaria epidemiology and control** ([`nonlinearities.html`](nonlinearities.html)).
-   Why a modest change in mosquito survival or bed-net coverage can produce a much larger (or
-   surprisingly small) change in prevalence and clinical cases. Traces a bed-net effect through the
+   Why a modest change in bed-net coverage, working through mosquito biting and survival, can
+   produce a much larger (or surprisingly small) change in prevalence and clinical cases. Traces a
+   bed-net effect through the
    coverage → EIR → prevalence → incidence cascade. The coverage → EIR step is a mechanistic
    experimental-hut net model; the EIR → PfPR and EIR → clinical-incidence relationships both come
    from the Griffin-model equilibrium ([malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium)),
@@ -30,16 +31,19 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    transmission, strength and duration of control, speed of withdrawal and loss of protection) plus
    a toy protection-over-time model. Structure and timescales sense-checked against the Griffin
    et al. / [malariasimulation](https://github.com/mrc-ide/malariasimulation) model.
-   Cross-check: `validation/validate_rebounds.R`.
+   Cross-checks: `validation/validate_rebounds.R` for the toy itself, and
+   `validation/validate_malariasim.R`, which runs an IRS programme deployed then stopped in the
+   full model.
 
-3. **Seasonality and the timing of control** ([`seasonality.html`](seasonality.html)).
+3. **Seasonality and the timing of malaria control** ([`seasonality.html`](seasonality.html)).
    Where transmission is seasonal, cases arrive in a short window and each dose of seasonal malaria
    chemoprevention (SMC) protects for only a few weeks, so a programme has to tile its rounds across
    the season. A toy model of childhood cases through the year, with sliders for seasonality, peak
-   timing, the number, spacing and start of the SMC rounds, coverage per round, and whether the same,
-   random or different children are reached across rounds (inter-round correlation), plus an
-   "optimise timing" button that searches for the round schedule averting the most cases. Shows how
-   impact depends on when the rounds land and on who is reached. The drug-prophylaxis curve is taken directly
+   timing, the speed of the seasonal take-off, the number, spacing and start of the SMC rounds,
+   coverage per round, and whether the same, random or different children are reached across
+   rounds (inter-round correlation), plus an "optimise timing" button that searches for the
+   first-round date and spacing averting the most cases, leaving the other controls unchanged.
+   Shows how impact depends on when the rounds land and on who is reached. The drug-prophylaxis curve is taken directly
    from [malariasimulation](https://github.com/mrc-ide/malariasimulation), and the seasonal SMC and
    correlation behaviour is cross-checked against it. Cross-check: `validation/validate_seasonality.R`.
 
@@ -50,7 +54,7 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    equilibrium ([malariaEquilibrium](https://github.com/mrc-ide/malariaEquilibrium)) with a single
    transmission-intensity slider. The chart shows clinical incidence per person by age (rising into
    adulthood at low transmission, concentrating in infancy at high transmission) alongside the
-   case distribution, with the under-5 / 5–15 / 15+ shares beside it. Cross-check:
+   case distribution, with the under-5 / 5–15 / 15+ shares in a bar below it. Cross-check:
    `validation/validate_age_distribution.R`.
 
 5. **Non-malaria fevers and inflated malaria case counts** ([`nmf.html`](nmf.html)).
@@ -65,7 +69,8 @@ Visits to the live page are counted anonymously with [GoatCounter](https://www.g
    the share of fevers that seek care. The
    coincidence structure follows the non-malaria fever process in
    [malariasimulation](https://github.com/mrc-ide/malariasimulation/pull/372), and
-   the over-count fractions are anchored to the estimates of Dalrymple et al. (2017).
+   the over-count fractions are chosen to sit in the broad range reported by Dalrymple et al.
+   (2017) rather than to reproduce a particular figure.
    Cross-check: `validation/validate_nmf.R`.
 
 6. **Attributing impact of malaria interventions** ([`attribution.html`](attribution.html)).
